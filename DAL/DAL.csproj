@@ -53,24 +53,28 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Calling.cs" />
-    <Compile Include="Client.cs" />
-    <Compile Include="C_Service.cs" />
-    <Compile Include="C_Service_Connection.cs" />
-    <Compile Include="EF.cs" />
-    <Compile Include="Individual.cs" />
-    <Compile Include="Internet.cs" />
-    <Compile Include="LegalEntity.cs" />
-    <Compile Include="Number.cs" />
+    <Compile Include="DomainModel\Administrator.cs" />
+    <Compile Include="DomainModel\Calling.cs" />
+    <Compile Include="DomainModel\Client.cs" />
+    <Compile Include="DomainModel\C_Service.cs" />
+    <Compile Include="DomainModel\C_Service_Connection.cs" />
+    <Compile Include="DataBase\EF.cs" />
+    <Compile Include="DomainModel\Expenses.cs" />
+    <Compile Include="DomainModel\Individual.cs" />
+    <Compile Include="DomainModel\Internet.cs" />
+    <Compile Include="DomainModel\LegalEntity.cs" />
+    <Compile Include="DomainModel\Monthly_remains_tarif.cs" />
+    <Compile Include="DomainModel\Number.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="SMS.cs" />
-    <Compile Include="Tarif.cs" />
-    <Compile Include="Tarif_History.cs" />
+    <Compile Include="DomainModel\SMS.cs" />
+    <Compile Include="DomainModel\Tarif.cs" />
+    <Compile Include="DomainModel\Tarif_History.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
     <None Include="packages.config" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
     <PropertyGroup>

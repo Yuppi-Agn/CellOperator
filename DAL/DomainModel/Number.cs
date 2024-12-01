@@ -15,6 +15,7 @@ namespace DAL
             C_Service_Connection = new HashSet<C_Service_Connection>();
             Calling = new HashSet<Calling>();
             Calling1 = new HashSet<Calling>();
+            Expenses = new HashSet<Expenses>();
             Internet = new HashSet<Internet>();
             SMS = new HashSet<SMS>();
             SMS1 = new HashSet<SMS>();
@@ -27,6 +28,8 @@ namespace DAL
         public int ID_Tarif { get; set; }
 
         public int? ID_Client { get; set; }
+
+        public int? ID_Monthly_remains_tarif { get; set; }
 
         [Column("Number")]
         [Required]
@@ -53,7 +56,12 @@ namespace DAL
         public virtual Client Client { get; set; }
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<Expenses> Expenses { get; set; }
+
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Internet> Internet { get; set; }
+
+        public virtual Monthly_remains_tarif Monthly_remains_tarif { get; set; }
 
         public virtual Tarif Tarif { get; set; }
 

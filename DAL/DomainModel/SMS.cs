@@ -15,6 +15,8 @@ namespace DAL
 
         public int? ID_number_slave { get; set; }
 
+        public int? ID_Expenses { get; set; }
+
         [Column("_Date")]
         public DateTime? C_Date { get; set; }
 
@@ -23,6 +25,8 @@ namespace DAL
         public string C_Data { get; set; }
 
         public byte? Connection_type { get; set; }
+
+        public virtual Expenses Expenses { get; set; }
 
         public virtual Number Number { get; set; }
 

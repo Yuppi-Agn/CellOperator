@@ -373,6 +373,12 @@ namespace BLL.Services
             if (clients.Count() != 0) return clients.AsEnumerable().Select(i => new ClientDTO(i)).First();
             else return null;
         }
+        public AdministratorDTO FindAdmin(string Login, string Password)
+        {
+            var admins = db.Administrator.Where(p => p.C_Login == Login).Where(p => p.C_Password == Password);
+            if (admins.Count() != 0) return admins.AsEnumerable().Select(i => new AdministratorDTO(i)).First();
+            else return null;
+        }
         public string FindName(ClientDTO client)
         {
             var LegalEntity = db.LegalEntity.Where(p => p.ClientID == client.ID).AsEnumerable();

@@ -14,11 +14,14 @@ namespace DAL
 
         public virtual DbSet<C_Service> C_Service { get; set; }
         public virtual DbSet<C_Service_Connection> C_Service_Connection { get; set; }
+        public virtual DbSet<Administrator> Administrator { get; set; }
         public virtual DbSet<Calling> Calling { get; set; }
         public virtual DbSet<Client> Client { get; set; }
+        public virtual DbSet<Expenses> Expenses { get; set; }
         public virtual DbSet<Individual> Individual { get; set; }
         public virtual DbSet<Internet> Internet { get; set; }
         public virtual DbSet<LegalEntity> LegalEntity { get; set; }
+        public virtual DbSet<Monthly_remains_tarif> Monthly_remains_tarif { get; set; }
         public virtual DbSet<Number> Number { get; set; }
         public virtual DbSet<SMS> SMS { get; set; }
         public virtual DbSet<Tarif> Tarif { get; set; }
@@ -40,6 +43,16 @@ namespace DAL
                 .WithOptional(e => e.C_Service)
                 .HasForeignKey(e => e.ID_Service);
 
+            modelBuilder.Entity<Administrator>()
+                .Property(e => e.C_Login)
+                .IsFixedLength()
+                .IsUnicode(false);
+
+            modelBuilder.Entity<Administrator>()
+                .Property(e => e.C_Password)
+                .IsFixedLength()
+                .IsUnicode(false);
+
             modelBuilder.Entity<Client>()
                 .Property(e => e.C_Login)
                 .IsFixedLength()
@@ -54,6 +67,25 @@ namespace DAL
                 .HasMany(e => e.Number)
                 .WithOptional(e => e.Client)
                 .HasForeignKey(e => e.ID_Client);
+
+            modelBuilder.Entity<Expenses>()
+                .Property(e => e.Expense)
+                .HasPrecision(10, 4);
+
+            modelBuilder.Entity<Expenses>()
+                .HasMany(e => e.Calling)
+                .WithOptional(e => e.Expenses)
+                .HasForeignKey(e => e.ID_Expenses);
+
+            modelBuilder.Entity<Expenses>()
+                .HasMany(e => e.Internet)
+                .WithOptional(e => e.Expenses)
+                .HasForeignKey(e => e.ID_Expenses);
+
+            modelBuilder.Entity<Expenses>()
+                .HasMany(e => e.SMS)
+                .WithOptional(e => e.Expenses)
+                .HasForeignKey(e => e.ID_Expenses);
 
             modelBuilder.Entity<Individual>()
                 .Property(e => e.FirstName)
@@ -99,6 +131,11 @@ namespace DAL
                 .IsFixedLength()
                 .IsUnicode(false);
 
+            modelBuilder.Entity<Monthly_remains_tarif>()
+                .HasMany(e => e.Number)
+                .WithOptional(e => e.Monthly_remains_tarif)
+                .HasForeignKey(e => e.ID_Monthly_remains_tarif);
+
             modelBuilder.Entity<Number>()
                 .Property(e => e.Number1)
                 .IsFixedLength()
@@ -122,6 +159,11 @@ namespace DAL
                 .HasMany(e => e.Calling1)
                 .WithOptional(e => e.Number1)
                 .HasForeignKey(e => e.ID_number_slave);
+
+            modelBuilder.Entity<Number>()
+                .HasMany(e => e.Expenses)
+                .WithOptional(e => e.Number)
+                .HasForeignKey(e => e.ID_number);
 
             modelBuilder.Entity<Number>()
                 .HasMany(e => e.Internet)

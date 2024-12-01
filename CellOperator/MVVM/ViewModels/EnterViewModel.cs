@@ -120,16 +120,15 @@ namespace CellOperator.MVVM.ViewModels
 
         private bool AdministratorAuth_check(string Login, string Password)
         {
-            if (Login == "1234" && Password == "1234")
+            DataBase_service Database = new DataBase_service();
+            AdministratorDTO Admin = Database.FindAdmin(Login, Password);
+            if (Admin != null)
                 return true;
-            else return false;
+            else return false;            
         }
         private bool UserAuth_check(string Login, string Password)
         {
-            DataBase_service Database;
-            //Methods_service methods;
-
-            Database = new DataBase_service();
+            DataBase_service Database = new DataBase_service();
             ClientDTO Client = Database.FindClient(Login, Password);
             if (Client != null)
                 return true;

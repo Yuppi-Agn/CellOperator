@@ -6,20 +6,18 @@ namespace DAL
     using System.ComponentModel.DataAnnotations.Schema;
     using System.Data.Entity.Spatial;
 
-    [Table("Internet")]
-    public partial class Internet
+    [Table("Administrator")]
+    public partial class Administrator
     {
         [DatabaseGenerated(DatabaseGeneratedOption.None)]
         public int ID { get; set; }
 
-        public int? ID_number { get; set; }
+        [Column("_Login")]
+        [StringLength(50)]
+        public string C_Login { get; set; }
 
-        [Column("_Date", TypeName = "date")]
-        public DateTime? C_Date { get; set; }
-
-        [Column("_Data")]
-        public decimal? C_Data { get; set; }
-
-        public virtual Number Number { get; set; }
+        [Column("_Password")]
+        [StringLength(50)]
+        public string C_Password { get; set; }
     }
 }

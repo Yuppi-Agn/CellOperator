@@ -115,6 +115,22 @@ namespace BLL.Models
             Password = p.C_Password.Trim();
         }
     }
+    public class AdministratorDTO
+    {
+        public int ID { get; set; }
+        public string Login { get; set; }
+        public string Password { get; set; }
+        public string Type { get; set; }
+        public byte? C_type { get; set; }
+
+        public AdministratorDTO() { }
+        public AdministratorDTO(Administrator p)
+        {
+            ID = p.ID;
+            Login = p.C_Login.Trim();
+            Password = p.C_Password.Trim();
+        }
+    }
 
     public class Client_LegalEntityDTO
     {
@@ -323,5 +339,53 @@ namespace BLL.Models
             Service = p.C_Service.Name.Trim();
         }
 
+    }
+    public class ExpensesDTO
+    {
+        public ExpensesDTO(Expenses p)
+        {
+            ID = p.ID;
+            ID_number = p.ID_number;
+            Date = p.C_Date;
+            Expense = p.Expense;
+            type = p.C_type;
+            Calling = p.Calling;
+            Number = p.Number;
+            Internet = p.Internet;
+            SMS = p.SMS;
+        }
+
+        public int ID { get; set; }
+
+        public int? ID_number { get; set; }
+
+        public DateTime? Date { get; set; }
+
+        public decimal? Expense { get; set; }
+
+        public byte? type { get; set; }
+
+        public virtual ICollection<Calling> Calling { get; set; }
+
+        public virtual Number Number { get; set; }
+
+        public virtual ICollection<Internet> Internet { get; set; }
+        public virtual ICollection<SMS> SMS { get; set; }
+    }
+    public partial class Monthly_remains_tarifDTO
+    {
+        public Monthly_remains_tarifDTO(Monthly_remains_tarif p)
+        {
+            ID = p.ID;
+            SMS_amount = p.SMS_amount;
+            MINUTES_amount = p.MINUTES_amount;
+        }
+        public int ID { get; set; }
+
+        public int SMS_amount { get; set; }
+
+        public int MINUTES_amount { get; set; }
+
+        public int Internet_amount { get; set; }
     }
 }
