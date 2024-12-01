@@ -1,0 +1,17 @@
+﻿<Window x:Class="CellOperator.ClientWindow_ReportSMS"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:CellOperator"
+        mc:Ignorable="d"
+        Title="Детализация СМС" Height="450" Width="238.277">
+    <DataGrid ItemsSource="{Binding Table}" CanUserAddRows="False" AutoGenerateColumns="False" HorizontalAlignment="Left" Height="auto" VerticalAlignment="Top" Width="auto">
+        <DataGrid.Columns>
+            <DataGridTextColumn Binding="{Binding Path=Type}" Header="Тип"/>
+            <DataGridTextColumn Binding="{Binding Path=OtherNumber}" Header="Иной номер"/>
+            <DataGridTextColumn Binding="{Binding Path=Date}" Header="Дата"/>
+            <DataGridTextColumn Binding="{Binding Path=ConnectionType}" Header="Тип отправки"/>
+        </DataGrid.Columns>
+    </DataGrid>
+</Window>

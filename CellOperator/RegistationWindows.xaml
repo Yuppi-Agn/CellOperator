@@ -1,0 +1,86 @@
+﻿<Window x:Class="CellOperator.RegistationWindows"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:CellOperator"
+        mc:Ignorable="d"
+        Title="RegistationWindows" Height="450" Width="800">
+    <Window.Resources>
+        <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
+    </Window.Resources>
+    <Grid>
+        <StackPanel HorizontalAlignment="Center" Height="auto" VerticalAlignment="Center" Width="auto" Grid.Column="1">
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                <TextBlock Text="Вы - Физическое лицо?"/>
+                <CheckBox IsChecked="{Binding IsIndividual}" HorizontalContentAlignment="Center" />
+            </StackPanel>
+            <Grid x:Name="Individual_entity" Visibility="{Binding IsIndividual, Converter={StaticResource BooleanToVisibilityConverter}}">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
+                <TextBlock Text="Имя:" Grid.Row="0" Grid.Column="0" />
+                <TextBlock Text="Фамилия:" Grid.Row="1" Grid.Column="0" />
+                <TextBlock Text="Отчество:" Grid.Row="2" Grid.Column="0" />
+                <TextBlock Text="Паспорт:" Grid.Row="3" Grid.Column="0" />
+
+                <TextBox Text="{Binding FirstName}" Grid.Row="0" Grid.Column="1" MinWidth="40" MinHeight="4" />
+                <TextBox Text="{Binding LastName}" Grid.Row="1" Grid.Column="1" MinWidth="40"/>
+                <TextBox Text="{Binding Patronymic}" Grid.Row="2" Grid.Column="1" MinWidth="40"/>
+                <TextBox Text="{Binding Passport}" Grid.Row="3" Grid.Column="1" MinWidth="40"/>
+            </Grid>
+            <Grid x:Name="Legal_entity" Visibility="{Binding IsLegal, Converter={StaticResource BooleanToVisibilityConverter}}">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
+                <TextBlock Text="Название организации:" Grid.Row="0" Grid.Column="0" />
+                <TextBlock Text="Индивидуалный номер:" Grid.Row="1" Grid.Column="0" />
+                <TextBlock Text="Адрес:" Grid.Row="2" Grid.Column="0" />
+
+                <TextBox Text="{Binding OrganizationName}" Grid.Row="0" Grid.Column="1" MinWidth="40"/>
+                <TextBox Text="{Binding IdividualTaxpayerNumber}" Grid.Row="1" Grid.Column="1" MinWidth="40"/>
+                <TextBox Text="{Binding Adress}" Grid.Row="2" Grid.Column="1" MinWidth="40"/>
+            </Grid>
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
+                <TextBlock Text="Логин:" Grid.Row="1" Grid.Column="0" />
+                <TextBlock Text="Пароль:" Grid.Row="2" Grid.Column="0" />
+                <TextBox x:Name="LoginBox" Text="{Binding Username}" Grid.Row="1" Grid.Column="1" MinWidth="40"/>
+                <TextBox x:Name="passwordBox"  Text="{Binding Password}" Grid.Row="2" Grid.Column="1" MinWidth="40"/>
+                <TextBlock Text="{Binding Status}" Grid.Row="4" Grid.Column="1"
+               HorizontalAlignment="Center" VerticalAlignment="Center" Foreground="Red" TextWrapping="Wrap" />
+            </Grid>
+            <Button Content="Зарегистрироваться" Margin="2" Command="{Binding RegistationAction, Mode=OneTime}"
+            CommandParameter="{Binding ElementName=passwordBox}"/>
+            <!--<Button Content="Войти как пользователь" Margin="2" Click="Button__UserAuth"/>
+            <Button Content="Войти как администратор" Click="Button_AdministratorAuth"/>-->
+        </StackPanel>
+    </Grid>
+</Window>

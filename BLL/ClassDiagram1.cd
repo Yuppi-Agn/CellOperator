@@ -1,0 +1,109 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1" MembersFormat="FullSignature">
+  <Class Name="BLL.Services.DataBase_service" Collapsed="true">
+    <Position X="2.5" Y="1.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>CAgAUIAEAAAwAAAAAEIQAgIaBCEQAAABADAzARAAAEw=</HashCode>
+      <FileName>Services\DataBase_service.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="BLL.Services.Methods_service" Collapsed="true">
+    <Position X="0.75" Y="1.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>BAAAAAAAAAAQAAAAAAAAAAAAAAAAAAAIAAAAAAAAAAA=</HashCode>
+      <FileName>Services\Methods_service.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="BLL.Models.CallingDTO" Collapsed="true">
+    <Position X="0.75" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>BAAAAAAAAAAAgAAAAAEAAAQAAAIBAAABAGAAAAAAAAA=</HashCode>
+      <FileName>Models\DTOs.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="BLL.Models.SMSDTO" Collapsed="true">
+    <Position X="19.25" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>BAAAAAAAAAAAgAAAAAEAAAAAAAIBABABAGAAAAAAAAA=</HashCode>
+      <FileName>Models\DTOs.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="BLL.Models.InternetDTO" Collapsed="true">
+    <Position X="10" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAgCAAAAAAAAAgAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Models\DTOs.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="BLL.Models.ClientDTO" Collapsed="true">
+    <Position X="6.5" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAgAAAAAAAAAAAAAAAAAACAQAQAACAAAA=</HashCode>
+      <FileName>Models\DTOs.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="BLL.Models.Client_LegalEntityDTO" Collapsed="true">
+    <Position X="4.5" Y="0.5" Width="1.75" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAIIAwAAAAAAAAAAAAAgAABACAQAQAACAAAA=</HashCode>
+      <FileName>Models\DTOs.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="BLL.Models.Client_IndividualDTO" Collapsed="true">
+    <Position X="2.5" Y="0.5" Width="1.75" />
+    <TypeIdentifier>
+      <HashCode>AAAAAGAAAAIAgAAAABAAAAAAAAAAAAACAQAQAACAAAg=</HashCode>
+      <FileName>Models\DTOs.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="BLL.Models.TarifDTO" Collapsed="true">
+    <Position X="22.75" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAQgQEAQSCgAAIBAAAAAAAAAAEAAAAAQAAAAAAAAA=</HashCode>
+      <FileName>Models\DTOs.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="BLL.Models.NumberDTO" Collapsed="true">
+    <Position X="15.25" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAQIAEAAAAgAIAAEAAAgAAAAAAAAAAgAAAAAAAAAA=</HashCode>
+      <FileName>Models\DTOs.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="BLL.Models.LegalEntityDTO" Collapsed="true">
+    <Position X="8.25" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAIIAwAAAAAAAAAAAAAgAABAAAAAAAAAAAAA=</HashCode>
+      <FileName>Models\DTOs.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="BLL.Models.IndividualDTO" Collapsed="true">
+    <Position X="11.75" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAGAAAAIAgAAAABAAAAAAAAAAAAAAAAAAAAAAAAg=</HashCode>
+      <FileName>Models\DTOs.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="BLL.Models.Tarif_HistoryDTO" Collapsed="true">
+    <Position X="21" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAQAAAIAAAgAIAAEAAAAAgAAAAAAAAAAAAAEAAAAA=</HashCode>
+      <FileName>Models\DTOs.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="BLL.Models.ServiceDTO" Collapsed="true">
+    <Position X="13.5" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAQAAgAAAAAAAAAQAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Models\DTOs.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="BLL.Models.Service_ConnectionDTO" Collapsed="true">
+    <Position X="17" Y="0.5" Width="2" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAgCAAAEAAAAAgAAAAQAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Models\DTOs.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Font Name="Segoe UI" Size="9" />
+</ClassDiagram>
