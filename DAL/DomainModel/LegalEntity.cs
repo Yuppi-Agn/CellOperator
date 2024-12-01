@@ -16,9 +16,6 @@ namespace DAL
         public string OrganizationName { get; set; }
 
         [StringLength(255)]
-        public string MSRN { get; set; }
-
-        [StringLength(255)]
         public string IdividualTaxpayerNumber { get; set; }
 
         [StringLength(250)]

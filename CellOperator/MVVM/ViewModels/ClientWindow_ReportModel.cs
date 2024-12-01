@@ -108,7 +108,177 @@ namespace CellOperator.MVVM.ViewModels
             MessageBox.Show("Произошла успешно!", "Покупка номера...", MessageBoxButton.OK);
             WindowManager.CloseWindow(ViewID);//Close();
         }
+        #region INotifyPropertyChanged Members
+        public event PropertyChangedEventHandler PropertyChanged;
+        private void NotifyPropertyChanged(string propertyName)
+        {
+            if (PropertyChanged != null)
+                PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
+        }
+        #endregion
+    }
 
+    class ClientWindow_SendSMSModel : INotifyPropertyChanged
+    {
+        ClientDTO client;
+        NumberDTO number;
+
+        private Guid _viewId;
+        public Guid ViewID
+        {
+            get { return _viewId; }
+        }
+
+        private DataBase_service DB;
+
+        private RelayCommand _BaseCommand;
+        public RelayCommand BaseCommand { get { return _BaseCommand; } }
+
+        private string _OtherNumber;
+        public string OtherNumber
+        {
+            get { return _OtherNumber; }
+            set
+            {
+                _OtherNumber = value;
+                NotifyPropertyChanged("OtherNumber");
+            }
+        }
+        private string _SMSData;
+        public string SMSData
+        {
+            get { return _SMSData; }
+            set
+            {
+                _SMSData = value;
+                NotifyPropertyChanged("SMSData");
+            }
+        }
+        public ClientWindow_SendSMSModel(ref DataBase_service db, ClientDTO client, NumberDTO number)
+        {
+            _viewId = Guid.NewGuid();
+            _BaseCommand = new RelayCommand(Action, i => true);
+            DB = db;
+
+            this.client = client;
+            this.number = number;
+        }
+        public void Action(object parameter)
+        {
+            DB.UserSendSMS(client.ID, "+7980"+_OtherNumber, SMSData);
+            MessageBox.Show("Произошла успешно!", "Отправка СМС...", MessageBoxButton.OK);
+            WindowManager.CloseWindow(ViewID);//Close();
+        }
+        #region INotifyPropertyChanged Members
+        public event PropertyChangedEventHandler PropertyChanged;
+        private void NotifyPropertyChanged(string propertyName)
+        {
+            if (PropertyChanged != null)
+                PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
+        }
+        #endregion
+    }
+    class ClientWindow_MakeCallModel : INotifyPropertyChanged
+    {
+        ClientDTO client;
+        NumberDTO number;
+
+        private Guid _viewId;
+        public Guid ViewID
+        {
+            get { return _viewId; }
+        }
+
+        private DataBase_service DB;
+
+        private RelayCommand _BaseCommand;
+        public RelayCommand BaseCommand { get { return _BaseCommand; } }
+
+        private string _OtherNumber;
+        public string OtherNumber
+        {
+            get { return _OtherNumber; }
+            set
+            {
+                _OtherNumber = value;
+                NotifyPropertyChanged("OtherNumber");
+            }
+        }
+        private string _CallDuration;
+        public string CallDuration
+        {
+            get { return _CallDuration; }
+            set
+            {
+                _CallDuration = value;
+                NotifyPropertyChanged("CallDuration");
+            }
+        }
+        public ClientWindow_MakeCallModel(ref DataBase_service db, ClientDTO client, NumberDTO number)
+        {
+            _viewId = Guid.NewGuid();
+            _BaseCommand = new RelayCommand(Action, i => true);
+            DB = db;
+
+            this.client = client;
+            this.number = number;
+        }
+        public void Action(object parameter)
+        {
+            DB.UserMakeCall(client.ID, "+7980"+_OtherNumber, int.Parse(_CallDuration));
+            MessageBox.Show("Произошел успешно!", "Звонок...", MessageBoxButton.OK);
+            WindowManager.CloseWindow(ViewID);//Close();
+        }
+        #region INotifyPropertyChanged Members
+        public event PropertyChangedEventHandler PropertyChanged;
+        private void NotifyPropertyChanged(string propertyName)
+        {
+            if (PropertyChanged != null)
+                PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
+        }
+        #endregion
+    }
+    class ClientWindow_SpentInternetModel : INotifyPropertyChanged
+    {
+        ClientDTO client;
+        NumberDTO number;
+
+        private Guid _viewId;
+        public Guid ViewID
+        {
+            get { return _viewId; }
+        }
+
+        private DataBase_service DB;
+
+        private RelayCommand _BaseCommand;
+        public RelayCommand BaseCommand { get { return _BaseCommand; } }
+
+        private string _InternetAmount;
+        public string InternetAmount
+        {
+            get { return _InternetAmount; }
+            set
+            {
+                _InternetAmount = value;
+                NotifyPropertyChanged("InternetAmount");
+            }
+        }
+        public ClientWindow_SpentInternetModel(ref DataBase_service db, ClientDTO client, NumberDTO number)
+        {
+            _viewId = Guid.NewGuid();
+            _BaseCommand = new RelayCommand(Action, i => true);
+            DB = db;
+
+            this.client = client;
+            this.number = number;
+        }
+        public void Action(object parameter)
+        {
+            DB.UserSpentInternet(client.ID, int.Parse(_InternetAmount));
+            MessageBox.Show("Произошла успешно!", "Трата интернета...", MessageBoxButton.OK);
+            WindowManager.CloseWindow(ViewID);//Close();
+        }
         #region INotifyPropertyChanged Members
         public event PropertyChangedEventHandler PropertyChanged;
         private void NotifyPropertyChanged(string propertyName)

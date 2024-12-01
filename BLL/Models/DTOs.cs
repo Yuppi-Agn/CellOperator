@@ -12,7 +12,6 @@ namespace BLL.Models
         public int ID { get; set; }
         public int? ID_number_host { get; set; }
         public string number_host { get; set; }
-        public int? ID_number_slave { get; set; }
         public string number_slave { get; set; }
         public DateTime? Date { get; set; }
         public int? Count { get; set; }
@@ -22,10 +21,9 @@ namespace BLL.Models
         public CallingDTO(Calling p)
         {
             number_host = p.Number.Number1.Trim();
-            number_slave = p.Number1.Number1.Trim();
+            number_slave = p.Number_slave.Trim();
             ID = p.ID;
             ID_number_host = p.ID_number_host;
-            ID_number_slave = p.ID_number_slave;
             Date = p.C_Date;
             Count = p.C_Count;
             Connection_type = p.Connection_type;
@@ -49,7 +47,6 @@ namespace BLL.Models
         public int ID { get; set; }
         public int? ID_number_host { get; set; }
         public string number_host { get; set; }
-        public int? ID_number_slave { get; set; }
         public string number_slave { get; set; }
         public DateTime? Date { get; set; }
         public string Data { get; set; }
@@ -61,13 +58,12 @@ namespace BLL.Models
         {
             ID = p.ID;
             ID_number_host = p.ID_number_host;
-            ID_number_slave = p.ID_number_slave;
             Date = p.C_Date;
             Data = p.C_Data.Trim();
             Connection_type = p.Connection_type;
 
             number_host = p.Number.Number1.Trim();
-            number_slave = p.Number1.Number1.Trim();
+            number_slave = p.Number_slave.Trim();
             switch (Connection_type)
             {
                 case 0:
@@ -150,7 +146,6 @@ namespace BLL.Models
         {
             ID = p.ID;
             OrganizationName = p.OrganizationName.Trim();
-            MSRN = p.MSRN.Trim();
             IdividualTaxpayerNumber = p.IdividualTaxpayerNumber.Trim();
             Adress = p.Adress.Trim();
             ClientID = p.ClientID;
@@ -234,8 +229,7 @@ namespace BLL.Models
         public decimal Bill { get; set; }
         public DateTime TarifDate { get; set; }
         public bool Status { get; set; }
-
-
+        public Monthly_remains_tarif Monthly_remains_tarif;
         public NumberDTO() { }
         public NumberDTO(Number p)
         {
@@ -247,13 +241,13 @@ namespace BLL.Models
             Bill = p.Bill;
             TarifDate = p.TarifDate;
             if (p.C_status == 0) Status = false; else Status = true;
+            Monthly_remains_tarif = p.Monthly_remains_tarif;
         }
     }
     public class LegalEntityDTO
     {
         public int ID { get; set; }
         public string OrganizationName { get; set; }
-        public string MSRN { get; set; }
         public string IdividualTaxpayerNumber { get; set; }
         public string Adress { get; set; }
         public int? ClientID { get; set; }
@@ -262,7 +256,6 @@ namespace BLL.Models
         {
             ID = p.ID;
             OrganizationName = p.OrganizationName.Trim();
-            MSRN = p.MSRN.Trim();
             IdividualTaxpayerNumber = p.IdividualTaxpayerNumber.Trim();
             Adress = p.Adress.Trim();
             ClientID = p.ClientID;
@@ -311,12 +304,14 @@ namespace BLL.Models
     {
         public int ID { get; set; }
         public string Name { get; set; }
+        public string Discription { get; set; }
         public decimal? Price { get; set; }
         public ServiceDTO(C_Service p)
         {
             ID = p.ID;
             Name = p.Name.Trim();
             Price = p.Price;
+            Discription = p.Discription;
         }
     }
     public class Service_ConnectionDTO

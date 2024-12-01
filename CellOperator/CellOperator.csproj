@@ -80,6 +80,15 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="ClientWindow_MakeCall.xaml.cs">
+      <DependentUpon>ClientWindow_MakeCall.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="ClientWindow_SendSMS.xaml.cs">
+      <DependentUpon>ClientWindow_SendSMS.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="ClientWindow_SpentInternet.xaml.cs">
+      <DependentUpon>ClientWindow_SpentInternet.xaml</DependentUpon>
+    </Compile>
     <Compile Include="MVVM\ViewModels\RegistationModel.cs" />
     <Compile Include="RegistationWindows.xaml.cs">
       <DependentUpon>RegistationWindows.xaml</DependentUpon>
@@ -100,11 +109,23 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="ClientWindow_MakeCall.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="ClientWindow_ReportCalling.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="ClientWindow_ReportSMS.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="ClientWindow_SendSMS.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="ClientWindow_SpentInternet.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

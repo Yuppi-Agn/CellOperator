@@ -152,6 +152,12 @@
                     </Grid>
                 </TabItem>
             </TabControl>
+
+            <StackPanel Orientation="Vertical" VerticalAlignment="Center" Grid.Row="0" Grid.Column="1" HorizontalAlignment="Center">
+                <Button Content="Сгенерировать" Command="{Binding GenerateBaseCommand}" Width="auto" HorizontalAlignment="Center"/>
+                <Button Content="Списать за месяц" Width="auto" HorizontalAlignment="Center"/>
+            </StackPanel>
+            
             <StackPanel Orientation="Vertical" VerticalAlignment="Center" Grid.Row="0" Grid.Column="1" HorizontalAlignment="Center" Visibility="Collapsed">
                 <StackPanel >
                     <Button Content="Добавить" Command="{Binding AddCommand}" x:Name="AddButton"  Width="auto" HorizontalAlignment="Center"/>

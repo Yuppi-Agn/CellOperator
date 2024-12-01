@@ -19,57 +19,10 @@ namespace BLL.Services
         List<string> Patronomics = new List<string>();
         List<string> Tarifs = new List<string>();
         List<string> Somethings = new List<string>();
+        List<string> Adreeses = new List<string>();
         public DataBase_service()
         {
             db = new EF();
-
-            if (true)
-            {
-                StreamReader sr = new StreamReader("C:\\Users\\Yuppi\\source\\repos\\PO_Lab3\\Resources\\Firstname.txt");
-                string line = sr.ReadLine();
-                while (line != null)
-                {
-                    FirstNames.Add(line);
-                    line = sr.ReadLine();
-                }
-                sr.Close();
-
-                sr = new StreamReader("C:\\Users\\Yuppi\\source\\repos\\PO_Lab3\\Resources\\Lastname.txt");
-                line = sr.ReadLine();
-                while (line != null)
-                {
-                    LastNames.Add(line);
-                    line = sr.ReadLine();
-                }
-                sr.Close();
-
-                sr = new StreamReader("C:\\Users\\Yuppi\\source\\repos\\PO_Lab3\\Resources\\Patronomic.txt");
-                line = sr.ReadLine();
-                while (line != null)
-                {
-                    Patronomics.Add(line);
-                    line = sr.ReadLine();
-                }
-                sr.Close();
-
-                sr = new StreamReader("C:\\Users\\Yuppi\\source\\repos\\PO_Lab3\\Resources\\Tarif.txt");
-                line = sr.ReadLine();
-                while (line != null)
-                {
-                    Tarifs.Add(line);
-                    line = sr.ReadLine();
-                }
-                sr.Close();
-
-                sr = new StreamReader("C:\\Users\\Yuppi\\source\\repos\\PO_Lab3\\Resources\\Something.txt");
-                line = sr.ReadLine();
-                while (line != null)
-                {
-                    Somethings.Add(line);
-                    line = sr.ReadLine();
-                }
-                sr.Close();
-            }
         }
         public List<ClientDTO> GetAllClients()
         {
@@ -101,7 +54,7 @@ namespace BLL.Services
         }
         public List<TarifDTO> GetAllTarifs(ClientDTO client)
         {
-            return db.Tarif.ToList().Where(i=> i.C_type == client.C_type).Select(i => new TarifDTO(i)).ToList();
+            return db.Tarif.ToList().Where(i => i.C_type == client.C_type).Select(i => new TarifDTO(i)).ToList();
         }
         public List<ServiceDTO> GetAllServices()
         {
@@ -256,7 +209,6 @@ namespace BLL.Services
                 ClientID = client.ID,
                 Adress = C.Adress,
                 IdividualTaxpayerNumber = C.IdividualTaxpayerNumber,
-                MSRN = C.MSRN,
                 OrganizationName = C.OrganizationName
             });
             return Save();
@@ -303,7 +255,6 @@ namespace BLL.Services
                 ClientID = client.ID,
                 Adress = C.Adress,
                 IdividualTaxpayerNumber = C.IdividualTaxpayerNumber,
-                MSRN = C.MSRN,
                 OrganizationName = C.OrganizationName
             });
             return Save();
@@ -321,7 +272,6 @@ namespace BLL.Services
         {
             LegalEntity It = db.LegalEntity.Find(C.ID);
             It.Adress = C.Adress;
-            It.MSRN = C.MSRN;
             It.OrganizationName = C.OrganizationName;
             It.IdividualTaxpayerNumber = C.IdividualTaxpayerNumber;
             Save();
@@ -383,13 +333,13 @@ namespace BLL.Services
         {
             var LegalEntity = db.LegalEntity.Where(p => p.ClientID == client.ID).AsEnumerable();
             if (LegalEntity.Count() > 0) return LegalEntity.Select(i => new LegalEntityDTO(i)).First().OrganizationName;
-            
+
             var Individual = db.Individual.Where(p => p.ClientID == client.ID).AsEnumerable();
             if (Individual.Count() > 0) {
                 var IndividualDT = Individual.Select(i => new IndividualDTO(i)).First();
-                return IndividualDT.FirstName + " " + IndividualDT.LastName + " " + IndividualDT.Patronymic; 
+                return IndividualDT.FirstName + " " + IndividualDT.LastName + " " + IndividualDT.Patronymic;
             }
-            
+
             return "Ups...";
         }
         public List<NumberDTO> FindNumbers(ClientDTO client)
@@ -400,12 +350,15 @@ namespace BLL.Services
         }
         public bool ChangeTarif_NumByClient(ClientDTO client, int TarifID, int NumID)
         {
-            Tarif NewTarif= db.Tarif.Find(TarifID);
+            Tarif NewTarif = db.Tarif.Find(TarifID);
             Number ThisNum = db.Number.Find(NumID);
             if (NewTarif == null || ThisNum == null) return false;
 
+            int ID=0;
+            if (db.Tarif_History.OrderBy(p => p.ID).ToList().LastOrDefault() != null) ID = db.Tarif_History.OrderBy(p => p.ID).ToList().LastOrDefault().ID + 1;
+
             Tarif_History tarif_History = new Tarif_History();
-            tarif_History.ID = db.Tarif_History.OrderBy(p => p.ID).ToList().Last().ID + 1;
+            tarif_History.ID = ID;
             tarif_History.ID_Number = NumID;
             tarif_History.ID_Tarif = TarifID;
             tarif_History.StartDate = ThisNum.TarifDate;
@@ -414,6 +367,9 @@ namespace BLL.Services
 
             ThisNum.ID_Tarif = NewTarif.ID;
             ThisNum.TarifDate = DateTime.Now;
+
+            ThisNum.Bill -= NewTarif.Price;
+            AddExpenses(NumID, 8, NewTarif.Price);
 
             return Save();
         }
@@ -437,12 +393,297 @@ namespace BLL.Services
                 IsExists = List.Count() > 0;
             }
             db.Number.Add(NewNumber);
+            //NewNumber.Bill -= db.Tarif.Find(TarifID).Price.Price;
+            //AddExpenses(NewNumber.ID, 8, db.Tarif.Find(TarifID).Price);
+
             Save();
             return false;
         }
+        private void CheckUpMonthly_remains_tarif()
+        {
+            List<Number> Numbers = db.Number.ToList();
+            foreach(var item in Numbers)
+            {
+                if(db.Monthly_remains_tarif.Where(p=> p.Number == item).FirstOrDefault() == null)
+                {
+                    int ID = 0;
+                    int ThisMinutes_amount = 0,
+                        ThisSMS_amount = 0,
+                        ThisInternet_amount = 0;
+                    if (item.Tarif!= null)
+                    {
+                        ThisMinutes_amount = item.Tarif.MINUTES_amount;
+                        ThisSMS_amount = item.Tarif.SMS_amount;
+                        ThisInternet_amount = item.Tarif.Internet_amount;
+                    }
+                    if (db.Monthly_remains_tarif.OrderBy(p => p.ID).ToList().LastOrDefault() != null) ID = db.Monthly_remains_tarif.OrderBy(p => p.ID).ToList().Last().ID + 1;
+                    Monthly_remains_tarif Monthly_remain = new Monthly_remains_tarif()
+                    {
+                        ID = ID,
+                        MINUTES_amount= ThisMinutes_amount,
+                        SMS_amount = ThisSMS_amount,
+                        Internet_amount = ThisInternet_amount,
+                    };
+                    item.ID_Monthly_remains_tarif = Monthly_remain.ID;
+                    db.Monthly_remains_tarif.Add(Monthly_remain);
+                }
+            }
+            Save();
+        }
+        private void CheckUpMonthly_remains_tarif(int NumberID)
+        {
+            Number Number = db.Number.Find(NumberID);
+
+            var idk = db.Monthly_remains_tarif.Where(p => p.ID == Number.ID_Monthly_remains_tarif).ToArray().FirstOrDefault();
+
+            if (idk == null)
+            {
+                int ID = 0;
+                int ThisMinutes_amount = 0,
+                    ThisSMS_amount = 0,
+                    ThisInternet_amount = 0;
+                if (Number.Tarif != null)
+                {
+                    ThisMinutes_amount = Number.Tarif.MINUTES_amount;
+                    ThisSMS_amount = Number.Tarif.SMS_amount;
+                    ThisInternet_amount = Number.Tarif.Internet_amount;
+                }
+                if (db.Monthly_remains_tarif.OrderBy(p => p.ID).ToList().LastOrDefault() != null) ID = db.Monthly_remains_tarif.OrderBy(p => p.ID).ToList().Last().ID + 1;
+                Monthly_remains_tarif Monthly_remain = new Monthly_remains_tarif()
+                {
+                    ID = ID,
+                    MINUTES_amount = ThisMinutes_amount,
+                    SMS_amount = ThisSMS_amount,
+                    Internet_amount = ThisInternet_amount,
+                };
+                Number.ID_Monthly_remains_tarif = Monthly_remain.ID;
+                db.Monthly_remains_tarif.Add(Monthly_remain);
+                Save();
+            }
+        }
+        public Expenses AddExpenses(int NumID, byte type, decimal expense)
+        {
+            /*
+             * 1-Звонки в тарифе | бесплатно
+             * 2-СМС в тарифе | бесплатно
+             * 3-Трафик в тарифе | бесплатно
+             * 
+             * 4-Звонки вне тарифа | платно
+             * 5-СМС вне тарифа | платно
+             * 6-Трафик вне тарифа | платно
+             * 
+             * 8-Подключение/смена тарифа | платно
+             * 9-Подключение услуги | платно
+             * 
+             * 10-Плата за услугу в месяц | платно
+             * 11-Плата за тариф в месяц | платно
+             */
+
+            int ID = 0;
+            if (db.Expenses.OrderBy(p => p.ID).ToList().LastOrDefault() != null) ID = db.Expenses.OrderBy(p => p.ID).ToList().Last().ID + 1;
+
+            Expenses expenses = new Expenses()
+            {
+                ID = ID,
+                C_Date = DateTime.Now,
+                ID_number = NumID,
+                C_type = type,
+                Expense = expense
+            };
+            db.Expenses.Add(expenses);
+            return expenses;
+        }
+        public void UserSendSMS(int IDnumber, string number_slave, string Message)
+        {
+            CheckUpMonthly_remains_tarif(IDnumber);
+            var BD_Number = db.Number.Find(IDnumber);
+            Expenses expense;            
+
+            if (BD_Number.Monthly_remains_tarif.SMS_amount >= 1)
+            {
+                BD_Number.Monthly_remains_tarif.SMS_amount -= 1;
+                expense =AddExpenses(BD_Number.ID, 2, 0);
+            }
+            else
+            {
+                var Cost = BD_Number.Tarif.sms_price;
+                BD_Number.Bill -= Cost;
+                expense =AddExpenses(BD_Number.ID, 5, Cost);
+            }
+
+            SMS ThisSMS = new SMS()
+            {
+                ID = db.SMS.OrderBy(p => p.ID).ToList().Last().ID + 1,
+                ID_number_host = BD_Number.ID,
+                Number = BD_Number,
+                Number_slave = number_slave,
+                Connection_type =1,
+                C_Data = Message,
+                Expenses = expense,
+                ID_Expenses = expense.ID,
+                C_Date = DateTime.Now,                
+            };
+            db.SMS.Add(ThisSMS);
+            Save();
+        }
+        public void UserMakeCall(int IDnumber, string number_slave, int Duration)
+        {
+            CheckUpMonthly_remains_tarif(IDnumber);
+            var BD_Number = db.Number.Find(IDnumber);
+            Expenses expense;
+
+            if (BD_Number.Monthly_remains_tarif.MINUTES_amount >= Duration)
+            {
+                BD_Number.Monthly_remains_tarif.MINUTES_amount -= Duration;
+                expense = AddExpenses(BD_Number.ID, 1, 0);
+            }
+            else //if (BD_Number.Monthly_remains_tarif.MINUTES_amount > 0)
+            {
+                var Remains = BD_Number.Monthly_remains_tarif.MINUTES_amount;
+                BD_Number.Monthly_remains_tarif.MINUTES_amount=0;
+                var Cost = BD_Number.Tarif.call_price_inCity * (Duration - Remains);
+                
+                BD_Number.Bill -= Cost;
+                expense = AddExpenses(BD_Number.ID, 4, Cost);
+            }
+
+            Calling ThisCalling = new Calling()
+            {
+                ID = db.SMS.OrderBy(p => p.ID).ToList().Last().ID + 1,
+                ID_number_host = BD_Number.ID,
+                Number = BD_Number,
+                Number_slave = number_slave,
+                Connection_type = 1,
+                C_Count = Duration,
+                Expenses = expense,
+                ID_Expenses = expense.ID,
+                C_Date = DateTime.Now,                
+            };
+            db.Calling.Add(ThisCalling);
+            Save();
+        }
+        public void UserSpentInternet(int IDnumber, int Amount)
+        {
+            CheckUpMonthly_remains_tarif(IDnumber);
+            var BD_Number = db.Number.Find(IDnumber);
+            Expenses expense;
+
+            if (BD_Number.Monthly_remains_tarif.Internet_amount >= Amount)
+            {
+                BD_Number.Monthly_remains_tarif.Internet_amount -= Amount;
+                expense = AddExpenses(BD_Number.ID, 3, 0);
+            }
+            else
+            {
+                var Remains = BD_Number.Monthly_remains_tarif.Internet_amount;
+                BD_Number.Monthly_remains_tarif.Internet_amount = 0;
+                var Cost = BD_Number.Tarif.internet_price * (Amount - Remains);
+
+                BD_Number.Bill -= Cost;
+                expense = AddExpenses(BD_Number.ID, 6, Cost);
+            }
+
+            Internet ThisInternet = new Internet()
+            {
+                ID = db.SMS.OrderBy(p => p.ID).ToList().Last().ID + 1,
+                Number = BD_Number,
+                C_Data = Amount,
+                Expenses = expense,
+                ID_Expenses = expense.ID,
+                C_Date = DateTime.Now,
+            };
+            db.Internet.Add(ThisInternet);
+            Save();
+        }
         public void GenerateMembers(int count)
         {
-            Random r = new Random(DateTime.Now.Millisecond);
+            const int TarifNumber = 10;
+
+            if (true)
+            {
+                Random rand = new Random((int)DateTime.Now.Ticks);
+                StreamReader sr;
+                /*StreamReader sr = new StreamReader("C:\\Users\\Yuppi\\source\\repos\\PO_Lab3\\Resources\\Firstname.txt");
+                string line = sr.ReadLine();
+                while (line != null)
+                {
+                    FirstNames.Add(line);
+                    line = sr.ReadLine();
+                }
+                sr.Close();
+
+                sr = new StreamReader("C:\\Users\\Yuppi\\source\\repos\\PO_Lab3\\Resources\\Lastname.txt");
+                line = sr.ReadLine();
+                while (line != null)
+                {
+                    LastNames.Add(line);
+                    line = sr.ReadLine();
+                }
+                sr.Close();
+
+                sr = new StreamReader("C:\\Users\\Yuppi\\source\\repos\\PO_Lab3\\Resources\\Patronomic.txt");
+                line = sr.ReadLine();
+                while (line != null)
+                {
+                    Patronomics.Add(line);
+                    line = sr.ReadLine();
+                }
+                sr.Close();*/
+
+                sr = new StreamReader(@"C:\Users\Yuppi\source\repos\PO Construction\ResourcesForGenerator\FLP.txt");
+                string line = sr.ReadLine();
+                while (line != null)
+                {
+                    var Items = line.Split(' ');
+                    FirstNames.Add(Items[0]);
+                    LastNames.Add(Items[1]);
+                    Patronomics.Add(Items[2]);
+                    line = sr.ReadLine();
+                }
+                sr.Close();
+
+                sr = new StreamReader(@"C:\Users\Yuppi\source\repos\PO Construction\ResourcesForGenerator\Tarif.txt");
+                line = sr.ReadLine();
+                while (line != null)
+                {
+                    Tarifs.Add(line);
+                    line = sr.ReadLine();
+                }
+                sr.Close();
+
+                sr = new StreamReader(@"C:\Users\Yuppi\source\repos\PO Construction\ResourcesForGenerator\Something.txt");
+                line = sr.ReadLine();
+                while (line != null)
+                {
+                    switch (rand.Next(0,3))
+                    {
+                        default:
+                        case 0:
+                            line = "ООО \"" + line + '\"';
+                            break;
+                        case 1:
+                            line = "АО \"" + line + '\"';
+                            break;
+                        case 2:
+                            line = "ПАО \"" + line + '\"';
+                            break;
+                    }
+                    Somethings.Add(line);
+                    line = sr.ReadLine();
+                }
+                sr.Close();
+
+                sr = new StreamReader(@"C:\Users\Yuppi\source\repos\PO Construction\ResourcesForGenerator\Adress.txt");
+                line = sr.ReadLine();
+                while (line != null)
+                {
+                    Adreeses.Add(line);
+                    line = sr.ReadLine();
+                }
+                sr.Close();
+            }
+
+            Random r = new Random((int) DateTime.Now.Ticks);// new Random(DateTime.Now.Millisecond);
             for (int i = 0; i < count; i++)
             {
                 switch (i % 2)
@@ -470,20 +711,23 @@ namespace BLL.Services
                         {
                             ID = i,
                             C_type = ((byte)(i % 2)),
-                            C_Login = (58 + r.Next(0, 9999) + r.Next(0, 9999) * 69 * 356).ToString(),
+                            C_Login = (58 + r.Next(0, 9999) + r.Next(0, 9999) * 67 * 356).ToString(),
                             C_Password = (434 + r.Next(0, 9999) + r.Next(0, 9999) * 123 * 25).ToString()
                         });
                         db.LegalEntity.Add(new LegalEntity()
                         {
                             ID = i / 2,
                             ClientID = i,
-                            Adress = "",
+                            Adress = Adreeses[r.Next(0, Adreeses.Count - 1)],
                             IdividualTaxpayerNumber = r.Next(0, 9) + r.Next(0, 9) + r.Next(0, 9) + r.Next(0, 9) + r.Next(0, 9) + r.Next(0, 9) + r.Next(0, 9) + r.Next(0, 9) + r.Next(0, 9) + r.Next(0, 9) + r.Next(0, 9) + r.Next(0, 9) + "",
-                            MSRN = r.Next(0, 9) + r.Next(0, 9) + r.Next(0, 9) + r.Next(0, 9) + r.Next(0, 9) + r.Next(0, 9) + "",
                             OrganizationName = Somethings[r.Next(0, Somethings.Count - 1)]
                         });
                         break;
                 }
+            }
+
+            for (int i = 0; i < TarifNumber; i++)
+            {
                 db.Tarif.Add(new Tarif()
                 {
                     ID = i,
@@ -500,23 +744,44 @@ namespace BLL.Services
                     C_type = ((byte)(i % 2)),
                     name = Tarifs[r.Next(0, Tarifs.Count - 1)]
                 });
+            }
+
+            for (int i = 0; i < count; i++)
+            {                
                 db.Number.Add(new Number()
                 {
                     ID = i,
                     Bill = r.Next(0, 10000) + r.Next(0, 99) / 100,
                     ID_Client = i,
                     TarifDate = DateTime.Now,
-                    ID_Tarif = i,
+                    ID_Tarif = i% TarifNumber,
                     C_status = 1,
                     Number1 = "7980" + r.Next(0, 9) + r.Next(0, 9) + r.Next(0, 9) + r.Next(0, 9) + r.Next(0, 9) + r.Next(0, 9) + r.Next(0, 9)
-                });
-                db.C_Service.Add(new C_Service()
-                {
-                    ID = i,
-                    Name = FirstNames[r.Next(0, FirstNames.Count - 1)],
-                    Price = r.Next(0, 10000) + r.Next(0, 99) / 100
-                });
+                });                
             }
+
+            db.C_Service.Add(new C_Service()
+            {
+                ID = 0,
+                Name = "Живой баланс",
+                Discription = "При каждой совершенной вами трате отправляет вам на телефон уведомление об оставшейся сумме на счету и сумме этой тратыю",
+                Price = r.Next(0, 10000) + r.Next(0, 99) / 100
+            });
+            db.C_Service.Add(new C_Service()
+            {
+                ID = 1,
+                Name = "Обещанный платеж",
+                Discription = "Нужно совершить важный звонок, а денег на счету нет? Не беда! С этой услугой мы дадим вам в кредит 100 рублей до следующего пополенния счета и уведомим об этом!",
+                Price = r.Next(0, 10000) + r.Next(0, 99) / 100
+            });
+            db.C_Service.Add(new C_Service()
+            {
+                ID = 2,
+                Name = "Секретарь",
+                Discription = "Умный ИИ отвечает на совершенные Вам звонки сам и старается ответить на все вопросы звонившего, а вам лишь останется прочитать результаты этого диалога!",
+                Price = r.Next(0, 10000) + r.Next(0, 99) / 100
+            });
+
             for (int i = 0; i < count / 2; i++)
             {
                 int i1 = r.Next(0, count / 2 - 1), i2 = r.Next(count / 2, count);
@@ -524,7 +789,7 @@ namespace BLL.Services
                 {
                     ID = i,
                     ID_number_host = i1,
-                    ID_number_slave = i2,
+                    Number_slave = db.Number.Local.Where(P=> P.ID == i2).First().Number1,
                     Connection_type = (byte)(r.Next(0, 3)),
                     C_Count = (r.Next(1, 60)),
                     C_Date = DateTime.Now
@@ -537,12 +802,13 @@ namespace BLL.Services
                 {
                     ID = i,
                     ID_number_host = i1,
-                    ID_number_slave = i2,
+                    Number_slave = db.Number.Local.Where(P => P.ID == i2).First().Number1,
                     Connection_type = (byte)(r.Next(0, 3)),
                     C_Date = DateTime.Now,
                     C_Data = "" + r.Next(0, 9999) + r.Next(0, 9999) + r.Next(0, 9999) + r.Next(0, 9999) + r.Next(0, 9999) + r.Next(0, 9999) + r.Next(0, 999999)
                 });
             }
+
             Save();
         }
     }

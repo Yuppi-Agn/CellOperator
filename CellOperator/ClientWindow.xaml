@@ -20,7 +20,7 @@
                     <RowDefinition Height="*"/>
                 </Grid.RowDefinitions>
             <!--<ListBox x:Name="PhoneList" HorizontalAlignment="Left" Height="auto" Binding.SourceUpdated="{Binding NumbersToVisible}" VerticalAlignment="Top" Width="auto" Grid.Row="0" Grid.Column="0"/>-->
-            <ListBox Name="NumbersToVisible" Grid.Row="0" Grid.Column="0" HorizontalAlignment="Left" Height="auto" Width="auto" ItemsSource="{Binding NumbersToVisible}" SelectedIndex="{Binding SelectedNumber}" IsTextSearchEnabled="False">
+            <ListBox Name="NumbersToVisible" Grid.Row="0" Grid.Column="0" HorizontalAlignment="Left" Height="auto" Width="auto" ItemsSource="{Binding NumbersToVisible}" SelectedIndex="{Binding SelectedNumber}" IsTextSearchEnabled="False" ClipToBounds="True">
                 <ListBox.ItemTemplate>
                     <DataTemplate>
                         <StackPanel Orientation="Vertical" >
@@ -33,12 +33,19 @@
             <TextBlock x:Name="Tarif" HorizontalAlignment="Left" TextWrapping="Wrap" Text="{Binding StringFormat=Тариф: {0}, Path=Tarif}" VerticalAlignment="Top" Grid.Row="0" Grid.Column="2"/>
             </Grid>
         <StackPanel Orientation="Vertical"  HorizontalAlignment="Left" VerticalAlignment="Bottom">
+            <Button Content="Посмотреть тарифы" HorizontalAlignment="Left"  Width="auto" Command="{Binding TarifChangeAction}"/>
+            <Button Content="Посмотреть услуги" HorizontalAlignment="Left"  Width="auto"/>
+            <Button Content="Приобрести новый номер" HorizontalAlignment="Left"  Width="auto" Command="{Binding BuyNumChangeAction}"/>
+            
             <Button Content="Детализация звонков" HorizontalAlignment="Left"  Width="auto" Command="{Binding CallingReport}"/>
             <Button Content="Детализация СМС" HorizontalAlignment="Left"  Width="auto" Command="{Binding SMSReport}"/>
-            <Button Content="Посмотреть тарифы" HorizontalAlignment="Left"  Width="auto" Command="{Binding TarifChangeAction}"/>
-            <Button Content="Приобрести новый номер" HorizontalAlignment="Left"  Width="auto" Command="{Binding BuyNumChangeAction}"/>
-            <Button Content="Посмотреть услуги" HorizontalAlignment="Left"  Width="auto"/>
-            <Button Content="Пополнить счет" HorizontalAlignment="Left"  Width="auto" Command="{Binding AddMoneyAction}"/> 
+            <Button Content="Детализация затрат" HorizontalAlignment="Left"  Width="auto"/>
+            
+            <Button Content="Пополнить счет" HorizontalAlignment="Left"  Width="auto" Command="{Binding AddMoneyAction}"/>
+
+            <Button Content="Написать СМС" HorizontalAlignment="Left"  Width="auto" Command="{Binding SendSMSAction}"/>
+            <Button Content="Позвонить" HorizontalAlignment="Left"  Width="auto" Command="{Binding MakeCallAction}"/>
+            <Button Content="Воспользоваться интернетом" HorizontalAlignment="Left"  Width="auto" Command="{Binding SpentInternetAction}"/>
         </StackPanel>
         </StackPanel>
     

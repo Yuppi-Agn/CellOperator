@@ -36,6 +36,8 @@ namespace BLL.Services
         public List<Methods.Report_Calling> Report_Calling(int ID)
         {
             List<Methods.Report_Calling> reports = new List<Methods.Report_Calling>();
+            var ThisNumber = db.Number.Find(ID);
+
             reports = (from Number1 in db.Number
                        join calling in db.Calling on Number1.ID equals calling.ID_number_host
                        where calling.ID_number_host == ID
@@ -44,12 +46,12 @@ namespace BLL.Services
                            Type = "Исходящие",
                            Minutes = (int)calling.C_Count,
                            Date = (DateTime)calling.C_Date,
-                           OtherNumber = calling.Number1.Number1,
+                           OtherNumber = calling.Number_slave,
                            NumConnectionType = (byte)calling.Connection_type,
                        }).ToList<Methods.Report_Calling>();
             reports.AddRange((from Number1 in db.Number
-                              join calling in db.Calling on Number1.ID equals calling.ID_number_slave
-                              where calling.ID_number_slave == ID
+                              join calling in db.Calling on Number1.Number1 equals calling.Number_slave
+                              where calling.Number_slave == ThisNumber.Number1
                               select new Methods.Report_Calling
                               {
                                   Minutes = (int)calling.C_Count,
@@ -63,6 +65,8 @@ namespace BLL.Services
         public List<Methods.Report_SMS> Report_SMS(int ID)
         {
             List<Methods.Report_SMS> reports = new List<Methods.Report_SMS>();
+            var ThisNumber = db.Number.Find(ID);
+
             reports = (from Number1 in db.Number
                        join SMS in db.SMS on Number1.ID equals SMS.ID_number_host
                        where SMS.ID_number_host == ID
@@ -70,17 +74,17 @@ namespace BLL.Services
                        {
                            Type = "Исходящие",
                            Date = (DateTime)SMS.C_Date,
-                           OtherNumber = SMS.Number1.Number1,
+                           OtherNumber = SMS.Number_slave,
                            NumConnectionType = (byte)SMS.Connection_type,
                        }).ToList<Methods.Report_SMS>();
             reports.AddRange((from Number1 in db.Number
-                              join SMS in db.Calling on Number1.ID equals SMS.ID_number_slave
-                              where SMS.ID_number_slave == ID
+                              join SMS in db.Calling on Number1.Number1 equals SMS.Number_slave
+                              where SMS.Number_slave == ThisNumber.Number1
                               select new Methods.Report_SMS
                               {
                                   Type = "Исходящие",
                                   Date = (DateTime)SMS.C_Date,
-                                  OtherNumber = SMS.Number1.Number1,
+                                  OtherNumber = SMS.Number_slave,
                                   NumConnectionType = (byte)SMS.Connection_type,
                               }).ToList<Methods.Report_SMS>());
             return reports;

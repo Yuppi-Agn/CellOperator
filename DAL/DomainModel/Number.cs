@@ -14,11 +14,9 @@ namespace DAL
         {
             C_Service_Connection = new HashSet<C_Service_Connection>();
             Calling = new HashSet<Calling>();
-            Calling1 = new HashSet<Calling>();
             Expenses = new HashSet<Expenses>();
             Internet = new HashSet<Internet>();
             SMS = new HashSet<SMS>();
-            SMS1 = new HashSet<SMS>();
             Tarif_History = new HashSet<Tarif_History>();
         }
 
@@ -50,9 +48,6 @@ namespace DAL
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Calling> Calling { get; set; }
 
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<Calling> Calling1 { get; set; }
-
         public virtual Client Client { get; set; }
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
@@ -67,9 +62,6 @@ namespace DAL
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<SMS> SMS { get; set; }
-
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<SMS> SMS1 { get; set; }
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Tarif_History> Tarif_History { get; set; }

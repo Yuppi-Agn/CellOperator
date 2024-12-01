@@ -1,0 +1,23 @@
+﻿<Window x:Class="CellOperator.ClientWindow_MakeCall"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:CellOperator"
+        mc:Ignorable="d"
+        Title="Совершаем звонок" Height="134.131" Width="362.469">
+    <Grid>
+        <StackPanel>
+            <TextBox Text="Ваш номер: "  />
+            <StackPanel Orientation="Horizontal" Height="auto">
+                <TextBlock Text="Номер, на который вы хотите позвонить: +7980"  />
+                <TextBox x:Name="OtherNumberBox" Text="{Binding OtherNumber}" MinWidth="40"/>
+            </StackPanel>
+            <StackPanel Orientation="Horizontal" Height="auto">
+                <TextBlock Text="Сколько минут? "  />
+                <TextBox x:Name="MinutesBox" InputMethod.InputScope="Number"  Text="{Binding CallDuration}" MinWidth="40"/>
+            </StackPanel>
+            <Button Content="Позвонить" Command="{Binding BaseCommand}"  Width="auto" HorizontalAlignment="Center"/>
+        </StackPanel>
+    </Grid>
+</Window>

@@ -48,8 +48,8 @@ namespace CellOperator.MVVM.ViewModels
             _loginCommand = new RelayCommand(Login, i => true);
             _RegirCommand = new RelayCommand(Registretion, i => true);
 
-            Username = "200516135";
-            Password = "12913507";
+            Username = "";
+            Password = "";
         }
         private void Login(object parameter)
         {

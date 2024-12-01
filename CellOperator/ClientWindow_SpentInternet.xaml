@@ -1,0 +1,19 @@
+﻿<Window x:Class="CellOperator.ClientWindow_SpentInternet"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:CellOperator"
+        mc:Ignorable="d"
+        Title="Потребляем трафик" Height="115.239" Width="208.312">
+    <Grid>
+        <StackPanel>
+            <TextBox Text="Ваш номер: "  />
+            <StackPanel Orientation="Horizontal" Height="auto">
+                <TextBlock Text="Сколько трафика (МБ)? "  />
+                <TextBox x:Name="MinutesBox" InputMethod.InputScope="Number" Text="{Binding InternetAmount}" MinWidth="40"/>
+            </StackPanel>
+            <Button Content="Потратить" Command="{Binding BaseCommand}"  Width="auto" HorizontalAlignment="Center"/>
+        </StackPanel>
+    </Grid>
+</Window>

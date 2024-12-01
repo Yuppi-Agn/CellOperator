@@ -66,6 +66,12 @@ namespace CellOperator.MVVM.ViewModels
         public RelayCommand BuyNumChangeAction { get { return _BuyNumChangeAction; } }
         private RelayCommand _AddMoneyAction;
         public RelayCommand AddMoneyAction { get { return _AddMoneyAction; } }
+        private RelayCommand _SendSMSAction;
+        public RelayCommand SendSMSAction { get { return _SendSMSAction; } }
+        private RelayCommand _MakeCallAction;
+        public RelayCommand MakeCallAction { get { return _MakeCallAction; } }
+        private RelayCommand _SpentInternetAction;
+        public RelayCommand SpentInternetAction { get { return _SpentInternetAction; } }
 
         public ClientViewModel(ClientDTO client) {
             Client = client;
@@ -84,6 +90,10 @@ namespace CellOperator.MVVM.ViewModels
             _TarifChangeAction = new RelayCommand(Show_TarifChange, i => true);
             _BuyNumChangeAction = new RelayCommand(Show_NumberBuy, i => true);
             _AddMoneyAction = new RelayCommand(AddMoney, i => true);
+
+            _SendSMSAction = new RelayCommand(SendSMS, i => true);
+            _MakeCallAction = new RelayCommand(MakeCall, i => true);
+            _SpentInternetAction = new RelayCommand(SpentInternet, i => true);
         }
 
         private Guid _viewId;
@@ -146,6 +156,27 @@ namespace CellOperator.MVVM.ViewModels
             Database.AddMoney(Numbers[SelectedNumber].ID, (decimal) 100);
             UpdateNums();
             NumberChanged(SelectedNumber);
+        }
+        public void SendSMS(object parameter)
+        {
+            var taskWindow = new ClientWindow_SendSMS(ref Database, Client, Numbers[SelectedNumber]);
+            taskWindow.ShowDialog();
+            UpdateNums();
+            NumberChanged(SSelectedNumber);
+        }
+        public void MakeCall(object parameter)
+        {
+            var taskWindow = new ClientWindow_MakeCall(ref Database, Client, Numbers[SelectedNumber]);
+            taskWindow.ShowDialog();
+            UpdateNums();
+            NumberChanged(SSelectedNumber);
+        }
+        public void SpentInternet(object parameter)
+        {
+            var taskWindow = new ClientWindow_SpentInternet(ref Database, Client, Numbers[SelectedNumber]);
+            taskWindow.ShowDialog();
+            UpdateNums();
+            NumberChanged(SSelectedNumber);
         }
     }
 }

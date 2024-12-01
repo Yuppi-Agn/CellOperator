@@ -9,6 +9,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BLL", "..\BLL\BLL.csproj", 
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DAL", "..\DAL\DAL.csproj", "{7FDE4F59-15DA-4921-ADB9-D07AC471F079}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Infrastructure", "Infrastructure", "{F8DD6FF5-1C3F-4E3C-97F1-C1D9BEA1A482}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -30,6 +32,10 @@ Global
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{1933E619-E8C7-4E9C-A6E7-310537FF508B} = {F8DD6FF5-1C3F-4E3C-97F1-C1D9BEA1A482}
+		{7FDE4F59-15DA-4921-ADB9-D07AC471F079} = {F8DD6FF5-1C3F-4E3C-97F1-C1D9BEA1A482}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {5309EA2B-A3F7-462A-828B-74C50949353D}

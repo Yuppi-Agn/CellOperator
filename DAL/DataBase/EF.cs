@@ -35,6 +35,11 @@ namespace DAL
                 .IsUnicode(false);
 
             modelBuilder.Entity<C_Service>()
+                .Property(e => e.Discription)
+                .IsFixedLength()
+                .IsUnicode(false);
+
+            modelBuilder.Entity<C_Service>()
                 .Property(e => e.Price)
                 .HasPrecision(18, 0);
 
@@ -50,6 +55,11 @@ namespace DAL
 
             modelBuilder.Entity<Administrator>()
                 .Property(e => e.C_Password)
+                .IsFixedLength()
+                .IsUnicode(false);
+
+            modelBuilder.Entity<Calling>()
+                .Property(e => e.Number_slave)
                 .IsFixedLength()
                 .IsUnicode(false);
 
@@ -117,11 +127,6 @@ namespace DAL
                 .IsUnicode(false);
 
             modelBuilder.Entity<LegalEntity>()
-                .Property(e => e.MSRN)
-                .IsFixedLength()
-                .IsUnicode(false);
-
-            modelBuilder.Entity<LegalEntity>()
                 .Property(e => e.IdividualTaxpayerNumber)
                 .IsFixedLength()
                 .IsUnicode(false);
@@ -156,11 +161,6 @@ namespace DAL
                 .HasForeignKey(e => e.ID_number_host);
 
             modelBuilder.Entity<Number>()
-                .HasMany(e => e.Calling1)
-                .WithOptional(e => e.Number1)
-                .HasForeignKey(e => e.ID_number_slave);
-
-            modelBuilder.Entity<Number>()
                 .HasMany(e => e.Expenses)
                 .WithOptional(e => e.Number)
                 .HasForeignKey(e => e.ID_number);
@@ -176,15 +176,15 @@ namespace DAL
                 .HasForeignKey(e => e.ID_number_host);
 
             modelBuilder.Entity<Number>()
-                .HasMany(e => e.SMS1)
-                .WithOptional(e => e.Number1)
-                .HasForeignKey(e => e.ID_number_slave);
-
-            modelBuilder.Entity<Number>()
                 .HasMany(e => e.Tarif_History)
                 .WithRequired(e => e.Number)
                 .HasForeignKey(e => e.ID_Number)
                 .WillCascadeOnDelete(false);
+
+            modelBuilder.Entity<SMS>()
+                .Property(e => e.Number_slave)
+                .IsFixedLength()
+                .IsUnicode(false);
 
             modelBuilder.Entity<SMS>()
                 .Property(e => e.C_Data)

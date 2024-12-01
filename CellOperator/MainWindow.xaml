@@ -30,7 +30,7 @@
                 <TextBlock Text="Логин:" Grid.Row="1" Grid.Column="0" />
                 <TextBlock Text="Пароль:" Grid.Row="2" Grid.Column="0" />
                 <TextBox x:Name="LoginBox" Text="{Binding Username}" Grid.Row="1" Grid.Column="1" MinWidth="40"/>
-                <PasswordBox x:Name="passwordBox" Password="12913507" Grid.Row="2" Grid.Column="1" MinWidth="40"/>                
+                <PasswordBox x:Name="passwordBox" Grid.Row="2" Grid.Column="1" MinWidth="40"/>                
                 <TextBlock Text="{Binding Status}" Grid.Row="4" Grid.Column="1"
                HorizontalAlignment="Center" VerticalAlignment="Center" Foreground="Red" TextWrapping="Wrap" />
             </Grid>

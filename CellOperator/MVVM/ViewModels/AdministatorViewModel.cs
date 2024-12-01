@@ -20,7 +20,10 @@ namespace CellOperator.MVVM.ViewModels
         DataBase_service Database;
         Methods_service methods;
 
-        private string _Field1;
+        private RelayCommand _GenerateBaseCommand;
+        public RelayCommand GenerateBaseCommand { get { return _GenerateBaseCommand; } }
+
+        /*private string _Field1;
         public string Field1
         {
             get { return _Field1; }
@@ -257,7 +260,7 @@ namespace CellOperator.MVVM.ViewModels
         public RelayCommand UpdateCommand { get { return _UpdateCommand; } }
 
         private readonly RelayCommand _TabChangedCommand;
-        public RelayCommand TabChangedCommand { get { return _TabChangedCommand; } }
+        public RelayCommand TabChangedCommand { get { return _TabChangedCommand; } }*/
 
         public ObservableCollection<Client_IndividualDTO> Client_Individuals { get; set; }
         public ObservableCollection<Client_LegalEntityDTO> Client_LegalEntitys { get; set; }
@@ -276,17 +279,6 @@ namespace CellOperator.MVVM.ViewModels
         {
             if (Database == null) Database = new DataBase_service();
 
-            var S1 = Database.GetAllIndividualClients();
-            var S2 = Database.GetAllLegalEntityClients();
-            var S3 = Database.GetAllNumbers();
-            var S4 = Database.GetAllTarifs();
-            var S5 = Database.GetAllSMS();
-            var S6 = Database.GetAllCallings();
-
-            var S7 = Database.GetAllServices();
-            var S8 = Database.GetAllService_Connection();
-            var S9 = Database.GetAllTarif_history();
-
             Client_Individuals = new ObservableCollection<Client_IndividualDTO>();
             Client_LegalEntitys = new ObservableCollection<Client_LegalEntityDTO>();
             Numbers = new ObservableCollection<NumberDTO>();
@@ -297,6 +289,28 @@ namespace CellOperator.MVVM.ViewModels
 
             Services = new ObservableCollection<ServiceDTO>();
             Service_Connection = new ObservableCollection<Service_ConnectionDTO>();
+
+            LoadMembers();
+            //Datagrid8.ItemsSource = methods.InDB();
+            //Datagrid9.ItemsSource = methods.Other();
+            //Datagrid1.row
+
+            /*_ChangeCommand = new RelayCommand(TableChanged, i => true);
+            _UpdateCommand = new RelayCommand(UpdateClass, i => true);*/
+            _GenerateBaseCommand = new RelayCommand(GenerateBase, i => true);
+        }
+        private void LoadMembers()
+        {
+            var S1 = Database.GetAllIndividualClients();
+            var S2 = Database.GetAllLegalEntityClients();
+            var S3 = Database.GetAllNumbers();
+            var S4 = Database.GetAllTarifs();
+            var S5 = Database.GetAllSMS();
+            var S6 = Database.GetAllCallings();
+
+            var S7 = Database.GetAllServices();
+            var S8 = Database.GetAllService_Connection();
+            var S9 = Database.GetAllTarif_history();
 
             for (int i = 0; i < S1.Count(); i++) Client_Individuals.Add(S1[i]);
             for (int i = 0; i < S2.Count(); i++) Client_LegalEntitys.Add(S2[i]);
@@ -309,14 +323,8 @@ namespace CellOperator.MVVM.ViewModels
 
             for (int i = 0; i < S7.Count(); i++) Services.Add(S7[i]);
             for (int i = 0; i < S8.Count(); i++) Service_Connection.Add(S8[i]);
-            //Datagrid8.ItemsSource = methods.InDB();
-            //Datagrid9.ItemsSource = methods.Other();
-            //Datagrid1.row
-
-            _ChangeCommand = new RelayCommand(TableChanged, i => true);
-            _UpdateCommand = new RelayCommand(UpdateClass, i => true);
         }
-        public void ChangeTable(int TabIndex)
+        /*public void ChangeTable(int TabIndex)
         {
             SetChangedToNull();
             if (TabIndex == 0)
@@ -417,6 +425,11 @@ namespace CellOperator.MVVM.ViewModels
             }
             SetChangedToNull();
             HideChangedNull();
+        }*/
+        public void GenerateBase(object parameter)
+        {
+            Database.GenerateMembers(700);
+            LoadMembers();
         }
 
         #region INotifyPropertyChanged Members

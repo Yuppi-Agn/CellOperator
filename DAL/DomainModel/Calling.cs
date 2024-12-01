@@ -14,7 +14,9 @@ namespace DAL
 
         public int? ID_number_host { get; set; }
 
-        public int? ID_number_slave { get; set; }
+        [Required]
+        [StringLength(20)]
+        public string Number_slave { get; set; }
 
         public int? ID_Expenses { get; set; }
 
@@ -29,7 +31,5 @@ namespace DAL
         public virtual Expenses Expenses { get; set; }
 
         public virtual Number Number { get; set; }
-
-        public virtual Number Number1 { get; set; }
     }
 }

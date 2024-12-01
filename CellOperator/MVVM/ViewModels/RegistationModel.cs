@@ -129,7 +129,6 @@ namespace CellOperator.MVVM.ViewModels
             {
                 LegalEntityDTO Client = new LegalEntityDTO();
                 Client.OrganizationName = OrganizationName;
-                Client.MSRN = "";
                 Client.IdividualTaxpayerNumber = IdividualTaxpayerNumber;
                 Client.Adress = Adress;
 
