@@ -348,6 +348,40 @@ namespace BLL.Models
             Number = p.Number;
             Internet = p.Internet;
             SMS = p.SMS;
+            switch (type)
+            {
+                default:
+                case 1:
+                    Type = "Звонки в тарифе";
+                    break;
+                case 2:
+                    Type = "СМС в тарифе";
+                    break;
+                case 3:
+                    Type = "Трафик в тарифе";
+                    break;
+                case 4:
+                    Type = "Звонки вне тарифа";
+                    break;
+                case 5:
+                    Type = "СМС вне тарифа";
+                    break;
+                case 6:
+                    Type = "Трафик вне тарифа";
+                    break;
+                case 8:
+                    Type = "Подключение/смена тарифа";
+                    break;
+                case 9:
+                    Type = "Подключение услуги";
+                    break;
+                case 10:
+                    Type = "Плата за услугу в месяц";
+                    break;
+                case 11:
+                    Type = "Плата за тариф в месяц";
+                    break;
+            }
         }
 
         public int ID { get; set; }
@@ -359,6 +393,7 @@ namespace BLL.Models
         public decimal? Expense { get; set; }
 
         public byte? type { get; set; }
+        public string Type { get; set; }
 
         public virtual ICollection<Calling> Calling { get; set; }
 

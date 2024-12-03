@@ -20,15 +20,15 @@
                     <RowDefinition Height="*"/>
                 </Grid.RowDefinitions>
             <!--<ListBox x:Name="PhoneList" HorizontalAlignment="Left" Height="auto" Binding.SourceUpdated="{Binding NumbersToVisible}" VerticalAlignment="Top" Width="auto" Grid.Row="0" Grid.Column="0"/>-->
-            <ListBox Name="NumbersToVisible" Grid.Row="0" Grid.Column="0" HorizontalAlignment="Left" Height="auto" Width="auto" ItemsSource="{Binding NumbersToVisible}" SelectedIndex="{Binding SelectedNumber}" IsTextSearchEnabled="False" ClipToBounds="True">
-                <ListBox.ItemTemplate>
+            <ComboBox Name="NumbersToVisible" Grid.Row="0" Grid.Column="0" HorizontalAlignment="Left" Height="auto" Width="auto" ItemsSource="{Binding NumbersToVisible}" SelectedIndex="{Binding SelectedNumber}" IsTextSearchEnabled="False" ClipToBounds="True">
+                <ComboBox.ItemTemplate>
                     <DataTemplate>
                         <StackPanel Orientation="Vertical" >
                             <TextBlock Text="{Binding}" Height="auto" Width="auto" />
                         </StackPanel>
                     </DataTemplate>
-                </ListBox.ItemTemplate>
-            </ListBox>
+                </ComboBox.ItemTemplate>
+            </ComboBox>
             <TextBlock x:Name="Money" HorizontalAlignment="Left" TextWrapping="Wrap" VerticalAlignment="Top" Grid.Row="0" Grid.Column="1" Text="{Binding StringFormat=Счет: {0:#######0.00} руб., Path=Money}" />
             <TextBlock x:Name="Tarif" HorizontalAlignment="Left" TextWrapping="Wrap" Text="{Binding StringFormat=Тариф: {0}, Path=Tarif}" VerticalAlignment="Top" Grid.Row="0" Grid.Column="2"/>
             </Grid>
@@ -39,7 +39,7 @@
             
             <Button Content="Детализация звонков" HorizontalAlignment="Left"  Width="auto" Command="{Binding CallingReport}"/>
             <Button Content="Детализация СМС" HorizontalAlignment="Left"  Width="auto" Command="{Binding SMSReport}"/>
-            <Button Content="Детализация затрат" HorizontalAlignment="Left"  Width="auto"/>
+            <Button Content="Детализация затрат" HorizontalAlignment="Left"  Width="auto" Command="{Binding ExpensesReport}"/>
             
             <Button Content="Пополнить счет" HorizontalAlignment="Left"  Width="auto" Command="{Binding AddMoneyAction}"/>
 

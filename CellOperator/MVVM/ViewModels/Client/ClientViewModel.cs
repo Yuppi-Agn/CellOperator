@@ -61,6 +61,9 @@ namespace CellOperator.MVVM.ViewModels
         private RelayCommand _CallingReport;
         public RelayCommand CallingReport { get { return _CallingReport; } }
         private RelayCommand _TarifChangeAction;
+        private RelayCommand _ExpensesReport;
+        public RelayCommand ExpensesReport { get { return _ExpensesReport; } }
+
         public RelayCommand TarifChangeAction { get { return _TarifChangeAction; } }
         private RelayCommand _BuyNumChangeAction;
         public RelayCommand BuyNumChangeAction { get { return _BuyNumChangeAction; } }
@@ -87,6 +90,8 @@ namespace CellOperator.MVVM.ViewModels
             _viewId = Guid.NewGuid();
             _CallingReport = new RelayCommand(Show_Calling_Report, i => true);
             _SMSReport = new RelayCommand(Show_SMS_Report, i => true);
+            _ExpensesReport = new RelayCommand(Show_Expenses_Report, i => true);
+
             _TarifChangeAction = new RelayCommand(Show_TarifChange, i => true);
             _BuyNumChangeAction = new RelayCommand(Show_NumberBuy, i => true);
             _AddMoneyAction = new RelayCommand(AddMoney, i => true);
@@ -112,16 +117,25 @@ namespace CellOperator.MVVM.ViewModels
 
         public void Show_Calling_Report(object parameter)
         {
-            ClientWindow_ReportCalling taskWindow = new ClientWindow_ReportCalling(methods.Report_Calling(Client.ID));
+            if (Numbers.Count - 1 < SelectedNumber) return;
+            ClientWindow_ReportCalling taskWindow = new ClientWindow_ReportCalling(methods.Report_Calling(Numbers[SelectedNumber].ID));
             taskWindow.Show();
         }
         public void Show_SMS_Report(object parameter)
         {
-            ClientWindow_ReportSMS taskWindow = new ClientWindow_ReportSMS(methods.Report_SMS(Client.ID));
+            if (Numbers.Count - 1 < SelectedNumber) return;
+            ClientWindow_ReportSMS taskWindow = new ClientWindow_ReportSMS(methods.Report_SMS(Numbers[SelectedNumber].ID));
+            taskWindow.Show();
+        }
+        public void Show_Expenses_Report(object parameter)
+        {
+            if (Numbers.Count - 1 < SelectedNumber) return;
+            ClientWindow_ReportExpenses taskWindow = new ClientWindow_ReportExpenses(methods.Report_Expenses(Numbers[SelectedNumber].ID));
             taskWindow.Show();
         }
         public void Show_TarifChange(object parameter)
         {
+            if (Numbers.Count - 1 < SelectedNumber) return;
             ClientTarifChange taskWindow = new ClientTarifChange(ref Database, Client, Numbers[SelectedNumber]);
             taskWindow.ShowDialog();
             UpdateNums();
@@ -153,12 +167,14 @@ namespace CellOperator.MVVM.ViewModels
         }
         private void AddMoney(object parameter)
         {
+            if (Numbers.Count - 1 < SelectedNumber) return;
             Database.AddMoney(Numbers[SelectedNumber].ID, (decimal) 100);
             UpdateNums();
             NumberChanged(SelectedNumber);
         }
         public void SendSMS(object parameter)
         {
+            if (Numbers.Count - 1 < SelectedNumber) return;
             var taskWindow = new ClientWindow_SendSMS(ref Database, Client, Numbers[SelectedNumber]);
             taskWindow.ShowDialog();
             UpdateNums();
@@ -166,6 +182,7 @@ namespace CellOperator.MVVM.ViewModels
         }
         public void MakeCall(object parameter)
         {
+            if (Numbers.Count - 1 < SelectedNumber) return;
             var taskWindow = new ClientWindow_MakeCall(ref Database, Client, Numbers[SelectedNumber]);
             taskWindow.ShowDialog();
             UpdateNums();
@@ -173,6 +190,7 @@ namespace CellOperator.MVVM.ViewModels
         }
         public void SpentInternet(object parameter)
         {
+            if (Numbers.Count - 1 < SelectedNumber) return;
             var taskWindow = new ClientWindow_SpentInternet(ref Database, Client, Numbers[SelectedNumber]);
             taskWindow.ShowDialog();
             UpdateNums();

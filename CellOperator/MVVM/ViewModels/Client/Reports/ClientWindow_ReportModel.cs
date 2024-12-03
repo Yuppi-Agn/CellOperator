@@ -34,6 +34,15 @@ namespace CellOperator.MVVM.ViewModels
             for (int i = 0; i < Table.Count; i++) this.Table.Add(Table[i]);
         }
     }
+    class ClientWindow_ReportExpensesModel
+    {
+        public ObservableCollection<ExpensesDTO> Table { get; set; }
+        public ClientWindow_ReportExpensesModel(List<ExpensesDTO> Table)
+        {
+            this.Table = new ObservableCollection<ExpensesDTO>();
+            for (int i = 0; i < Table.Count; i++) this.Table.Add(Table[i]);
+        }
+    }
     class ClientWindow_TarifChangeModel : INotifyPropertyChanged
     {
         ClientDTO client;
@@ -154,8 +163,14 @@ namespace CellOperator.MVVM.ViewModels
                 NotifyPropertyChanged("SMSData");
             }
         }
+        public string _YourNumber;
+        public string YourNumber
+        {
+            get { return _YourNumber; }
+        }
         public ClientWindow_SendSMSModel(ref DataBase_service db, ClientDTO client, NumberDTO number)
         {
+            _YourNumber = "Ваш номер: "+ number.Number;
             _viewId = Guid.NewGuid();
             _BaseCommand = new RelayCommand(Action, i => true);
             DB = db;
@@ -165,7 +180,7 @@ namespace CellOperator.MVVM.ViewModels
         }
         public void Action(object parameter)
         {
-            DB.UserSendSMS(client.ID, "+7980"+_OtherNumber, SMSData);
+            DB.UserSendSMS(number.ID, "+7980"+_OtherNumber, SMSData);
             MessageBox.Show("Произошла успешно!", "Отправка СМС...", MessageBoxButton.OK);
             WindowManager.CloseWindow(ViewID);//Close();
         }
@@ -214,8 +229,14 @@ namespace CellOperator.MVVM.ViewModels
                 NotifyPropertyChanged("CallDuration");
             }
         }
+        public string _YourNumber;
+        public string YourNumber
+        {
+            get { return _YourNumber; }
+        }
         public ClientWindow_MakeCallModel(ref DataBase_service db, ClientDTO client, NumberDTO number)
         {
+            _YourNumber = "Ваш номер: " + number.Number;
             _viewId = Guid.NewGuid();
             _BaseCommand = new RelayCommand(Action, i => true);
             DB = db;
@@ -225,7 +246,7 @@ namespace CellOperator.MVVM.ViewModels
         }
         public void Action(object parameter)
         {
-            DB.UserMakeCall(client.ID, "+7980"+_OtherNumber, int.Parse(_CallDuration));
+            DB.UserMakeCall(number.ID, "+7980"+_OtherNumber, int.Parse(_CallDuration));
             MessageBox.Show("Произошел успешно!", "Звонок...", MessageBoxButton.OK);
             WindowManager.CloseWindow(ViewID);//Close();
         }
@@ -264,8 +285,14 @@ namespace CellOperator.MVVM.ViewModels
                 NotifyPropertyChanged("InternetAmount");
             }
         }
+        public string _YourNumber;
+        public string YourNumber
+        {
+            get { return _YourNumber; }
+        }
         public ClientWindow_SpentInternetModel(ref DataBase_service db, ClientDTO client, NumberDTO number)
         {
+            _YourNumber = "Ваш номер: " + number.Number;
             _viewId = Guid.NewGuid();
             _BaseCommand = new RelayCommand(Action, i => true);
             DB = db;
@@ -275,7 +302,7 @@ namespace CellOperator.MVVM.ViewModels
         }
         public void Action(object parameter)
         {
-            DB.UserSpentInternet(client.ID, int.Parse(_InternetAmount));
+            DB.UserSpentInternet(number.ID, int.Parse(_InternetAmount));
             MessageBox.Show("Произошла успешно!", "Трата интернета...", MessageBoxButton.OK);
             WindowManager.CloseWindow(ViewID);//Close();
         }

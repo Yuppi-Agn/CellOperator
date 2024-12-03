@@ -8,7 +8,7 @@
         Title="Потребляем трафик" Height="115.239" Width="208.312">
     <Grid>
         <StackPanel>
-            <TextBox Text="Ваш номер: "  />
+            <TextBlock Text="{Binding YourNumber}" />
             <StackPanel Orientation="Horizontal" Height="auto">
                 <TextBlock Text="Сколько трафика (МБ)? "  />
                 <TextBox x:Name="MinutesBox" InputMethod.InputScope="Number" Text="{Binding InternetAmount}" MinWidth="40"/>

@@ -38,9 +38,11 @@ namespace BLL.Services
             List<Methods.Report_Calling> reports = new List<Methods.Report_Calling>();
             var ThisNumber = db.Number.Find(ID);
 
-            reports = (from Number1 in db.Number
-                       join calling in db.Calling on Number1.ID equals calling.ID_number_host
-                       where calling.ID_number_host == ID
+            reports = (from calling in db.Calling
+                       where calling.ID_number_host == ThisNumber.ID
+                       /*from Number1 in db.Number
+                              join calling in db.Calling on Number1.ID equals calling.ID_number_host
+                              where calling.ID_number_host == ID*/
                        select new Methods.Report_Calling
                        {
                            Type = "Исходящие",
@@ -49,12 +51,16 @@ namespace BLL.Services
                            OtherNumber = calling.Number_slave,
                            NumConnectionType = (byte)calling.Connection_type,
                        }).ToList<Methods.Report_Calling>();
-            reports.AddRange((from Number1 in db.Number
+            reports.AddRange((
+                from calling in db.Calling
+                where calling.Number_slave.Trim() == ThisNumber.Number1.Trim()
+                /*from Number1 in db.Number
                               join calling in db.Calling on Number1.Number1 equals calling.Number_slave
-                              where calling.Number_slave == ThisNumber.Number1
-                              select new Methods.Report_Calling
+                              where calling.Number_slave == ThisNumber.Number1*/
+                select new Methods.Report_Calling
                               {
-                                  Minutes = (int)calling.C_Count,
+                    Type = "Входящие",
+                    Minutes = (int)calling.C_Count,
                                   Date = (DateTime)calling.C_Date,
                                   OtherNumber = calling.Number.Number1,
                                   NumConnectionType = (byte)calling.Connection_type,
@@ -67,9 +73,11 @@ namespace BLL.Services
             List<Methods.Report_SMS> reports = new List<Methods.Report_SMS>();
             var ThisNumber = db.Number.Find(ID);
 
-            reports = (from Number1 in db.Number
-                       join SMS in db.SMS on Number1.ID equals SMS.ID_number_host
-                       where SMS.ID_number_host == ID
+            reports = (from SMS in db.SMS
+                       where SMS.ID_number_host == ThisNumber.ID
+                       /*from Number1 in db.Number
+                              join SMS in db.SMS on Number1.ID equals SMS.ID_number_host
+                              where SMS.ID_number_host == ID*/
                        select new Methods.Report_SMS
                        {
                            Type = "Исходящие",
@@ -77,17 +85,26 @@ namespace BLL.Services
                            OtherNumber = SMS.Number_slave,
                            NumConnectionType = (byte)SMS.Connection_type,
                        }).ToList<Methods.Report_SMS>();
-            reports.AddRange((from Number1 in db.Number
+            reports.AddRange((
+                from SMS in db.SMS
+                where SMS.Number_slave.Trim() == ThisNumber.Number1.Trim()
+                /*from Number1 in db.Number
                               join SMS in db.Calling on Number1.Number1 equals SMS.Number_slave
-                              where SMS.Number_slave == ThisNumber.Number1
-                              select new Methods.Report_SMS
-                              {
-                                  Type = "Исходящие",
-                                  Date = (DateTime)SMS.C_Date,
-                                  OtherNumber = SMS.Number_slave,
-                                  NumConnectionType = (byte)SMS.Connection_type,
-                              }).ToList<Methods.Report_SMS>());
+                              where SMS.Number_slave == ThisNumber.Number1*/
+                select new Methods.Report_SMS
+                {
+                    Type = "Входящие",
+                    Date = (DateTime)SMS.C_Date,
+                    OtherNumber = SMS.Number_slave,
+                    NumConnectionType = (byte)SMS.Connection_type,
+                }).ToList<Methods.Report_SMS>());
             return reports;
+        }
+        public List<ExpensesDTO> Report_Expenses(int ID)
+        {
+            var list = db.Expenses.Where(p => p.ID_number == ID).AsEnumerable();
+            if (list.Count() > 0) return list.Select(i => new ExpensesDTO(i)).ToList<ExpensesDTO>();
+            else return new List<ExpensesDTO>();
         }
     }
 }

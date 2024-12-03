@@ -8,7 +8,7 @@
         Title="Пишем смс" Height="144.667" Width="410">
     <Grid>
         <StackPanel>
-            <TextBox Text="Ваш номер: "  />
+            <TextBlock Text="{Binding YourNumber}" />
             <StackPanel Orientation="Horizontal" Height="auto">
                 <TextBlock Text="Номер, на который вы хотите позвонить: +7980"  />
                 <TextBox x:Name="OtherNumberBox" Text="{Binding OtherNumber}" MinWidth="40"/>

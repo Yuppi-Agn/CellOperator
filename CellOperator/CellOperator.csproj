@@ -83,13 +83,16 @@
     <Compile Include="ClientWindow_MakeCall.xaml.cs">
       <DependentUpon>ClientWindow_MakeCall.xaml</DependentUpon>
     </Compile>
+    <Compile Include="ClientWindow_ReportExpenses.xaml.cs">
+      <DependentUpon>ClientWindow_ReportExpenses.xaml</DependentUpon>
+    </Compile>
     <Compile Include="ClientWindow_SendSMS.xaml.cs">
       <DependentUpon>ClientWindow_SendSMS.xaml</DependentUpon>
     </Compile>
     <Compile Include="ClientWindow_SpentInternet.xaml.cs">
       <DependentUpon>ClientWindow_SpentInternet.xaml</DependentUpon>
     </Compile>
-    <Compile Include="MVVM\ViewModels\RegistationModel.cs" />
+    <Compile Include="MVVM\ViewModels\Enter\RegistationModel.cs" />
     <Compile Include="RegistationWindows.xaml.cs">
       <DependentUpon>RegistationWindows.xaml</DependentUpon>
     </Compile>
@@ -114,6 +117,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="ClientWindow_ReportCalling.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="ClientWindow_ReportExpenses.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -166,10 +173,10 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="MVVM\Services\IFileService.cs" />
-    <Compile Include="MVVM\ViewModels\AdministatorViewModel.cs" />
-    <Compile Include="MVVM\ViewModels\ClientViewModel.cs" />
-    <Compile Include="MVVM\ViewModels\ClientWindow_ReportModel.cs" />
-    <Compile Include="MVVM\ViewModels\EnterViewModel.cs" />
+    <Compile Include="MVVM\ViewModels\Administator\AdministatorViewModel.cs" />
+    <Compile Include="MVVM\ViewModels\Client\ClientViewModel.cs" />
+    <Compile Include="MVVM\ViewModels\Client\Reports\ClientWindow_ReportModel.cs" />
+    <Compile Include="MVVM\ViewModels\Enter\EnterViewModel.cs" />
     <Compile Include="MVVM\ViewModels\RelayCommand.cs" />
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>
@@ -188,8 +195,6 @@
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
-    <None Include="ClassDiagram1.cd" />
-    <None Include="ClassDiagram2.cd" />
     <None Include="packages.config" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
@@ -220,6 +225,20 @@
       <ProductName>.NET Framework 3.5 SP1</ProductName>
       <Install>false</Install>
     </BootstrapperPackage>
+  </ItemGroup>
+  <ItemGroup>
+    <WCFMetadata Include="Connected Services\" />
+  </ItemGroup>
+  <ItemGroup>
+    <COMReference Include="Microsoft.Office.Core">
+      <Guid>{2DF8D04C-5BFA-101B-BDE5-00AA0044DE52}</Guid>
+      <VersionMajor>2</VersionMajor>
+      <VersionMinor>8</VersionMinor>
+      <Lcid>0</Lcid>
+      <WrapperTool>primary</WrapperTool>
+      <Isolated>False</Isolated>
+      <EmbedInteropTypes>True</EmbedInteropTypes>
+    </COMReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">

@@ -387,7 +387,7 @@ namespace BLL.Services
                     TarifDate = DateTime.Now,
                     ID_Tarif = TarifID,
                     C_status = 1,
-                    Number1 = "7980" + r.Next(0, 9) + r.Next(0, 9) + r.Next(0, 9) + r.Next(0, 9) + r.Next(0, 9) + r.Next(0, 9) + r.Next(0, 9)
+                    Number1 = "+7980" + r.Next(0, 9) + r.Next(0, 9) + r.Next(0, 9) + r.Next(0, 9) + r.Next(0, 9) + r.Next(0, 9) + r.Next(0, 9)
                 };
                 var List = db.Number.Where(p => p.Number1 == NewNumber.Number1).AsEnumerable();
                 IsExists = List.Count() > 0;
@@ -428,7 +428,6 @@ namespace BLL.Services
                     db.Monthly_remains_tarif.Add(Monthly_remain);
                 }
             }
-            Save();
         }
         private void CheckUpMonthly_remains_tarif(int NumberID)
         {
@@ -549,7 +548,7 @@ namespace BLL.Services
 
             Calling ThisCalling = new Calling()
             {
-                ID = db.SMS.OrderBy(p => p.ID).ToList().Last().ID + 1,
+                ID = db.Calling.OrderBy(p => p.ID).ToList().Last().ID + 1,
                 ID_number_host = BD_Number.ID,
                 Number = BD_Number,
                 Number_slave = number_slave,
@@ -585,7 +584,7 @@ namespace BLL.Services
 
             Internet ThisInternet = new Internet()
             {
-                ID = db.SMS.OrderBy(p => p.ID).ToList().Last().ID + 1,
+                ID = db.Internet.OrderBy(p => p.ID).ToList().Last().ID + 1,
                 Number = BD_Number,
                 C_Data = Amount,
                 Expenses = expense,
@@ -756,7 +755,7 @@ namespace BLL.Services
                     TarifDate = DateTime.Now,
                     ID_Tarif = i% TarifNumber,
                     C_status = 1,
-                    Number1 = "7980" + r.Next(0, 9) + r.Next(0, 9) + r.Next(0, 9) + r.Next(0, 9) + r.Next(0, 9) + r.Next(0, 9) + r.Next(0, 9)
+                    Number1 = "+7980" + r.Next(0, 9) + r.Next(0, 9) + r.Next(0, 9) + r.Next(0, 9) + r.Next(0, 9) + r.Next(0, 9) + r.Next(0, 9)
                 });                
             }
 
@@ -809,6 +808,24 @@ namespace BLL.Services
                 });
             }
 
+            db.Client.Add(new Client()
+            {
+                ID = db.Client.Local.Count,
+                C_type = 0,
+                C_Login = "123",
+                C_Password = "123"
+            });
+            db.Individual.Add(new Individual()
+            {
+                ID = db.Individual.Local.Count,
+                ClientID = db.Client.Local.Count - 1,
+                FirstName = "Юппи",
+                LastName = "Агненко",
+                Patronymic = "-",
+                Passport = r.Next(1000, 9999) + "" + r.Next(100000, 999999)
+            });
+
+            CheckUpMonthly_remains_tarif();
             Save();
         }
     }
