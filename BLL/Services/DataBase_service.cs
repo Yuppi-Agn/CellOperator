@@ -64,6 +64,10 @@ namespace BLL.Services
         {
             return db.C_Service_Connection.ToList().Select(i => new Service_ConnectionDTO(i)).ToList();
         }
+        public List<C_Service_Connection_HistoryDTO> GetAllC_Service_Connection_History()
+        {
+            return db.C_Service_Connection_History.ToList().Select(i => new C_Service_Connection_HistoryDTO(i)).ToList();
+        }
         public List<Tarif_HistoryDTO> GetAllTarif_history()
         {
             return db.Tarif_History.ToList().Select(i => new Tarif_HistoryDTO(i)).ToList();
@@ -302,12 +306,66 @@ namespace BLL.Services
                 Save();
             }
         }
+        public void ServiceConnect(int NumID, int ServiceID)
+        {
+            var Number = db.Number.Find(NumID);
+            var Service = db.C_Service.Find(ServiceID);
+
+            if (Number == null || Service == null) return;
+
+            int ID = 0;
+            if (db.C_Service_Connection.OrderBy(p => p.ID).ToList().Count > 0) ID = db.C_Service_Connection.OrderBy(p => p.ID).ToList().Last().ID + 1;
+
+            db.C_Service_Connection.Add(new C_Service_Connection(){
+                ID = ID,
+                C_Date = DateTime.Now,
+                ID_number = Number.ID,
+                ID_Service = Service.ID,
+            });
+
+            Number.Bill -= (decimal) Service.Price;
+            AddExpenses(Number.ID, 9, (decimal) Service.Price);
+            Save();
+        }
+        public void ServiceDisconnect(int NumID, int ServiceID)
+        {
+            var Number = db.Number.Find(NumID);
+            var Service = db.C_Service.Find(ServiceID);
+
+            if (Number == null || Service == null) return;
+
+            var Service_Connection = db.C_Service_Connection.Where(P=> P.ID_number== Number.ID && P.ID_Service == Service.ID).FirstOrDefault();
+            if (Service_Connection == null) return;
+
+            int ID = 0;
+            if (db.C_Service_Connection_History.OrderBy(p => p.ID).ToList().Count > 0) ID = db.C_Service_Connection_History.OrderBy(p => p.ID).ToList().Last().ID + 1;
+
+            db.C_Service_Connection_History.Add(new C_Service_Connection_History()
+            {
+                ID = ID,
+                StartDate = Service_Connection.C_Date,
+                EndDate = DateTime.Now,
+                ID_number = Number.ID,
+                ID_Service = Service.ID,
+            });
+            db.C_Service_Connection.Remove(Service_Connection);
+            Save();
+        }
         public void AddMoney(int ID, decimal Money)
         {
             Number It = db.Number.Find(ID);
             if (It != null)
             {
                 It.Bill += Money;
+                Save();
+            }
+        }
+        public void PasswordChange(int ClientID, string Password)
+        {
+            Client It = db.Client.Find(ClientID);
+            if (It != null)
+            {
+                It.C_Password = Password;
                 Save();
             }
         }
@@ -764,21 +822,21 @@ namespace BLL.Services
                 ID = 0,
                 Name = "Живой баланс",
                 Discription = "При каждой совершенной вами трате отправляет вам на телефон уведомление об оставшейся сумме на счету и сумме этой тратыю",
-                Price = r.Next(0, 10000) + r.Next(0, 99) / 100
+                Price = r.Next(10, 300) + r.Next(0, 99) / 100
             });
             db.C_Service.Add(new C_Service()
             {
                 ID = 1,
                 Name = "Обещанный платеж",
                 Discription = "Нужно совершить важный звонок, а денег на счету нет? Не беда! С этой услугой мы дадим вам в кредит 100 рублей до следующего пополенния счета и уведомим об этом!",
-                Price = r.Next(0, 10000) + r.Next(0, 99) / 100
+                Price = r.Next(7, 100) + r.Next(0, 99) / 100
             });
             db.C_Service.Add(new C_Service()
             {
                 ID = 2,
                 Name = "Секретарь",
                 Discription = "Умный ИИ отвечает на совершенные Вам звонки сам и старается ответить на все вопросы звонившего, а вам лишь останется прочитать результаты этого диалога!",
-                Price = r.Next(0, 10000) + r.Next(0, 99) / 100
+                Price = r.Next(100, 1000) + r.Next(0, 99) / 100
             });
 
             for (int i = 0; i < count / 2; i++)
@@ -808,9 +866,11 @@ namespace BLL.Services
                 });
             }
 
+            int SpecID = db.Client.Local.Count;
+
             db.Client.Add(new Client()
             {
-                ID = db.Client.Local.Count,
+                ID = SpecID,
                 C_type = 0,
                 C_Login = "123",
                 C_Password = "123"
@@ -818,12 +878,83 @@ namespace BLL.Services
             db.Individual.Add(new Individual()
             {
                 ID = db.Individual.Local.Count,
-                ClientID = db.Client.Local.Count - 1,
+                ClientID = SpecID,
                 FirstName = "Юппи",
                 LastName = "Агненко",
                 Patronymic = "-",
                 Passport = r.Next(1000, 9999) + "" + r.Next(100000, 999999)
             });
+
+            db.Number.Add(new Number()
+            {
+                ID= db.Number.Local.Count,
+                Bill = r.Next(0, 10000) + r.Next(0, 99) / 100,
+                ID_Client = SpecID,
+                TarifDate = DateTime.Now,
+                ID_Tarif = 0,
+                C_status = 1,
+                Number1 = "+7980" + r.Next(0, 9) + r.Next(0, 9) + r.Next(0, 9) + r.Next(0, 9) + r.Next(0, 9) + r.Next(0, 9) + r.Next(0, 9)
+            });
+
+            for (int i = 0; i < count / 2; i++)
+            {
+                int i1 = r.Next(0, count / 2 - 1);
+                switch (i % 2)
+                {
+                    case 0:
+                        db.Calling.Add(new Calling()
+                        {
+                            ID = db.Calling.Local.Count,
+                            ID_number_host = SpecID,
+                            Number_slave = db.Number.Local.Where(P => P.ID == i1).First().Number1,
+                            Connection_type = (byte)(r.Next(0, 3)),
+                            C_Count = (r.Next(1, 60)),
+                            C_Date = DateTime.Now
+                        });
+                        break;
+                    case 1:
+                        db.Calling.Add(new Calling()
+                        {
+                            ID = db.Calling.Local.Count,
+                            ID_number_host = i1,
+                            Number_slave = db.Number.Local.Where(P => P.ID_Client == SpecID).First().Number1,
+                            Connection_type = (byte)(r.Next(0, 3)),
+                            C_Count = (r.Next(1, 60)),
+                            C_Date = DateTime.Now
+                        });
+                        break;
+                }
+
+            }
+            for (int i = 0; i < count / 2; i++)
+            {
+                int i1 = r.Next(0, count / 2 - 1);
+                switch (i % 2)
+                {
+                    case 0:
+                        db.SMS.Add(new SMS()
+                        {
+                            ID = db.SMS.Local.Count,
+                            ID_number_host = SpecID,
+                            Number_slave = db.Number.Local.Where(P => P.ID == i1).First().Number1,
+                            Connection_type = (byte)(r.Next(0, 3)),
+                            C_Date = DateTime.Now,
+                            C_Data = "" + r.Next(0, 9999) + r.Next(0, 9999) + r.Next(0, 9999) + r.Next(0, 9999) + r.Next(0, 9999) + r.Next(0, 9999) + r.Next(0, 999999)
+                        });
+                        break;
+                    case 1:
+                        db.SMS.Add(new SMS()
+                        {
+                            ID = db.SMS.Local.Count,
+                            ID_number_host = i1,
+                            Number_slave = db.Number.Local.Where(P => P.ID_Client == SpecID).First().Number1,
+                            Connection_type = (byte)(r.Next(0, 3)),
+                            C_Date = DateTime.Now,
+                            C_Data = "" + r.Next(0, 9999) + r.Next(0, 9999) + r.Next(0, 9999) + r.Next(0, 9999) + r.Next(0, 9999) + r.Next(0, 9999) + r.Next(0, 999999)
+                        });
+                        break;
+                }                
+            }
 
             CheckUpMonthly_remains_tarif();
             Save();

@@ -11,7 +11,6 @@ using BLL.Models;
 using System.Collections.ObjectModel;
 
 using System.IO;
-using Microsoft.VisualBasic;
 
 namespace CellOperator.MVVM.Services
 {
@@ -54,7 +53,7 @@ namespace CellOperator.MVVM.Services
             SaveDialog.DefaultExt = Extension;
             Openialog.DefaultExt = Extension;
 
-            string Filter = FilterName.Trim() +" (" + Extension + ")|*" + Extension;
+            string Filter = FilterName.Trim() + "|" + '*'+Extension;
             SaveDialog.Filter = Filter;
             Openialog.Filter = Filter;
         }
@@ -89,20 +88,93 @@ namespace CellOperator.MVVM.Services
             else return false;
         }
     }
-    public class FileService_xlsx : IFileService
+    public class FileService_csv : IFileService
     {
         IDialogService dialogService;
         string Path="";
-        public FileService_xlsx()
+        public FileService_csv()
         {
-            dialogService = new WindowsDilalogService("Введите название", "*xlsx", "Таблица Excel");
+            dialogService = new WindowsDilalogService("Введите название", "csv", "Таблица csv");
         }
         public void Save(List<Methods.Report_Calling> Callings) {
             if (!FilePath()) return;
-            //BotAgent.DataExporter.Excel Excel = new BotAgent.DataExporter.Excel();
+
+            string String = "";
+            const string Separator = ",",
+                StrSym = "\"";
+            var stream = new StreamWriter(Path, false, Encoding.UTF8);
+
+            String = StrSym+"Тип"+ StrSym;
+            String += Separator + StrSym + "Иной номер" + StrSym;
+            String += Separator + StrSym + "Дата" + StrSym;
+            String += Separator + StrSym + "Время" + StrSym;
+            String += Separator + StrSym + "Тип звонка" + StrSym;
+
+            stream.WriteLine(String);
+
+            foreach (var item in Callings)
+            {
+                //stream.WriteLine("\"{0:yyyy-MM-dd HH:mm:ss}\",\"{1}\"", DateTime.Now, this.textBox1.Text);
+                String = StrSym + item.Type + StrSym;
+                String += Separator + StrSym + item.OtherNumber.Trim() + StrSym;
+                String += Separator + StrSym + item.Date.ToString() + StrSym;
+                String += Separator + StrSym + item.Minutes + StrSym;
+                String += Separator + StrSym + item.ConnectionType + StrSym;
+
+                stream.WriteLine(String);
+            }
+            stream.Dispose();
         }
-        public void Save(List<Methods.Report_SMS> SMS) { }
-        public void Save(List<ExpensesDTO> Expenses) { }
+        public void Save(List<Methods.Report_SMS> SMS) {
+            if (!FilePath()) return;
+
+            string String = "";
+            const string Separator = ",",
+                StrSym = "\"";
+            var stream = new StreamWriter(Path, false, Encoding.UTF8);
+
+            String = StrSym + "Тип" + StrSym;
+            String += Separator + StrSym + "Иной номер" + StrSym;
+            String += Separator + StrSym + "Дата" + StrSym;
+            String += Separator + StrSym + "Тип звонка" + StrSym;
+
+            stream.WriteLine(String);
+
+            foreach (var item in SMS)
+            {
+                String = StrSym + item.Type + StrSym;
+                String += Separator + StrSym + item.OtherNumber.Trim() + StrSym;
+                String += Separator + StrSym + item.Date.ToString() + StrSym;
+                String += Separator + StrSym + item.ConnectionType + StrSym;
+
+                stream.WriteLine(String);
+            }
+            stream.Dispose();
+        }
+        public void Save(List<ExpensesDTO> Expenses) {
+            if (!FilePath()) return;
+
+            string String = "";
+            const string Separator = ",",
+                StrSym = "\"";
+            var stream = new StreamWriter(Path, false, Encoding.UTF8);
+            
+            String = StrSym + "Дата" + StrSym;
+            String += Separator + StrSym + "Тип" + StrSym;
+            String += Separator + StrSym + "Сумма" + StrSym;
+
+            stream.WriteLine(String);
+
+            foreach (var item in Expenses)
+            {
+                String = StrSym + item.Date.ToString() + StrSym;
+                String += Separator + StrSym + item.Type + StrSym;
+                String += Separator + StrSym + item.Expense + StrSym;
+
+                stream.WriteLine(String);
+            }
+            stream.Dispose();
+        }
         private bool FilePath()
         {
             if (dialogService.SaveFileDialog()) { 

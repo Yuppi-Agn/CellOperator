@@ -320,7 +320,6 @@ namespace BLL.Models
         public int? ID_number { get; set; }
         public int? ID_Service { get; set; }
         public DateTime? C_Date { get; set; }
-        public byte? C_status { get; set; }
         public string Number { get; set; }
         public string Service { get; set; }
         public Service_ConnectionDTO(C_Service_Connection p)
@@ -329,11 +328,30 @@ namespace BLL.Models
             ID_number = p.ID_number;
             ID_Service = p.ID_Service;
             C_Date = p.C_Date;
-            C_status = p.C_status;
             Number = p.Number.Number1.Trim();
             Service = p.C_Service.Name.Trim();
         }
 
+    }
+    public partial class C_Service_Connection_HistoryDTO
+    {
+        public int ID { get; set; }
+        public int? ID_number { get; set; }
+        public int? ID_Service { get; set; }
+        public DateTime? StartDate { get; set; }
+        public DateTime? EndDate { get; set; }
+        public string Str_Number { get; set; }
+        public string Str_Service { get; set; }
+        public C_Service_Connection_HistoryDTO(C_Service_Connection_History p)
+        {
+            ID = p.ID;
+            ID_number = p.ID_number;
+            ID_Service = p.ID_Service;
+            StartDate = p.StartDate;
+            EndDate = p.EndDate;
+            Str_Number = p.Number.Number1.Trim();
+            Str_Service = p.C_Service.Name.Trim();
+        }
     }
     public class ExpensesDTO
     {

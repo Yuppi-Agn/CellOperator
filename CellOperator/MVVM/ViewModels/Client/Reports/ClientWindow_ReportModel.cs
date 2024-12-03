@@ -14,33 +14,63 @@ using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Windows.Controls;
 
+using CellOperator.MVVM.Services;
+
 namespace CellOperator.MVVM.ViewModels
 {
     class ClientWindow_ReportCallingModel
     {
+        private List<Methods.Report_Calling> MyTable;
+        private RelayCommand _SaveCSVAction;
+        public RelayCommand SaveCSVAction { get { return _SaveCSVAction; } }
         public ObservableCollection<Methods.Report_Calling> Table { get; set; }
-        public ClientWindow_ReportCallingModel( List<Methods.Report_Calling> Table)
+        public ClientWindow_ReportCallingModel(List<Methods.Report_Calling> Table)
         {
+            MyTable = Table;
             this.Table = new ObservableCollection<Methods.Report_Calling>();
             for (int i = 0; i < Table.Count; i++) this.Table.Add(Table[i]);
+            _SaveCSVAction = new RelayCommand(SaveCSV, i => true);
+        }
+        void SaveCSV(object parameter)
+        {
+            var Service = new FileService_csv();
+            Service.Save(MyTable);
         }
     }
     class ClientWindow_ReportSMSModel
     {
+        private List<Methods.Report_SMS> MyTable;
+        private RelayCommand _SaveCSVAction;
+        public RelayCommand SaveCSVAction { get { return _SaveCSVAction; } }
         public ObservableCollection<Methods.Report_SMS> Table { get; set; }
         public ClientWindow_ReportSMSModel(List<Methods.Report_SMS> Table)
         {
             this.Table = new ObservableCollection<Methods.Report_SMS>();
             for (int i = 0; i < Table.Count; i++) this.Table.Add(Table[i]);
+            _SaveCSVAction = new RelayCommand(SaveCSV, i => true);
+        }
+        void SaveCSV(object parameter)
+        {
+            var Service = new FileService_csv();
+            Service.Save(MyTable);
         }
     }
     class ClientWindow_ReportExpensesModel
     {
+        private List<ExpensesDTO> MyTable;
+        private RelayCommand _SaveCSVAction;
+        public RelayCommand SaveCSVAction { get { return _SaveCSVAction; } }
         public ObservableCollection<ExpensesDTO> Table { get; set; }
         public ClientWindow_ReportExpensesModel(List<ExpensesDTO> Table)
         {
             this.Table = new ObservableCollection<ExpensesDTO>();
             for (int i = 0; i < Table.Count; i++) this.Table.Add(Table[i]);
+            _SaveCSVAction = new RelayCommand(SaveCSV, i => true);
+        }
+        void SaveCSV(object parameter)
+        {
+            var Service = new FileService_csv();
+            Service.Save(MyTable);
         }
     }
     class ClientWindow_TarifChangeModel : INotifyPropertyChanged
@@ -75,12 +105,13 @@ namespace CellOperator.MVVM.ViewModels
         public ClientWindow_TarifChangeModel(ref DataBase_service db, ClientDTO client, NumberDTO number)
         {
             _viewId = Guid.NewGuid();
-            this.Tarifs = new ObservableCollection<TarifDTO>();            
+            this.Tarifs = new ObservableCollection<TarifDTO>();
             _ChangeAction = new RelayCommand(Change, i => true);
             DB = db;
 
             var Table = DB.GetAllTarifs(client);
-            for (int i = 0; i < Table.Count; i++) {
+            for (int i = 0; i < Table.Count; i++)
+            {
                 this.Tarifs.Add(Table[i]);
             }
 
@@ -126,7 +157,74 @@ namespace CellOperator.MVVM.ViewModels
         }
         #endregion
     }
+    class ClientWindow_ServiceChangeModel : INotifyPropertyChanged
+    {
+        ClientDTO client;
+        NumberDTO number;
 
+        private Guid _viewId;
+        public Guid ViewID
+        {
+            get { return _viewId; }
+        }
+
+        private DataBase_service DB;
+        public ObservableCollection<Methods.ServiceOutput> Table { get; set; }
+
+        private RelayCommand _ChangeAction;
+        public RelayCommand ChangeAction { get { return _ChangeAction; } }
+
+        private Methods.ServiceOutput _Selected;
+        public Methods.ServiceOutput Selected
+        {
+            get { return _Selected; }
+            set
+            {
+                _Selected = value;
+                NotifyPropertyChanged("Selected");
+            }
+        }
+        public ClientWindow_ServiceChangeModel(ref DataBase_service db, ClientDTO client, NumberDTO number)
+        {
+            _viewId = Guid.NewGuid();
+            this.Table = new ObservableCollection<Methods.ServiceOutput>();
+            _ChangeAction = new RelayCommand(Change, i => true);
+            DB = db;
+            this.client = client;
+            this.number = number;
+
+            Update();
+        }
+        public void Change(object parameter)
+        {
+            if (Selected == null) return;
+
+            if (Selected.Stat) DB.ServiceDisconnect(number.ID, Selected.ID);
+            else DB.ServiceConnect(number.ID, Selected.ID);
+
+            Update();
+        }
+
+        private void Update()
+        {
+            var Service = new Methods_service();
+
+            var Table = Service.GetServices(number.ID);
+            this.Table.Clear();
+            for (int i = 0; i < Table.Count; i++)
+            {
+                this.Table.Add(Table[i]);
+            }
+        }
+        #region INotifyPropertyChanged Members
+        public event PropertyChangedEventHandler PropertyChanged;
+        private void NotifyPropertyChanged(string propertyName)
+        {
+            if (PropertyChanged != null)
+                PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
+        }
+        #endregion
+    }
     class ClientWindow_SendSMSModel : INotifyPropertyChanged
     {
         ClientDTO client;
@@ -170,7 +268,7 @@ namespace CellOperator.MVVM.ViewModels
         }
         public ClientWindow_SendSMSModel(ref DataBase_service db, ClientDTO client, NumberDTO number)
         {
-            _YourNumber = "Ваш номер: "+ number.Number;
+            _YourNumber = "Ваш номер: " + number.Number;
             _viewId = Guid.NewGuid();
             _BaseCommand = new RelayCommand(Action, i => true);
             DB = db;
@@ -180,7 +278,7 @@ namespace CellOperator.MVVM.ViewModels
         }
         public void Action(object parameter)
         {
-            DB.UserSendSMS(number.ID, "+7980"+_OtherNumber, SMSData);
+            DB.UserSendSMS(number.ID, "+7980" + _OtherNumber, SMSData);
             MessageBox.Show("Произошла успешно!", "Отправка СМС...", MessageBoxButton.OK);
             WindowManager.CloseWindow(ViewID);//Close();
         }
@@ -246,7 +344,7 @@ namespace CellOperator.MVVM.ViewModels
         }
         public void Action(object parameter)
         {
-            DB.UserMakeCall(number.ID, "+7980"+_OtherNumber, int.Parse(_CallDuration));
+            DB.UserMakeCall(number.ID, "+7980" + _OtherNumber, int.Parse(_CallDuration));
             MessageBox.Show("Произошел успешно!", "Звонок...", MessageBoxButton.OK);
             WindowManager.CloseWindow(ViewID);//Close();
         }
@@ -305,6 +403,51 @@ namespace CellOperator.MVVM.ViewModels
             DB.UserSpentInternet(number.ID, int.Parse(_InternetAmount));
             MessageBox.Show("Произошла успешно!", "Трата интернета...", MessageBoxButton.OK);
             WindowManager.CloseWindow(ViewID);//Close();
+        }
+        #region INotifyPropertyChanged Members
+        public event PropertyChangedEventHandler PropertyChanged;
+        private void NotifyPropertyChanged(string propertyName)
+        {
+            if (PropertyChanged != null)
+                PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
+        }
+        #endregion
+    }
+    class ClientWindow_PasswordChangeModel : INotifyPropertyChanged
+    {
+        ClientDTO client;
+
+        private Guid _viewId;
+        public Guid ViewID
+        {
+            get { return _viewId; }
+        }
+        private string _Password;
+        public string Password
+        {
+            get { return _Password; }
+            set { _Password = value; }
+        }
+        private DataBase_service DB;
+
+        private RelayCommand _BaseAction;
+        public RelayCommand BaseAction { get { return _BaseAction; } }
+
+        public ClientWindow_PasswordChangeModel(ref DataBase_service db, ClientDTO client)
+        {
+            this.client = client;
+            _viewId = Guid.NewGuid();
+            _BaseAction = new RelayCommand(Change, i => true);
+            DB = db;
+        }
+        public void Change(object parameter)
+        {
+            if (_Password.Length > 0) {
+                DB.PasswordChange(client.ID, _Password);
+
+                MessageBox.Show("Произошла успешно!", "Смена пароля...", MessageBoxButton.OK);
+                WindowManager.CloseWindow(ViewID);
+            }
         }
         #region INotifyPropertyChanged Members
         public event PropertyChangedEventHandler PropertyChanged;

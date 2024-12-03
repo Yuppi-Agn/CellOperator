@@ -34,7 +34,7 @@
             </Grid>
         <StackPanel Orientation="Vertical"  HorizontalAlignment="Left" VerticalAlignment="Bottom">
             <Button Content="Посмотреть тарифы" HorizontalAlignment="Left"  Width="auto" Command="{Binding TarifChangeAction}"/>
-            <Button Content="Посмотреть услуги" HorizontalAlignment="Left"  Width="auto"/>
+            <Button Content="Посмотреть услуги" HorizontalAlignment="Left"  Width="auto" Command="{Binding ServiceChangeAction}"/>
             <Button Content="Приобрести новый номер" HorizontalAlignment="Left"  Width="auto" Command="{Binding BuyNumChangeAction}"/>
             
             <Button Content="Детализация звонков" HorizontalAlignment="Left"  Width="auto" Command="{Binding CallingReport}"/>
@@ -46,6 +46,8 @@
             <Button Content="Написать СМС" HorizontalAlignment="Left"  Width="auto" Command="{Binding SendSMSAction}"/>
             <Button Content="Позвонить" HorizontalAlignment="Left"  Width="auto" Command="{Binding MakeCallAction}"/>
             <Button Content="Воспользоваться интернетом" HorizontalAlignment="Left"  Width="auto" Command="{Binding SpentInternetAction}"/>
+
+            <Button Content="Сменить пароль" HorizontalAlignment="Left"  Width="auto" Command="{Binding ChangePasswordAction}"/>
         </StackPanel>
         </StackPanel>
     

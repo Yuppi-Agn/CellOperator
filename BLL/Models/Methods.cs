@@ -76,5 +76,30 @@ namespace BLL.Models
                 }
             }
         }
+        public class ServiceOutput
+        {
+            public int ID { get; set; }
+            public string Name { get; set; }
+            public string Discription { get; set; }
+            public decimal? Price { get; set; }
+            public string Status { get; set; }
+            public bool Stat { get; set; }
+            public ServiceOutput(C_Service p, bool Stat)
+            {
+                ID = p.ID;
+                Name = p.Name.Trim();
+                Price = p.Price;
+                Discription = p.Discription;
+                this.Stat = Stat;
+                if (Stat) Status = "Подключено"; else Status = "Не подключено";
+            }
+            public ServiceOutput(ServiceDTO p)
+            {
+                ID = p.ID;
+                Name = p.Name.Trim();
+                Price = p.Price;
+                Discription = p.Discription;
+            }
+        }
     }
 }

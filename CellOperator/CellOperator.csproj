@@ -53,6 +53,9 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="CSVLibraryAK, Version=1.0.0.0, Culture=neutral, processorArchitecture=x86">
+      <HintPath>packages\CSVLibraryAK.1.0.0\lib\net471\CSVLibraryAK.dll</HintPath>
+    </Reference>
     <Reference Include="EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
       <HintPath>packages\EntityFramework.6.5.1\lib\net45\EntityFramework.dll</HintPath>
     </Reference>
@@ -80,6 +83,12 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="ClientChangePassword.xaml.cs">
+      <DependentUpon>ClientChangePassword.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="ClientServiceChange.xaml.cs">
+      <DependentUpon>ClientServiceChange.xaml</DependentUpon>
+    </Compile>
     <Compile Include="ClientWindow_MakeCall.xaml.cs">
       <DependentUpon>ClientWindow_MakeCall.xaml</DependentUpon>
     </Compile>
@@ -97,6 +106,14 @@
       <DependentUpon>RegistationWindows.xaml</DependentUpon>
     </Compile>
     <Page Include="AdministatorWindows.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="ClientChangePassword.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="ClientServiceChange.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

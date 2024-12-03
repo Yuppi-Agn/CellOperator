@@ -13,6 +13,7 @@ namespace DAL
         public Number()
         {
             C_Service_Connection = new HashSet<C_Service_Connection>();
+            C_Service_Connection_History = new HashSet<C_Service_Connection_History>();
             Calling = new HashSet<Calling>();
             Expenses = new HashSet<Expenses>();
             Internet = new HashSet<Internet>();
@@ -44,6 +45,9 @@ namespace DAL
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<C_Service_Connection> C_Service_Connection { get; set; }
+
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<C_Service_Connection_History> C_Service_Connection_History { get; set; }
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Calling> Calling { get; set; }

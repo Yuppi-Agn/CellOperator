@@ -58,6 +58,7 @@
     <Compile Include="DomainModel\Client.cs" />
     <Compile Include="DomainModel\C_Service.cs" />
     <Compile Include="DomainModel\C_Service_Connection.cs" />
+    <Compile Include="DomainModel\C_Service_Connection_History.cs" />
     <Compile Include="DataBase\EF.cs" />
     <Compile Include="DomainModel\Expenses.cs" />
     <Compile Include="DomainModel\Individual.cs" />

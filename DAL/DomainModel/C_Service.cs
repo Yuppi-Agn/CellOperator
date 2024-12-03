@@ -13,6 +13,7 @@ namespace DAL
         public C_Service()
         {
             C_Service_Connection = new HashSet<C_Service_Connection>();
+            C_Service_Connection_History = new HashSet<C_Service_Connection_History>();
         }
 
         [DatabaseGenerated(DatabaseGeneratedOption.None)]
@@ -28,5 +29,8 @@ namespace DAL
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<C_Service_Connection> C_Service_Connection { get; set; }
+
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<C_Service_Connection_History> C_Service_Connection_History { get; set; }
     }
 }

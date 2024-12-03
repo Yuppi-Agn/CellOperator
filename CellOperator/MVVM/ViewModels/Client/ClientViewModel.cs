@@ -59,12 +59,13 @@ namespace CellOperator.MVVM.ViewModels
         private RelayCommand _SMSReport;
         public RelayCommand SMSReport { get { return _SMSReport; } }
         private RelayCommand _CallingReport;
-        public RelayCommand CallingReport { get { return _CallingReport; } }
-        private RelayCommand _TarifChangeAction;
+        public RelayCommand CallingReport { get { return _CallingReport; } }        
         private RelayCommand _ExpensesReport;
         public RelayCommand ExpensesReport { get { return _ExpensesReport; } }
-
+        private RelayCommand _TarifChangeAction;
         public RelayCommand TarifChangeAction { get { return _TarifChangeAction; } }
+        private RelayCommand _ServiceChangeAction;
+        public RelayCommand ServiceChangeAction { get { return _ServiceChangeAction; } }
         private RelayCommand _BuyNumChangeAction;
         public RelayCommand BuyNumChangeAction { get { return _BuyNumChangeAction; } }
         private RelayCommand _AddMoneyAction;
@@ -75,6 +76,8 @@ namespace CellOperator.MVVM.ViewModels
         public RelayCommand MakeCallAction { get { return _MakeCallAction; } }
         private RelayCommand _SpentInternetAction;
         public RelayCommand SpentInternetAction { get { return _SpentInternetAction; } }
+        private RelayCommand _ChangePasswordAction;
+        public RelayCommand ChangePasswordAction { get { return _ChangePasswordAction; } }
 
         public ClientViewModel(ClientDTO client) {
             Client = client;
@@ -93,12 +96,15 @@ namespace CellOperator.MVVM.ViewModels
             _ExpensesReport = new RelayCommand(Show_Expenses_Report, i => true);
 
             _TarifChangeAction = new RelayCommand(Show_TarifChange, i => true);
+            _ServiceChangeAction = new RelayCommand(Show_ServiceChange, i => true);
             _BuyNumChangeAction = new RelayCommand(Show_NumberBuy, i => true);
             _AddMoneyAction = new RelayCommand(AddMoney, i => true);
 
             _SendSMSAction = new RelayCommand(SendSMS, i => true);
             _MakeCallAction = new RelayCommand(MakeCall, i => true);
             _SpentInternetAction = new RelayCommand(SpentInternet, i => true);
+
+            _ChangePasswordAction = new RelayCommand(ChangePassword, i => true);
         }
 
         private Guid _viewId;
@@ -137,6 +143,14 @@ namespace CellOperator.MVVM.ViewModels
         {
             if (Numbers.Count - 1 < SelectedNumber) return;
             ClientTarifChange taskWindow = new ClientTarifChange(ref Database, Client, Numbers[SelectedNumber]);
+            taskWindow.ShowDialog();
+            UpdateNums();
+            NumberChanged(SSelectedNumber);
+        }
+        public void Show_ServiceChange(object parameter)
+        {
+            if (Numbers.Count - 1 < SelectedNumber) return;
+            ClientServiceChange taskWindow = new ClientServiceChange(ref Database, Client, Numbers[SelectedNumber]);
             taskWindow.ShowDialog();
             UpdateNums();
             NumberChanged(SSelectedNumber);
@@ -195,6 +209,11 @@ namespace CellOperator.MVVM.ViewModels
             taskWindow.ShowDialog();
             UpdateNums();
             NumberChanged(SSelectedNumber);
+        }
+        public void ChangePassword(object parameter)
+        {
+            var taskWindow = new ClientChangePassword(ref Database, Client);
+            taskWindow.ShowDialog();
         }
     }
 }

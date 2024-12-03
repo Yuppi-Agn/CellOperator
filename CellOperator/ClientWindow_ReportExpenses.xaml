@@ -5,12 +5,24 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:CellOperator"
         mc:Ignorable="d"
-        Title="Детализация трат" Height="450" Width="800">
-    <DataGrid ItemsSource="{Binding Table}" CanUserAddRows="False" AutoGenerateColumns="False" HorizontalAlignment="Left" Height="auto" VerticalAlignment="Top" Width="auto">
+        Title="Детализация трат" Height="203.652" Width="212.091">
+    <Grid HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+        <ToolBar Grid.Row="0" Grid.Column="0" ScrollViewer.HorizontalScrollBarVisibility="Disabled" ScrollViewer.VerticalScrollBarVisibility="Disabled" ScrollViewer.CanContentScroll="False"  Height="auto" Width="auto" UseLayoutRounding="True" Grid.IsSharedSizeScope="True">
+            <Button Grid.Row="0" Grid.Column="0" Content="Сохранить в csv" HorizontalAlignment="Left"  Width="auto" Command="{Binding SaveCSVAction}"/>
+        </ToolBar>
+        <DataGrid Grid.Row="1" Grid.Column="0" ItemsSource="{Binding Table}" CanUserAddRows="False" AutoGenerateColumns="False" HorizontalAlignment="Left" Height="auto" VerticalAlignment="Top" Width="auto">
         <DataGrid.Columns>            
             <DataGridTextColumn Binding="{Binding Path=Date}" Header="Дата"/>
             <DataGridTextColumn Binding="{Binding Path=Type}" Header="Тип"/>
             <DataGridTextColumn Binding="{Binding Path=Expense}" Header="Сумма"/>
         </DataGrid.Columns>
     </DataGrid>
+        </Grid>
 </Window>

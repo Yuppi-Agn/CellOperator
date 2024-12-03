@@ -6,8 +6,8 @@ namespace DAL
     using System.ComponentModel.DataAnnotations.Schema;
     using System.Data.Entity.Spatial;
 
-    [Table("_Service_Connection")]
-    public partial class C_Service_Connection
+    [Table("_Service_Connection_History")]
+    public partial class C_Service_Connection_History
     {
         [DatabaseGenerated(DatabaseGeneratedOption.None)]
         public int ID { get; set; }
@@ -16,8 +16,9 @@ namespace DAL
 
         public int? ID_Service { get; set; }
 
-        [Column("_Date")]
-        public DateTime? C_Date { get; set; }
+        public DateTime? StartDate { get; set; }
+
+        public DateTime? EndDate { get; set; }
 
         public virtual C_Service C_Service { get; set; }
 

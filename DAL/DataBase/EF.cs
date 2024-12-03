@@ -14,6 +14,7 @@ namespace DAL
 
         public virtual DbSet<C_Service> C_Service { get; set; }
         public virtual DbSet<C_Service_Connection> C_Service_Connection { get; set; }
+        public virtual DbSet<C_Service_Connection_History> C_Service_Connection_History { get; set; }
         public virtual DbSet<Administrator> Administrator { get; set; }
         public virtual DbSet<Calling> Calling { get; set; }
         public virtual DbSet<Client> Client { get; set; }
@@ -45,6 +46,11 @@ namespace DAL
 
             modelBuilder.Entity<C_Service>()
                 .HasMany(e => e.C_Service_Connection)
+                .WithOptional(e => e.C_Service)
+                .HasForeignKey(e => e.ID_Service);
+
+            modelBuilder.Entity<C_Service>()
+                .HasMany(e => e.C_Service_Connection_History)
                 .WithOptional(e => e.C_Service)
                 .HasForeignKey(e => e.ID_Service);
 
@@ -152,6 +158,11 @@ namespace DAL
 
             modelBuilder.Entity<Number>()
                 .HasMany(e => e.C_Service_Connection)
+                .WithOptional(e => e.Number)
+                .HasForeignKey(e => e.ID_number);
+
+            modelBuilder.Entity<Number>()
+                .HasMany(e => e.C_Service_Connection_History)
                 .WithOptional(e => e.Number)
                 .HasForeignKey(e => e.ID_number);
 

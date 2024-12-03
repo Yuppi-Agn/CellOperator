@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 
 using BLL.Models;
 using DAL;
+using static BLL.Models.Methods;
 
 namespace BLL.Services
 {
@@ -105,6 +106,17 @@ namespace BLL.Services
             var list = db.Expenses.Where(p => p.ID_number == ID).AsEnumerable();
             if (list.Count() > 0) return list.Select(i => new ExpensesDTO(i)).ToList<ExpensesDTO>();
             else return new List<ExpensesDTO>();
+        }
+        public List<ServiceOutput> GetServices(int NumberID)
+        {
+            List<ServiceOutput> Output = new List<ServiceOutput>();
+            foreach (var item in db.C_Service.ToList())
+            {
+                bool Connected;
+                if (db.C_Service_Connection.Where(P => P.ID_number == NumberID && P.ID_Service == item.ID).FirstOrDefault() != null) Connected = true; else Connected = false;
+                Output.Add(new ServiceOutput(item, Connected));
+            }
+            return Output;
         }
     }
 }
