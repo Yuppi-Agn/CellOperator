@@ -64,7 +64,6 @@
     <Compile Include="DomainModel\Individual.cs" />
     <Compile Include="DomainModel\Internet.cs" />
     <Compile Include="DomainModel\LegalEntity.cs" />
-    <Compile Include="DomainModel\Monthly_remains_tarif.cs" />
     <Compile Include="DomainModel\Number.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="DomainModel\SMS.cs" />

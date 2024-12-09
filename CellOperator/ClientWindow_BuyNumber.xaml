@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:CellOperator"
         mc:Ignorable="d"
-        Title="Приобретение нового номера" Height="450" Width="350.872">
+        Title="Приобретение нового номера" SizeToContent="WidthAndHeight" MaxHeight="450">
     <Grid>
     <Grid.ColumnDefinitions>
         <ColumnDefinition Width="auto" />

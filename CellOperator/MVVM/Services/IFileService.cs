@@ -16,9 +16,9 @@ namespace CellOperator.MVVM.Services
 {
     public interface IFileService
     {
-        void Save(List<Methods.Report_Calling> Callings);
-        void Save(List<Methods.Report_SMS> SMS);
-        void Save(List<ExpensesDTO> Expenses);
+        void Save(List<Methods.Report_Calling> Callings, string Path);
+        void Save(List<Methods.Report_SMS> SMS, string Path);
+        void Save(List<ExpensesDTO> Expenses, string Path);
         //List<Phone> Open(string filename);
         //void Save(string filename, List<Phone> phonesList);
     }
@@ -89,19 +89,17 @@ namespace CellOperator.MVVM.Services
         }
     }
     public class FileService_csv : IFileService
-    {
-        IDialogService dialogService;
-        string Path="";
+    {        
+        const string Separator = ";",
+            StrSym = "\"";
         public FileService_csv()
         {
-            dialogService = new WindowsDilalogService("Введите название", "csv", "Таблица csv");
-        }
-        public void Save(List<Methods.Report_Calling> Callings) {
-            if (!FilePath()) return;
 
+        }
+        public void Save(List<Methods.Report_Calling> Callings, string Path)
+        {
+            if (Callings == null) throw new Exception("Callings=null");
             string String = "";
-            const string Separator = ",",
-                StrSym = "\"";
             var stream = new StreamWriter(Path, false, Encoding.UTF8);
 
             String = StrSym+"Тип"+ StrSym;
@@ -125,12 +123,9 @@ namespace CellOperator.MVVM.Services
             }
             stream.Dispose();
         }
-        public void Save(List<Methods.Report_SMS> SMS) {
-            if (!FilePath()) return;
-
+        public void Save(List<Methods.Report_SMS> SMS, string Path ) {
+            if (SMS == null) throw new Exception("SMS=null");
             string String = "";
-            const string Separator = ",",
-                StrSym = "\"";
             var stream = new StreamWriter(Path, false, Encoding.UTF8);
 
             String = StrSym + "Тип" + StrSym;
@@ -151,12 +146,10 @@ namespace CellOperator.MVVM.Services
             }
             stream.Dispose();
         }
-        public void Save(List<ExpensesDTO> Expenses) {
-            if (!FilePath()) return;
-
+        public void Save(List<ExpensesDTO> Expenses, string Path) {
+            if (Expenses == null) throw new Exception("Expenses=null");
+            
             string String = "";
-            const string Separator = ",",
-                StrSym = "\"";
             var stream = new StreamWriter(Path, false, Encoding.UTF8);
             
             String = StrSym + "Дата" + StrSym;
@@ -174,14 +167,6 @@ namespace CellOperator.MVVM.Services
                 stream.WriteLine(String);
             }
             stream.Dispose();
-        }
-        private bool FilePath()
-        {
-            if (dialogService.SaveFileDialog()) { 
-                Path = dialogService.FilePath;
-                return true;
-            }
-            else return false;
         }
     }
 

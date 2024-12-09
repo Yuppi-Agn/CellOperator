@@ -9,6 +9,7 @@ using System.Windows.Controls;
 
 using BLL.Services;
 using BLL.Models;
+using CellOperator.MVVM.Services;
 
 namespace CellOperator.MVVM.ViewModels
 {
@@ -57,44 +58,30 @@ namespace CellOperator.MVVM.ViewModels
             string clearTextPassword = passwordBox.Password;
             try
             {
-                //User user = _authenticationService.AuthenticateUser(Username, clearTextPassword);
-
-                //Update UI
-
-                if (AdministratorAuth_check(Username, clearTextPassword))
-                {
-                    AdministatorWindows taskWindow = new AdministatorWindows();
-                    taskWindow.Show();
-
-                    //NotifyPropertyChanged("AuthenticatedUser");
-                    NotifyPropertyChanged("IsAuthenticated");
-                    _loginCommand.RaiseCanExecuteChanged();
-
-                    WindowManager.CloseWindow(ViewID); //Close();
+                AuthService authService = new AuthService();
+                switch (authService.AuthCheck(Username, clearTextPassword)) {
+                    
+                    case 1:
+                        {
+                            AdministatorWindows taskWindow = new AdministatorWindows();
+                            taskWindow.Show();
+                        }
+                        break;
+                    case 2:
+                        {
+                            var Database = new DataBase_service();
+                            ClientWindow taskWindow = new ClientWindow(Database.FindClient(Username, clearTextPassword));
+                            taskWindow.Show();
+                        }
+                        break;
+                    default:
+                    case 0:                        
+                            Status = "Введеные логин и пароль или не совпадают или не существуют.";
+                        return;
                 }
-                else if (UserAuth_check(Username, clearTextPassword))
-                {
-                    DataBase_service Database;
-                    Database = new DataBase_service();
-                    ClientWindow taskWindow = new ClientWindow(Database.FindClient(Username, passwordBox.Password));
-                    taskWindow.Show();
-
-                    //NotifyPropertyChanged("AuthenticatedUser");
-                    NotifyPropertyChanged("IsAuthenticated");
-                    _loginCommand.RaiseCanExecuteChanged();
-
-                    WindowManager.CloseWindow(ViewID);//Close();
-                }
-                else
-                {
-                    Status = "НЕПРАВИЛЬНО";
-                }
-                
-                //_logoutCommand.RaiseCanExecuteChanged();
-                //Username = string.Empty; //reset
-                //passwordBox.Password = string.Empty; //reset
-                //Status = string.Empty;
-                //_IsAuthenticated = true;
+                NotifyPropertyChanged("IsAuthenticated");
+                _loginCommand.RaiseCanExecuteChanged();
+                WindowManager.CloseWindow(ViewID); //Close();                
             }
             catch (UnauthorizedAccessException)
             {
@@ -112,29 +99,6 @@ namespace CellOperator.MVVM.ViewModels
 
             WindowManager.CloseWindow(ViewID);
         }
-
-       /* private void Button_Auth(object sender, RoutedEventArgs e)
-        {
-            
-        }*/
-
-        private bool AdministratorAuth_check(string Login, string Password)
-        {
-            DataBase_service Database = new DataBase_service();
-            AdministratorDTO Admin = Database.FindAdmin(Login, Password);
-            if (Admin != null)
-                return true;
-            else return false;            
-        }
-        private bool UserAuth_check(string Login, string Password)
-        {
-            DataBase_service Database = new DataBase_service();
-            ClientDTO Client = Database.FindClient(Login, Password);
-            if (Client != null)
-                return true;
-            else return false;
-        }
-        
         #region INotifyPropertyChanged Members
         public event PropertyChangedEventHandler PropertyChanged;
         private void NotifyPropertyChanged(string propertyName)

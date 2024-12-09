@@ -28,8 +28,6 @@ namespace DAL
 
         public int? ID_Client { get; set; }
 
-        public int? ID_Monthly_remains_tarif { get; set; }
-
         [Column("Number")]
         [Required]
         [StringLength(20)]
@@ -42,6 +40,12 @@ namespace DAL
 
         [Column("_status")]
         public byte? C_status { get; set; }
+
+        public int SMS_remains_amount { get; set; }
+
+        public int MINUTES_remains_amount { get; set; }
+
+        public int Internet_remains_amount { get; set; }
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<C_Service_Connection> C_Service_Connection { get; set; }
@@ -59,8 +63,6 @@ namespace DAL
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Internet> Internet { get; set; }
-
-        public virtual Monthly_remains_tarif Monthly_remains_tarif { get; set; }
 
         public virtual Tarif Tarif { get; set; }
 

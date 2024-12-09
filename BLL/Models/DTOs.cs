@@ -229,7 +229,9 @@ namespace BLL.Models
         public decimal Bill { get; set; }
         public DateTime TarifDate { get; set; }
         public bool Status { get; set; }
-        public Monthly_remains_tarif Monthly_remains_tarif;
+        public int SMS_remains_amount { get; set; }
+        public int MINUTES_remains_amount { get; set; }
+        public int Internet_remains_amount { get; set; }
         public NumberDTO() { }
         public NumberDTO(Number p)
         {
@@ -241,7 +243,9 @@ namespace BLL.Models
             Bill = p.Bill;
             TarifDate = p.TarifDate;
             if (p.C_status == 0) Status = false; else Status = true;
-            Monthly_remains_tarif = p.Monthly_remains_tarif;
+            SMS_remains_amount = p.SMS_remains_amount;
+            MINUTES_remains_amount = p.MINUTES_remains_amount;
+            Internet_remains_amount = p.Internet_remains_amount;
         }
     }
     public class LegalEntityDTO
@@ -419,21 +423,5 @@ namespace BLL.Models
 
         public virtual ICollection<Internet> Internet { get; set; }
         public virtual ICollection<SMS> SMS { get; set; }
-    }
-    public partial class Monthly_remains_tarifDTO
-    {
-        public Monthly_remains_tarifDTO(Monthly_remains_tarif p)
-        {
-            ID = p.ID;
-            SMS_amount = p.SMS_amount;
-            MINUTES_amount = p.MINUTES_amount;
-        }
-        public int ID { get; set; }
-
-        public int SMS_amount { get; set; }
-
-        public int MINUTES_amount { get; set; }
-
-        public int Internet_amount { get; set; }
     }
 }

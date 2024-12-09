@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:CellOperator"
         mc:Ignorable="d"
-        Title="Потребляем трафик" Height="115.239" Width="208.312">
+        Title="Потребляем трафик" SizeToContent="WidthAndHeight">
     <Grid>
         <StackPanel>
             <TextBlock Text="{Binding YourNumber}" />

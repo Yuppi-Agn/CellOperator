@@ -13,7 +13,9 @@ using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 
 using BLL.Models;
+using BLL.Services;
 using CellOperator.MVVM.ViewModels;
+using CellOperator.MVVM.Services;
 
 namespace CellOperator
 {
@@ -22,10 +24,14 @@ namespace CellOperator
     /// </summary>
     public partial class ClientWindow_ReportExpenses : Window
     {
-        public ClientWindow_ReportExpenses(List<ExpensesDTO> Table)
+        public ClientWindow_ReportExpenses(int NumId, ref Methods_service Methods)
         {
             InitializeComponent();
-            DataContext = new ClientWindow_ReportExpensesModel(Table);
+
+            FileService_csv fileService = new FileService_csv();
+            WindowsDilalogService dilalogService = new WindowsDilalogService("Введите название", ".csv", "Таблица формата csv");
+
+            DataContext = new ClientWindow_ReportExpensesModel(NumId, ref Methods, dilalogService, fileService);
         }
     }
 }

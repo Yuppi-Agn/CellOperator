@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:CellOperator"
         mc:Ignorable="d"
-        Title="Тарифы!" Height="450" Width="350.872">
+        Title="Тарифы!" SizeToContent="WidthAndHeight" MaxHeight="450">
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="auto" />

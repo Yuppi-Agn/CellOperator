@@ -68,6 +68,56 @@ namespace BLL.Services
                               }).ToList<Methods.Report_Calling>());
             return reports;
         }
+        public List<Methods.Report_Calling> Report_Calling(int ID, DateTime FromDate, DateTime ToDate)
+        {
+            if(FromDate==null || ToDate == null) return null;
+            if (FromDate > ToDate) return null;
+
+            List<Methods.Report_Calling> reports = new List<Methods.Report_Calling>();
+            var ThisNumber = db.Number.Find(ID);
+
+            reports = (from calling in db.Calling
+                       where calling.ID_number_host == ThisNumber.ID
+                       where calling.C_Date <= ToDate
+                       where calling.C_Date >= FromDate
+                       select new Methods.Report_Calling
+                       {
+                           Type = "Исходящие",
+                           Minutes = (int)calling.C_Count,
+                           Date = (DateTime)calling.C_Date,
+                           OtherNumber = calling.Number_slave,
+                           NumConnectionType = (byte)calling.Connection_type,
+                       }).ToList<Methods.Report_Calling>();
+            reports.AddRange((
+                from calling in db.Calling
+                where calling.Number_slave.Trim() == ThisNumber.Number1.Trim()
+                where calling.C_Date <= ToDate
+                where calling.C_Date >= FromDate
+                /*from Number1 in db.Number
+                              join calling in db.Calling on Number1.Number1 equals calling.Number_slave
+                              where calling.Number_slave == ThisNumber.Number1*/
+                select new Methods.Report_Calling
+                {
+                    Type = "Входящие",
+                    Minutes = (int)calling.C_Count,
+                    Date = (DateTime)calling.C_Date,
+                    OtherNumber = calling.Number.Number1,
+                    NumConnectionType = (byte)calling.Connection_type,
+                }).ToList<Methods.Report_Calling>());
+            return reports;
+        }
+        public DateTime Report_Calling_FirstDate()
+        {
+            var Item = db.Calling.OrderBy(p => p.C_Date).ToArray().First();
+            if (Item == null) return DateTime.Now;
+            else return ((DateTime)Item.C_Date);
+        }
+        public DateTime Report_Calling_LastDate()
+        {
+            var Item = db.Calling.OrderBy(p => p.C_Date).ToArray().Last();
+            if (Item == null) return DateTime.Now;
+            else return ((DateTime)Item.C_Date);
+        }
 
         public List<Methods.Report_SMS> Report_SMS(int ID)
         {
@@ -101,11 +151,77 @@ namespace BLL.Services
                 }).ToList<Methods.Report_SMS>());
             return reports;
         }
+        public List<Methods.Report_SMS> Report_SMS(int ID, DateTime FromDate, DateTime ToDate)
+        {
+            if (FromDate == null || ToDate == null) return null;
+            if (FromDate > ToDate) return null;
+
+            List<Methods.Report_SMS> reports = new List<Methods.Report_SMS>();
+            var ThisNumber = db.Number.Find(ID);
+
+            reports = (from SMS in db.SMS
+                       where SMS.ID_number_host == ThisNumber.ID
+                       where SMS.C_Date <= ToDate
+                       where SMS.C_Date >= FromDate
+                       select new Methods.Report_SMS
+                       {
+                           Type = "Исходящие",
+                           Date = (DateTime)SMS.C_Date,
+                           OtherNumber = SMS.Number_slave,
+                           NumConnectionType = (byte)SMS.Connection_type,
+                       }).ToList<Methods.Report_SMS>();
+            reports.AddRange((
+                from SMS in db.SMS
+                where SMS.Number_slave.Trim() == ThisNumber.Number1.Trim()
+                where SMS.C_Date <= ToDate
+                where SMS.C_Date >= FromDate
+                select new Methods.Report_SMS
+                {
+                    Type = "Входящие",
+                    Date = (DateTime)SMS.C_Date,
+                    OtherNumber = SMS.Number_slave,
+                    NumConnectionType = (byte)SMS.Connection_type,
+                }).ToList<Methods.Report_SMS>());
+            return reports;
+        }
+        public DateTime Report_SMS_FirstDate()
+        {
+            var Item = db.SMS.OrderBy(p => p.C_Date).ToArray().First();
+            if (Item == null) return DateTime.Now;
+            else return (DateTime)Item.C_Date;
+        }
+        public DateTime Report_SMS_LastDate()
+        {
+            var Item = db.SMS.OrderBy(p => p.C_Date).ToArray().Last();
+            if (Item == null) return DateTime.Now;
+            else return (DateTime)Item.C_Date;
+        }
         public List<ExpensesDTO> Report_Expenses(int ID)
         {
             var list = db.Expenses.Where(p => p.ID_number == ID).AsEnumerable();
             if (list.Count() > 0) return list.Select(i => new ExpensesDTO(i)).ToList<ExpensesDTO>();
             else return new List<ExpensesDTO>();
+        }
+        public List<ExpensesDTO> Report_Expenses(int ID, DateTime FromDate, DateTime ToDate)
+        {
+            if (FromDate == null || ToDate == null) return null;
+            if (FromDate > ToDate) return null;
+
+            var list = db.Expenses.Where(p => p.ID_number == ID && p.C_Date <= ToDate && p.C_Date >= FromDate).AsEnumerable();
+            if (list.Count() > 0) return list.Select(i => new ExpensesDTO(i)).ToList<ExpensesDTO>();
+            else return new List<ExpensesDTO>();
+        }
+        public DateTime Report_Expenses_FirstDate()
+        {
+            var Item = db.Expenses.OrderBy(p => p.C_Date).ToArray().First();
+            if (Item == null) return DateTime.Now;
+            else return (DateTime)Item.C_Date;
+        }
+        public DateTime Report_Expenses_LastDate()
+        {
+            var Item = db.Expenses.OrderBy(p => p.C_Date).ToArray().Last();
+            if (Item == null) return DateTime.Now;
+            else return (DateTime)Item.C_Date;
         }
         public List<ServiceOutput> GetServices(int NumberID)
         {

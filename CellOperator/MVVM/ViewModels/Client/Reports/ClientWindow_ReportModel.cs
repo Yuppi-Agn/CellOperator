@@ -20,58 +20,289 @@ namespace CellOperator.MVVM.ViewModels
 {
     class ClientWindow_ReportCallingModel
     {
+        IDialogService DialogService;
+        IFileService FileService;
+        Methods_service Methods;
+        int NumId;
+        private DateTime _FromDate;
+        public DateTime FromDate
+        {
+            get { return _FromDate; }
+            set
+            {
+                _FromDate = value;
+                NotifyPropertyChanged("FromDate");
+                TableChanged();
+            }
+        }
+        private DateTime _ToDate;
+        public DateTime ToDate
+        {
+            get { return _ToDate; }
+            set
+            {
+                _ToDate = value;
+                NotifyPropertyChanged("ToDate");
+                TableChanged();
+            }
+        }
+        private DateTime _FirstDate;
+        public DateTime FirstDate
+        {
+            get { return _FirstDate; }
+            set
+            {
+                _FirstDate = value;
+                NotifyPropertyChanged("FirstDate");
+            }
+        }
+        private DateTime _LastDate;
+        public DateTime LastDate
+        {
+            get { return _LastDate; }
+            set
+            {
+                _LastDate = value;
+                NotifyPropertyChanged("LastDate");
+            }
+        }
+
         private List<Methods.Report_Calling> MyTable;
         private RelayCommand _SaveCSVAction;
         public RelayCommand SaveCSVAction { get { return _SaveCSVAction; } }
         public ObservableCollection<Methods.Report_Calling> Table { get; set; }
-        public ClientWindow_ReportCallingModel(List<Methods.Report_Calling> Table)
-        {
-            MyTable = Table;
+        public ClientWindow_ReportCallingModel(int NumId, ref Methods_service Methods, IDialogService DialogService, IFileService FileService)
+        {    
+            this.Methods = Methods;
+            this.NumId = NumId;
+            this.DialogService = DialogService;
+            this.FileService = FileService;
+            MyTable = Methods.Report_Calling(NumId);
             this.Table = new ObservableCollection<Methods.Report_Calling>();
-            for (int i = 0; i < Table.Count; i++) this.Table.Add(Table[i]);
+            for (int i = 0; i < MyTable.Count; i++) this.Table.Add(MyTable[i]);
             _SaveCSVAction = new RelayCommand(SaveCSV, i => true);
+            //var Tnew = Methods.Report_Calling_FirstDate();
+            FirstDate = FromDate = Methods.Report_Calling_FirstDate();
+            LastDate= ToDate = Methods.Report_Calling_LastDate();
+        }
+        private void TableChanged()
+        {
+            MyTable = Methods.Report_Calling(NumId, FromDate, ToDate);
+            if (MyTable != null)
+            {
+                Table.Clear();
+                for (int i = 0; i < MyTable.Count; i++) this.Table.Add(MyTable[i]);
+            }
+            else Table.Clear();
         }
         void SaveCSV(object parameter)
         {
-            var Service = new FileService_csv();
-            Service.Save(MyTable);
+            if (DialogService.SaveFileDialog())
+            {
+                var Path = DialogService.FilePath;
+                FileService.Save(MyTable, Path);
+            }
+            else return;
         }
+        #region INotifyPropertyChanged Members
+        public event PropertyChangedEventHandler PropertyChanged;
+        private void NotifyPropertyChanged(string propertyName)
+        {
+            if (PropertyChanged != null)
+                PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
+        }
+        #endregion
     }
     class ClientWindow_ReportSMSModel
     {
+        IDialogService DialogService;
+        IFileService FileService;
+        Methods_service Methods;
+        int NumId;
+        private DateTime _FromDate;
+        public DateTime FromDate
+        {
+            get { return _FromDate; }
+            set
+            {
+                _FromDate = value;
+                NotifyPropertyChanged("FromDate");
+                TableChanged();
+            }
+        }
+        private DateTime _ToDate;
+        public DateTime ToDate
+        {
+            get { return _ToDate; }
+            set
+            {
+                _ToDate = value;
+                NotifyPropertyChanged("ToDate");
+                TableChanged();
+            }
+        }
+        private DateTime _FirstDate;
+        public DateTime FirstDate
+        {
+            get { return _FirstDate; }
+            set
+            {
+                _FirstDate = value;
+                NotifyPropertyChanged("FirstDate");
+            }
+        }
+        private DateTime _LastDate;
+        public DateTime LastDate
+        {
+            get { return _LastDate; }
+            set
+            {
+                _LastDate = value;
+                NotifyPropertyChanged("LastDate");
+            }
+        }
+
         private List<Methods.Report_SMS> MyTable;
         private RelayCommand _SaveCSVAction;
         public RelayCommand SaveCSVAction { get { return _SaveCSVAction; } }
         public ObservableCollection<Methods.Report_SMS> Table { get; set; }
-        public ClientWindow_ReportSMSModel(List<Methods.Report_SMS> Table)
+        public ClientWindow_ReportSMSModel(int NumId, ref Methods_service Methods, IDialogService DialogService, IFileService FileService)
         {
+            this.Methods = Methods;
+            this.NumId = NumId;
+            this.DialogService = DialogService;
+            this.FileService = FileService;
+
+            MyTable = Methods.Report_SMS(NumId);
             this.Table = new ObservableCollection<Methods.Report_SMS>();
-            for (int i = 0; i < Table.Count; i++) this.Table.Add(Table[i]);
+            for (int i = 0; i < MyTable.Count; i++) this.Table.Add(MyTable[i]);
             _SaveCSVAction = new RelayCommand(SaveCSV, i => true);
+
+            FirstDate = FromDate = Methods.Report_SMS_FirstDate();
+            LastDate = ToDate = Methods.Report_SMS_LastDate();
+        }
+        private void TableChanged()
+        {
+            MyTable = Methods.Report_SMS(NumId, FromDate, ToDate);
+            if (MyTable != null)
+            {
+                Table.Clear();
+                for (int i = 0; i < MyTable.Count; i++) this.Table.Add(MyTable[i]);
+            }
+            else Table.Clear();
         }
         void SaveCSV(object parameter)
         {
-            var Service = new FileService_csv();
-            Service.Save(MyTable);
+            if (DialogService.SaveFileDialog())
+            {
+                var Path = DialogService.FilePath;
+                FileService.Save(MyTable, Path);
+            }
+            else return;
         }
+        #region INotifyPropertyChanged Members
+        public event PropertyChangedEventHandler PropertyChanged;
+        private void NotifyPropertyChanged(string propertyName)
+        {
+            if (PropertyChanged != null)
+                PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
+        }
+        #endregion
     }
     class ClientWindow_ReportExpensesModel
     {
+        IDialogService DialogService;
+        IFileService FileService;
+        Methods_service Methods;
+        int NumId;
+        private DateTime _FromDate;
+        public DateTime FromDate
+        {
+            get { return _FromDate; }
+            set
+            {
+                _FromDate = value;
+                NotifyPropertyChanged("FromDate");
+                TableChanged();
+            }
+        }
+        private DateTime _ToDate;
+        public DateTime ToDate
+        {
+            get { return _ToDate; }
+            set
+            {
+                _ToDate = value;
+                NotifyPropertyChanged("ToDate");
+                TableChanged();
+            }
+        }
+        private DateTime _FirstDate;
+        public DateTime FirstDate
+        {
+            get { return _FirstDate; }
+            set
+            {
+                _FirstDate = value;
+                NotifyPropertyChanged("FirstDate");
+            }
+        }
+        private DateTime _LastDate;
+        public DateTime LastDate
+        {
+            get { return _LastDate; }
+            set
+            {
+                _LastDate = value;
+                NotifyPropertyChanged("LastDate");
+            }
+        }
+
         private List<ExpensesDTO> MyTable;
         private RelayCommand _SaveCSVAction;
         public RelayCommand SaveCSVAction { get { return _SaveCSVAction; } }
         public ObservableCollection<ExpensesDTO> Table { get; set; }
-        public ClientWindow_ReportExpensesModel(List<ExpensesDTO> Table)
+        public ClientWindow_ReportExpensesModel(int NumId, ref Methods_service Methods, IDialogService DialogService, IFileService FileService)
         {
+            this.Methods = Methods;
+            this.NumId = NumId;
+            this.MyTable = Methods.Report_Expenses(NumId);
+            this.DialogService = DialogService;
+            this.FileService = FileService;
+
             this.Table = new ObservableCollection<ExpensesDTO>();
-            for (int i = 0; i < Table.Count; i++) this.Table.Add(Table[i]);
+            for (int i = 0; i < MyTable.Count; i++) this.Table.Add(MyTable[i]);
             _SaveCSVAction = new RelayCommand(SaveCSV, i => true);
+            FirstDate = FromDate = Methods.Report_Expenses_FirstDate();
+            LastDate = ToDate = Methods.Report_Expenses_LastDate();
+        }
+        private void TableChanged()
+        {
+            MyTable = Methods.Report_Expenses(NumId, FromDate, ToDate);
+            if (MyTable != null)
+            {
+                Table.Clear();
+                for (int i = 0; i < MyTable.Count; i++) this.Table.Add(MyTable[i]);
+            }
+            else Table.Clear();
         }
         void SaveCSV(object parameter)
         {
-            var Service = new FileService_csv();
-            Service.Save(MyTable);
+            if (DialogService.SaveFileDialog())
+            {
+                var Path = DialogService.FilePath;
+                FileService.Save(MyTable, Path);
+            }
+            else return;
         }
+        #region INotifyPropertyChanged Members
+        public event PropertyChangedEventHandler PropertyChanged;
+        private void NotifyPropertyChanged(string propertyName)
+        {
+            if (PropertyChanged != null)
+                PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
+        }
+        #endregion
     }
     class ClientWindow_TarifChangeModel : INotifyPropertyChanged
     {

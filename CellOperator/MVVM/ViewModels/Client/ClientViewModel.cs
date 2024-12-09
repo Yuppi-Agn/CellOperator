@@ -124,19 +124,19 @@ namespace CellOperator.MVVM.ViewModels
         public void Show_Calling_Report(object parameter)
         {
             if (Numbers.Count - 1 < SelectedNumber) return;
-            ClientWindow_ReportCalling taskWindow = new ClientWindow_ReportCalling(methods.Report_Calling(Numbers[SelectedNumber].ID));
+            ClientWindow_ReportCalling taskWindow = new ClientWindow_ReportCalling(Numbers[SelectedNumber].ID, ref methods);//ClientWindow_ReportCalling(methods.Report_Calling(Numbers[SelectedNumber].ID));
             taskWindow.Show();
         }
         public void Show_SMS_Report(object parameter)
         {
             if (Numbers.Count - 1 < SelectedNumber) return;
-            ClientWindow_ReportSMS taskWindow = new ClientWindow_ReportSMS(methods.Report_SMS(Numbers[SelectedNumber].ID));
+            ClientWindow_ReportSMS taskWindow = new ClientWindow_ReportSMS(Numbers[SelectedNumber].ID, ref methods);//(methods.Report_SMS(Numbers[SelectedNumber].ID));
             taskWindow.Show();
         }
         public void Show_Expenses_Report(object parameter)
         {
             if (Numbers.Count - 1 < SelectedNumber) return;
-            ClientWindow_ReportExpenses taskWindow = new ClientWindow_ReportExpenses(methods.Report_Expenses(Numbers[SelectedNumber].ID));
+            ClientWindow_ReportExpenses taskWindow = new ClientWindow_ReportExpenses(Numbers[SelectedNumber].ID, ref methods); //(methods.Report_Expenses(Numbers[SelectedNumber].ID));
             taskWindow.Show();
         }
         public void Show_TarifChange(object parameter)

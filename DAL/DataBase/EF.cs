@@ -22,7 +22,6 @@ namespace DAL
         public virtual DbSet<Individual> Individual { get; set; }
         public virtual DbSet<Internet> Internet { get; set; }
         public virtual DbSet<LegalEntity> LegalEntity { get; set; }
-        public virtual DbSet<Monthly_remains_tarif> Monthly_remains_tarif { get; set; }
         public virtual DbSet<Number> Number { get; set; }
         public virtual DbSet<SMS> SMS { get; set; }
         public virtual DbSet<Tarif> Tarif { get; set; }
@@ -141,11 +140,6 @@ namespace DAL
                 .Property(e => e.Adress)
                 .IsFixedLength()
                 .IsUnicode(false);
-
-            modelBuilder.Entity<Monthly_remains_tarif>()
-                .HasMany(e => e.Number)
-                .WithOptional(e => e.Monthly_remains_tarif)
-                .HasForeignKey(e => e.ID_Monthly_remains_tarif);
 
             modelBuilder.Entity<Number>()
                 .Property(e => e.Number1)

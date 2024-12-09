@@ -13,7 +13,9 @@ using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 
 using BLL.Models;
+using BLL.Services;
 using CellOperator.MVVM.ViewModels;
+using CellOperator.MVVM.Services;
 
 namespace CellOperator
 {
@@ -22,10 +24,14 @@ namespace CellOperator
     /// </summary>
     public partial class ClientWindow_ReportSMS : Window
     {
-        public ClientWindow_ReportSMS(List<Methods.Report_SMS> Table)
+        public ClientWindow_ReportSMS(int NumId, ref Methods_service Methods)
         {
             InitializeComponent();
-            DataContext = new ClientWindow_ReportSMSModel(Table);
+
+            FileService_csv fileService = new FileService_csv();
+            WindowsDilalogService dilalogService = new WindowsDilalogService("Введите название", ".csv", "Таблица формата csv");
+
+            DataContext = new ClientWindow_ReportSMSModel(NumId, ref Methods, dilalogService, fileService);
         }
     }
 }
