@@ -6,11 +6,15 @@
         xmlns:local="clr-namespace:CellOperator"
         mc:Ignorable="d"
         Title="Вход в систему" Height="450" Width="800">
-    <Grid>
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="*"/>
-        </Grid.ColumnDefinitions>
-        <StackPanel HorizontalAlignment="Center" Height="auto" VerticalAlignment="Center" Width="auto" Grid.Column="1">
+    <Border>
+        <Border.Background>
+            <LinearGradientBrush StartPoint="0, 0" EndPoint="1, 0.7">
+                <GradientStop Color="{StaticResource secondaryBackColor1}" Offset="0"/>
+                <GradientStop Color="{StaticResource primaryBackColor2}" Offset="0.7"/>
+            </LinearGradientBrush>
+        </Border.Background>
+        
+        <StackPanel HorizontalAlignment="Center" Height="auto" VerticalAlignment="Center" Width="auto">
             <Grid>
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="*"/>
@@ -27,18 +31,21 @@
                 <TextBlock Text="" Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2"
                FontSize="14" HorizontalAlignment="Right" TextWrapping="Wrap" FontWeight="Bold"
                Margin="2,2,2,2"/>
-                <TextBlock Text="Логин:" Grid.Row="1" Grid.Column="0" />
-                <TextBlock Text="Пароль:" Grid.Row="2" Grid.Column="0" />
-                <TextBox x:Name="LoginBox" Text="{Binding Username}" Grid.Row="1" Grid.Column="1" MinWidth="40"/>
-                <PasswordBox x:Name="passwordBox" Grid.Row="2" Grid.Column="1" MinWidth="40"/>                
+                <TextBlock Text="Логин:" Grid.Row="1" Grid.Column="0" Foreground="{StaticResource titleColor2}"/>
+                <TextBlock Text="Пароль:" Grid.Row="2" Grid.Column="0" Foreground="{StaticResource titleColor2}"/>
+                <TextBox x:Name="LoginBox" Text="{Binding Username}" Grid.Row="1" Grid.Column="1" MinWidth="40" Foreground="{StaticResource titleColor2}" Background="Transparent"/>
+                <PasswordBox x:Name="passwordBox" Grid.Row="2" Grid.Column="1" MinWidth="40" Foreground="{StaticResource titleColor2}" Background="Transparent"/>                
                 <TextBlock Text="{Binding Status}" Grid.Row="4" Grid.Column="1"
                HorizontalAlignment="Center" VerticalAlignment="Center" Foreground="Red" TextWrapping="Wrap" />
             </Grid>
-            <Button Content="Войти" Margin="2" Command="{Binding LoginCommand, Mode=OneTime}"
-            CommandParameter="{Binding ElementName=passwordBox}"/>
-            <Button Content="Зарегистрироваться" Margin="2" Command="{Binding RegirCommand, Mode=OneTime}"/>
+            <!-- ="{StaticResource menuButton}" Tag="{StaticResource color1}" -->
+            <Button Style="{StaticResource RoundedButtonStyle}"
+                Content="Войти" Margin="2" Command="{Binding LoginCommand, Mode=OneTime}"
+            CommandParameter="{Binding ElementName=passwordBox}" />
+            <Button Style="{StaticResource RoundedButtonStyle}"
+                Content="Зарегистрироваться" Margin="2" Command="{Binding RegirCommand, Mode=OneTime}" />
             <!--<Button Content="Войти как пользователь" Margin="2" Click="Button__UserAuth"/>
             <Button Content="Войти как администратор" Click="Button_AdministratorAuth"/>-->
-        </StackPanel>        
-    </Grid>
+        </StackPanel>  
+    </Border>
 </Window>

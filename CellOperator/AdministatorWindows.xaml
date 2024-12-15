@@ -9,215 +9,168 @@
         Title="Вы - администратор" Height="450" Width="840.077">
     <Window.Resources>
         <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
+        <local:DateTimeToDateConverter x:Key="myDateConverter" />
     </Window.Resources>
-    <Grid>        
+    <Border Padding="20,10,20,10">
+        <Border.Background>
+            <LinearGradientBrush StartPoint="0, 0" EndPoint="1, 0.7">
+                <GradientStop Color="{StaticResource secondaryBackColor1}" Offset="0"/>
+                <GradientStop Color="{StaticResource primaryBackColor2}" Offset="0.7"/>
+            </LinearGradientBrush>
+        </Border.Background>
         <Grid>
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="7*"/>
-                <ColumnDefinition Width="auto"/>
-            </Grid.ColumnDefinitions>
-            <Grid.RowDefinitions>
-                <RowDefinition Height="*"/>
-            </Grid.RowDefinitions>
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="7*"/>
+                    <ColumnDefinition Width="auto"/>
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
 
-            <TabControl x:Name="TabControl1" HorizontalAlignment="Left" Height="auto" Margin="0,0,0,0" VerticalAlignment="Top" Width="auto" Grid.Row="0" Grid.Column="0">
-                <TabItem Header="Физическое лицо">
-                    <Grid Background="#FFE5E5E5">
-                        <DataGrid x:Name="Datagrid1" ItemsSource="{Binding Client_Individuals}" CanUserAddRows="False" AutoGenerateColumns="False" HorizontalAlignment="Left" Height="auto" VerticalAlignment="Top" Width="auto">
-                            <DataGrid.Columns>
-                                <DataGridTextColumn Binding="{Binding Path=ID}" Header="Идентификатор" Visibility="Hidden"/>
-                                <DataGridTextColumn Binding="{Binding Path=FirstName}" Header="Имя"/>
-                                <DataGridTextColumn Binding="{Binding Path=LastName}" Header="Фамилия"/>
-                                <DataGridTextColumn Binding="{Binding Path=Patronymic}" Header="Отчество"/>
-                                <DataGridTextColumn Binding="{Binding Path=Passport}" Header="Паспорт"/>
-                                <DataGridTextColumn Binding="{Binding Path=Login}" Header="Логин"/>
-                                <DataGridTextColumn Binding="{Binding Path=Password}" Header="Пароль"/>
-                            </DataGrid.Columns>
-                        </DataGrid>
-                    </Grid>
-                </TabItem>
-                <TabItem Header="Юридическое лицо">
-                    <Grid Background="#FFE5E5E5">
-                        <DataGrid x:Name="Datagrid2" ItemsSource="{Binding Client_LegalEntitys}" HorizontalAlignment="Left" Height="auto" VerticalAlignment="Top" Width="auto" CanUserAddRows="False" AutoGenerateColumns="False">
-                            <DataGrid.Columns>
-                                <DataGridTextColumn Binding="{Binding Path=ID}" Header="Идентификатор" Visibility="Hidden"/>
-                                <DataGridTextColumn Binding="{Binding Path=OrganizationName}" Header="Название организации"/>
-                                <DataGridTextColumn Binding="{Binding Path=IdividualTaxpayerNumber}" Header="Индивидуальный номер налогоплательщика"/>
-                                <DataGridTextColumn Binding="{Binding Path=Adress}" Header="Адрес"/>
-                                <DataGridTextColumn Binding="{Binding Path=Login}" Header="Логин"/>
-                                <DataGridTextColumn Binding="{Binding Path=Password}" Header="Пароль"/>
-                            </DataGrid.Columns>
-                        </DataGrid>
-                    </Grid>
-                </TabItem>
-                <TabItem Header="Номера">
-                    <Grid Background="#FFE5E5E5">
-                        <DataGrid x:Name="Datagrid3" ItemsSource="{Binding Numbers}" HorizontalAlignment="Left" Height="auto" VerticalAlignment="Top" Width="auto" AutoGenerateColumns="False">
-                            <DataGrid.Columns>
-                                <DataGridTextColumn Binding="{Binding Path=ID}" Header="Идентификатор" Visibility="Hidden"/>
-                                <DataGridTextColumn Binding="{Binding Path=Number}" Header="Номер"/>
-                                <DataGridTextColumn Binding="{Binding Path=Bill}" Header="Счет"/>
-                                <DataGridTextColumn Binding="{Binding Path=Tarif}" Header="Название тарифа"/>
-                                <DataGridTextColumn Binding="{Binding Path=TarifDate}" Header="Дата подключения тарифа"/>
-                                <DataGridTextColumn Binding="{Binding Path=Status}" Header="Статус номера"/>
-                            </DataGrid.Columns>
-                        </DataGrid>
-                    </Grid>
-                </TabItem>
-                <TabItem Header="Тарифы">
-                    <Grid Background="#FFE5E5E5">
-                        <DataGrid x:Name="Datagrid4" ItemsSource="{Binding Tarifs}" HorizontalAlignment="Left" Height="auto" VerticalAlignment="Top" Width="auto" AutoGenerateColumns="False">
-                            <DataGrid.Columns>
-                                <DataGridTextColumn Binding="{Binding Path=ID}" Header="Идентификатор" Visibility="Hidden"/>
-                                <DataGridTextColumn Binding="{Binding Path=name}" Header="Название"/>
-                                <DataGridTextColumn Binding="{Binding Path=Type}" Header="Тип"/>
-                                <DataGridTextColumn Binding="{Binding Path=Status}" Header="Статус тарифа"/>
+                <TabControl x:Name="TabControl1" HorizontalAlignment="Left" Height="auto" Margin="0,0,0,0" VerticalAlignment="Top" Width="auto" Grid.Row="0" Grid.Column="0" SelectedIndex="{Binding SelectedPage}">
+                    <TabItem Header="Физическое лицо">
+                        <Grid Background="#FFE5E5E5">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="244*"/>
+                                <ColumnDefinition Width="339*"/>
+                            </Grid.ColumnDefinitions>
+                            <DataGrid IsReadOnly="True" x:Name="Datagrid1" ItemsSource="{Binding Client_Individuals}" CanUserAddRows="False" AutoGenerateColumns="False" HorizontalAlignment="Left" Height="auto" VerticalAlignment="Top" Width="auto" SelectedIndex="{Binding SelectedClient, Mode=TwoWay}" Grid.ColumnSpan="2" Margin="0,0,0,-0.333">
+                                <DataGrid.Columns>
+                                    <DataGridTextColumn Binding="{Binding Path=ID}" Header="Идентификатор" Visibility="Hidden"/>
+                                    <DataGridTextColumn Binding="{Binding Path=FirstName}" Header="Имя"/>
+                                    <DataGridTextColumn Binding="{Binding Path=LastName}" Header="Фамилия"/>
+                                    <DataGridTextColumn Binding="{Binding Path=Patronymic}" Header="Отчество"/>
+                                    <DataGridTextColumn Binding="{Binding Path=Passport}" Header="Паспорт"/>
+                                    <DataGridTextColumn Binding="{Binding Path=Login}" Header="Логин"/>
+                                    <DataGridTextColumn Binding="{Binding Path=Password}" Header="Пароль"/>
+                                </DataGrid.Columns>
+                            </DataGrid>
+                        </Grid>
+                    </TabItem>
+                    <TabItem Header="Юридическое лицо">
+                        <Grid Background="#FFE5E5E5">
+                            <DataGrid IsReadOnly="True" x:Name="Datagrid2" ItemsSource="{Binding Client_LegalEntitys}" HorizontalAlignment="Left" Height="auto" VerticalAlignment="Top" Width="auto" CanUserAddRows="False" AutoGenerateColumns="False" SelectedIndex="{Binding SelectedClient, Mode=TwoWay}">
+                                <DataGrid.Columns>
+                                    <DataGridTextColumn Binding="{Binding Path=ID}" Header="Идентификатор" Visibility="Hidden"/>
+                                    <DataGridTextColumn Binding="{Binding Path=OrganizationName}" Header="Название организации"/>
+                                    <DataGridTextColumn Binding="{Binding Path=IdividualTaxpayerNumber}" Header="Индивидуальный номер налогоплательщика"/>
+                                    <DataGridTextColumn Binding="{Binding Path=Adress}" Header="Адрес"/>
+                                    <DataGridTextColumn Binding="{Binding Path=Login}" Header="Логин"/>
+                                    <DataGridTextColumn Binding="{Binding Path=Password}" Header="Пароль"/>
+                                </DataGrid.Columns>
+                            </DataGrid>
+                        </Grid>
+                    </TabItem>
+                    <TabItem Header="Номера">
+                        <Grid Background="#FFE5E5E5">
+                            <DataGrid IsReadOnly="True" x:Name="Datagrid3" ItemsSource="{Binding Numbers}" HorizontalAlignment="Left" Height="auto" VerticalAlignment="Top" Width="auto" AutoGenerateColumns="False">
+                                <DataGrid.Columns>
+                                    <DataGridTextColumn Binding="{Binding Path=ID}" Header="Идентификатор" Visibility="Hidden"/>
+                                    <DataGridTextColumn Binding="{Binding Path=Number}" Header="Номер"/>
+                                    <DataGridTextColumn Binding="{Binding Path=Bill}" Header="Счет"/>
+                                    <DataGridTextColumn Binding="{Binding Path=Tarif}" Header="Название тарифа"/>
+                                    <DataGridTextColumn Binding="{Binding Path=TarifDate,Converter={StaticResource myDateConverter}}" Header="Дата подключения тарифа"/>
+                                    <DataGridTextColumn Binding="{Binding Path=Status}" Header="Статус номера" Visibility="Collapsed"/>
+                                </DataGrid.Columns>
+                            </DataGrid>
+                        </Grid>
+                    </TabItem>
+                    <TabItem Header="Тарифы">
+                        <Grid Background="#FFE5E5E5">
+                            <DataGrid IsReadOnly="True" x:Name="Datagrid4" ItemsSource="{Binding Tarifs}" HorizontalAlignment="Left" Height="auto" VerticalAlignment="Top" Width="auto" AutoGenerateColumns="False">
+                                <DataGrid.Columns>
+                                    <DataGridTextColumn Binding="{Binding Path=ID}" Header="Идентификатор" Visibility="Hidden"/>
+                                    <DataGridTextColumn Binding="{Binding Path=name}" Header="Название"/>
+                                    <DataGridTextColumn Binding="{Binding Path=Type}" Header="Тип"/>
+                                    <DataGridTextColumn Binding="{Binding Path=Status}" Header="Статус тарифа"/>
 
-                                <DataGridTextColumn Binding="{Binding Path=MINUTES_amount}" Header="Количество минут в тарифе"/>
-                                <DataGridTextColumn Binding="{Binding Path=SMS_amount}" Header="Количество СМС в тарифе"/>
-                                <DataGridTextColumn Binding="{Binding Path=Internet_amount}" Header="Количество интернета в тарифе"/>
+                                    <DataGridTextColumn Binding="{Binding Path=MINUTES_amount}" Header="Количество минут в тарифе"/>
+                                    <DataGridTextColumn Binding="{Binding Path=SMS_amount}" Header="Количество СМС в тарифе"/>
+                                    <DataGridTextColumn Binding="{Binding Path=Internet_amount}" Header="Количество интернета в тарифе"/>
 
-                                <DataGridTextColumn Binding="{Binding Path=call_price_inCity}" Header="Цена звонков по городу"/>
-                                <DataGridTextColumn Binding="{Binding Path=call_price_outCity}" Header="Цена звонков между городами"/>
-                                <DataGridTextColumn Binding="{Binding Path=call_price_outContry}" Header="Цена международных звонков"/>
-                                <DataGridTextColumn Binding="{Binding Path=sms_price}" Header="Цена смс"/>
-                                <DataGridTextColumn Binding="{Binding Path=internet_price}" Header="Цена интернета"/>
-                            </DataGrid.Columns>
-                        </DataGrid>
-                    </Grid>
-                </TabItem>
-                <TabItem Header="История тарифов">
-                    <Grid Background="#FFE5E5E5">
-                        <DataGrid x:Name="Datagrid5" ItemsSource="{Binding Tarifs_history}" HorizontalAlignment="Left" Height="auto" VerticalAlignment="Top" Width="auto" AutoGenerateColumns="False">
-                            <DataGrid.Columns>
-                                <DataGridTextColumn Binding="{Binding Path=ID}" Header="Идентификатор" Visibility="Hidden"/>
-                                <DataGridTextColumn Binding="{Binding Path=Number}" Header="Номер"/>
-                                <DataGridTextColumn Binding="{Binding Path=Tarif}" Header="Тариф"/>
-                                <DataGridTextColumn Binding="{Binding Path=StartDate}" Header="Дата взятия"/>
-                                <DataGridTextColumn Binding="{Binding Path=EndDate}" Header="Даты смены"/>
-                            </DataGrid.Columns>
-                        </DataGrid>
-                    </Grid>
-                </TabItem>
-                <TabItem Header="СМС">
-                    <Grid Background="#FFE5E5E5">
-                        <DataGrid x:Name="Datagrid6" ItemsSource="{Binding SMS}" HorizontalAlignment="Left" Height="auto" VerticalAlignment="Top" Width="auto" AutoGenerateColumns="False">
-                            <DataGrid.Columns>
-                                <DataGridTextColumn Binding="{Binding Path=ID}" Header="Идентификатор" Visibility="Hidden"/>
-                                <DataGridTextColumn Binding="{Binding Path=number_host}" Header="Отправитель"/>
-                                <DataGridTextColumn Binding="{Binding Path=number_slave}" Header="Получатель"/>
-                                <DataGridTextColumn Binding="{Binding Path=Date}" Header="Дата"/>
-                                <DataGridTextColumn Binding="{Binding Path=Data}" Header="Данные"/>
-                                <DataGridTextColumn Binding="{Binding Path=type}" Header="Тип"/>
-                            </DataGrid.Columns>
-                        </DataGrid>
-                    </Grid>
-                </TabItem>
-                <TabItem Header="Звонки">
-                    <Grid Background="#FFE5E5E5">
-                        <DataGrid x:Name="Datagrid7" ItemsSource="{Binding Callings}" HorizontalAlignment="Left" Height="auto" VerticalAlignment="Top" Width="auto" AutoGenerateColumns="False">
-                            <DataGrid.Columns>
-                                <DataGridTextColumn Binding="{Binding Path=ID}" Header="Идентификатор" Visibility="Hidden"/>
-                                <DataGridTextColumn Binding="{Binding Path=number_host}" Header="Инициатор"/>
-                                <DataGridTextColumn Binding="{Binding Path=number_slave}" Header="Адресат"/>
-                                <DataGridTextColumn Binding="{Binding Path=Date}" Header="Дата"/>
-                                <DataGridTextColumn Binding="{Binding Path=Count}" Header="Длительность"/>
-                                <DataGridTextColumn Binding="{Binding Path=type}" Header="Тип"/>
-                            </DataGrid.Columns>
-                        </DataGrid>
-                    </Grid>
-                </TabItem>
-                <TabItem Header="Услуги">
-                    <Grid Background="#FFE5E5E5">
-                        <DataGrid x:Name="Datagrid8" ItemsSource="{Binding Services}" HorizontalAlignment="Left" Height="auto" VerticalAlignment="Top" Width="auto" AutoGenerateColumns="False">
-                            <DataGrid.Columns>
-                                <DataGridTextColumn Binding="{Binding Path=ID}" Header="Идентификатор" Visibility="Hidden"/>
-                                <DataGridTextColumn Binding="{Binding Path=Name}" Header="Название"/>
-                                <DataGridTextColumn Binding="{Binding Path=Price}" Header="Цена"/>
-                            </DataGrid.Columns>
-                        </DataGrid>
-                    </Grid>
-                </TabItem>
-                <TabItem Header="Подключенные услуги">
-                    <Grid Background="#FFE5E5E5">
-                        <DataGrid x:Name="Datagrid9" ItemsSource="{Binding Service_Connection}" HorizontalAlignment="Left" Height="auto" VerticalAlignment="Top" Width="auto" AutoGenerateColumns="False">
-                            <DataGrid.Columns>
-                                <DataGridTextColumn Binding="{Binding Path=ID}" Header="Идентификатор" Visibility="Hidden"/>
-                                <DataGridTextColumn Binding="{Binding Path=Number}" Header="Номер"/>
-                                <DataGridTextColumn Binding="{Binding Path=Service}" Header="Сервис"/>
-                                <DataGridTextColumn Binding="{Binding Path=C_Date}" Header="Дата"/>
-                                <DataGridTextColumn Binding="{Binding Path=C_status}" Header="Статус"/>
-                            </DataGrid.Columns>
-                        </DataGrid>
-                    </Grid>
-                </TabItem>
-            </TabControl>
+                                    <DataGridTextColumn Binding="{Binding Path=call_price_inCity}" Header="Цена звонков по городу"/>
+                                    <DataGridTextColumn Binding="{Binding Path=call_price_outCity}" Header="Цена звонков между городами"/>
+                                    <DataGridTextColumn Binding="{Binding Path=call_price_outContry}" Header="Цена международных звонков"/>
+                                    <DataGridTextColumn Binding="{Binding Path=sms_price}" Header="Цена смс"/>
+                                    <DataGridTextColumn Binding="{Binding Path=internet_price}" Header="Цена интернета"/>
+                                </DataGrid.Columns>
+                            </DataGrid>
+                        </Grid>
+                    </TabItem>
+                    <TabItem Header="История тарифов">
+                        <Grid Background="#FFE5E5E5">
+                            <DataGrid IsReadOnly="True" x:Name="Datagrid5" ItemsSource="{Binding Tarifs_history}" HorizontalAlignment="Left" Height="auto" VerticalAlignment="Top" Width="auto" AutoGenerateColumns="False">
+                                <DataGrid.Columns>
+                                    <DataGridTextColumn Binding="{Binding Path=ID}" Header="Идентификатор" Visibility="Hidden"/>
+                                    <DataGridTextColumn Binding="{Binding Path=Number}" Header="Номер"/>
+                                    <DataGridTextColumn Binding="{Binding Path=Tarif}" Header="Тариф"/>
+                                    <DataGridTextColumn Binding="{Binding Path=StartDate,Converter={StaticResource myDateConverter}}" Header="Дата взятия"/>
+                                    <DataGridTextColumn Binding="{Binding Path=EndDate,Converter={StaticResource myDateConverter}}" Header="Даты смены"/>
+                                </DataGrid.Columns>
+                            </DataGrid>
+                        </Grid>
+                    </TabItem>
+                    <TabItem Header="СМС">
+                        <Grid Background="#FFE5E5E5">
+                            <DataGrid IsReadOnly="True" x:Name="Datagrid6" ItemsSource="{Binding SMS}" HorizontalAlignment="Left" Height="auto" VerticalAlignment="Top" Width="auto" AutoGenerateColumns="False">
+                                <DataGrid.Columns>
+                                    <DataGridTextColumn Binding="{Binding Path=ID}" Header="Идентификатор" Visibility="Hidden"/>
+                                    <DataGridTextColumn Binding="{Binding Path=number_host}" Header="Отправитель"/>
+                                    <DataGridTextColumn Binding="{Binding Path=number_slave}" Header="Получатель"/>
+                                    <DataGridTextColumn Binding="{Binding Path=Date,Converter={StaticResource myDateConverter}}" Header="Дата"/>
+                                    <DataGridTextColumn Binding="{Binding Path=Data}" Header="Данные"/>
+                                    <DataGridTextColumn Binding="{Binding Path=type}" Header="Тип"/>
+                                </DataGrid.Columns>
+                            </DataGrid>
+                        </Grid>
+                    </TabItem>
+                    <TabItem Header="Звонки">
+                        <Grid Background="#FFE5E5E5">
+                            <DataGrid IsReadOnly="True" x:Name="Datagrid7" ItemsSource="{Binding Callings}" HorizontalAlignment="Left" Height="auto" VerticalAlignment="Top" Width="auto" AutoGenerateColumns="False">
+                                <DataGrid.Columns>
+                                    <DataGridTextColumn Binding="{Binding Path=ID}" Header="Идентификатор" Visibility="Hidden"/>
+                                    <DataGridTextColumn Binding="{Binding Path=number_host}" Header="Инициатор"/>
+                                    <DataGridTextColumn Binding="{Binding Path=number_slave}" Header="Адресат"/>
+                                    <DataGridTextColumn Binding="{Binding Path=Date,Converter={StaticResource myDateConverter}}" Header="Дата"/>
+                                    <DataGridTextColumn Binding="{Binding Path=Count}" Header="Длительность"/>
+                                    <DataGridTextColumn Binding="{Binding Path=type}" Header="Тип"/>
+                                </DataGrid.Columns>
+                            </DataGrid>
+                        </Grid>
+                    </TabItem>
+                    <TabItem Header="Услуги">
+                        <Grid Background="#FFE5E5E5">
+                            <DataGrid IsReadOnly="True" x:Name="Datagrid8" ItemsSource="{Binding Services}" HorizontalAlignment="Left" Height="auto" VerticalAlignment="Top" Width="auto" AutoGenerateColumns="False">
+                                <DataGrid.Columns>
+                                    <DataGridTextColumn Binding="{Binding Path=ID}" Header="Идентификатор" Visibility="Hidden"/>
+                                    <DataGridTextColumn Binding="{Binding Path=Name}" Header="Название"/>
+                                    <DataGridTextColumn Binding="{Binding Path=Price}" Header="Цена"/>
+                                </DataGrid.Columns>
+                            </DataGrid>
+                        </Grid>
+                    </TabItem>
+                    <TabItem Header="Подключенные услуги">
+                        <Grid Background="#FFE5E5E5">
+                            <DataGrid IsReadOnly="True" x:Name="Datagrid9" ItemsSource="{Binding Service_Connection}" HorizontalAlignment="Left" Height="auto" VerticalAlignment="Top" Width="auto" AutoGenerateColumns="False">
+                                <DataGrid.Columns>
+                                    <DataGridTextColumn Binding="{Binding Path=ID}" Header="Идентификатор" Visibility="Hidden"/>
+                                    <DataGridTextColumn Binding="{Binding Path=Number}" Header="Номер"/>
+                                    <DataGridTextColumn Binding="{Binding Path=Service}" Header="Сервис"/>
+                                    <DataGridTextColumn Binding="{Binding Path=C_Date,Converter={StaticResource myDateConverter}}" Header="Дата"/>
+                                    <DataGridTextColumn Binding="{Binding Path=C_status}" Header="Статус"/>
+                                </DataGrid.Columns>
+                            </DataGrid>
+                        </Grid>
+                    </TabItem>
+                </TabControl>
 
-            <StackPanel Orientation="Vertical" VerticalAlignment="Center" Grid.Row="0" Grid.Column="1" HorizontalAlignment="Center">
-                <Button Content="Сгенерировать" Command="{Binding GenerateBaseCommand}" Width="auto" HorizontalAlignment="Center"/>
-                <Button Content="Списать за месяц" Width="auto" HorizontalAlignment="Center"/>
-            </StackPanel>
-            
-            <StackPanel Orientation="Vertical" VerticalAlignment="Center" Grid.Row="0" Grid.Column="1" HorizontalAlignment="Center" Visibility="Collapsed">
-                <StackPanel >
-                    <Button Content="Добавить" Command="{Binding AddCommand}" x:Name="AddButton"  Width="auto" HorizontalAlignment="Center"/>
-                    <Button Content="Изменить" Command="{Binding ChangeCommand}" x:Name="ChangeButton"  HorizontalAlignment="Center"  Width="auto"
-                            CommandParameter="{Binding ElementName=TabControl1}"
-                    />
-                    <Button Content="Удалить"  Command="{Binding DeleteCommand}" x:Name="DeleteButton" HorizontalAlignment="Center"  Width="auto"/>
+                <StackPanel Orientation="Vertical" VerticalAlignment="Center" Grid.Row="0" Grid.Column="1" HorizontalAlignment="Center">
+                    <Button Content="Отчет о прибыли" Command="{Binding GenerateExpencesReportCommand}" Width="auto" HorizontalAlignment="Center" Style="{StaticResource RoundedButtonStyle}"/>
+                    <Button Content="Сменить пароль" Command="{Binding ChangePasswordCommand}" Width="auto" HorizontalAlignment="Center" Style="{StaticResource RoundedButtonStyle}"/>
+                    <Button Content="Списать за месяц" Command="{Binding MountlySpentCommand}" Width="auto" HorizontalAlignment="Center" Style="{StaticResource RoundedButtonStyle}"/>
                 </StackPanel>
-                <StackPanel x:Name="ChangeDialog" Orientation="Vertical" Visibility="Visible">
-                    <StackPanel Orientation="Horizontal" Visibility="{Binding FieldVisible1, Converter={StaticResource BooleanToVisibilityConverter}}">
-                        <TextBlock Text="{Binding FieldName1}" />
-                        <TextBox Text="{Binding Field1}" MinWidth="40"/>
-                    </StackPanel>
-                    <StackPanel Orientation="Horizontal" Visibility="{Binding FieldVisible2, Converter={StaticResource BooleanToVisibilityConverter}}">
-                        <TextBlock Text="{Binding FieldName2}" />
-                        <TextBox  Text="{Binding Field2}" MinWidth="40"/>
-                    </StackPanel>
-                    <StackPanel Orientation="Horizontal" Visibility="{Binding FieldVisible3, Converter={StaticResource BooleanToVisibilityConverter}}">
-                        <TextBlock Text="{Binding FieldName3}" />
-                        <TextBox Text="{Binding Field3}" MinWidth="40"/>
-                    </StackPanel>
-                    <StackPanel Orientation="Horizontal" Visibility="{Binding FieldVisible4, Converter={StaticResource BooleanToVisibilityConverter}}">
-                        <TextBlock Text="{Binding FieldName4}" />
-                        <TextBox Text="{Binding Field4}" MinWidth="40"/>
-                    </StackPanel>
-                    <StackPanel Orientation="Horizontal" Visibility="{Binding FieldVisible5, Converter={StaticResource BooleanToVisibilityConverter}}">
-                        <TextBlock Text="{Binding FieldName5}" />
-                        <TextBox Text="{Binding Field5}" MinWidth="40"/>
-                    </StackPanel>
-                    <StackPanel Orientation="Horizontal" Visibility="{Binding FieldVisible6, Converter={StaticResource BooleanToVisibilityConverter}}">
-                        <TextBlock Text="{Binding FieldName6}" />
-                        <TextBox Text="{Binding Field6}" MinWidth="40"/>
-                    </StackPanel>
-                    <StackPanel Orientation="Horizontal" Visibility="{Binding FieldVisible7, Converter={StaticResource BooleanToVisibilityConverter}}">
-                        <TextBlock Text="{Binding FieldName7}" />
-                        <TextBox Text="{Binding Field7}" MinWidth="40"/>
-                    </StackPanel>
-                    <StackPanel Orientation="Horizontal" Visibility="{Binding FieldVisible8, Converter={StaticResource BooleanToVisibilityConverter}}">
-                        <TextBlock Text="{Binding FieldName8}" />
-                        <TextBox Text="{Binding Field8}" MinWidth="40"/>
-                    </StackPanel>
-                    <StackPanel Orientation="Horizontal" Visibility="{Binding FieldVisible9, Converter={StaticResource BooleanToVisibilityConverter}}">
-                        <TextBlock Text="{Binding FieldName9}" />
-                        <TextBox Text="{Binding Field9}" MinWidth="40"/>
-                    </StackPanel>
-                    <StackPanel Orientation="Horizontal" Visibility="{Binding FieldVisible10, Converter={StaticResource BooleanToVisibilityConverter}}">
-                        <TextBlock Text="{Binding FieldName10}" />
-                        <TextBox Text="{Binding Field10}" MinWidth="40"/>
-                    </StackPanel>
-                    <StackPanel Orientation="Horizontal" Visibility="{Binding FieldVisible11, Converter={StaticResource BooleanToVisibilityConverter}}">
-                        <TextBlock Text="{Binding FieldName11}" />
-                        <TextBox Text="{Binding Field11}" MinWidth="40"/>
-                    </StackPanel>
-                    <Button Content="Применить" x:Name="UpdateButton"  HorizontalAlignment="Center"  Width="auto"
-                            Command="{Binding UpdateCommand, Mode=OneTime}"
-                            CommandParameter="{Binding ElementName=TabControl1}"
-                            />
-                </StackPanel>
-                
-            </StackPanel>
-        </Grid>        
+            </Grid>
         </Grid>
+    </Border>
 </Window>

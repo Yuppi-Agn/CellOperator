@@ -6,36 +6,46 @@
         xmlns:local="clr-namespace:CellOperator"
         mc:Ignorable="d"
         Title="Приобретение нового номера" SizeToContent="WidthAndHeight" MaxHeight="450">
-    <Grid>
-    <Grid.ColumnDefinitions>
-        <ColumnDefinition Width="auto" />
-        <ColumnDefinition Width="auto" />
-    </Grid.ColumnDefinitions>
-    <Grid.RowDefinitions>
-        <RowDefinition Height="*" />
-    </Grid.RowDefinitions>
-        <Button Grid.Column="1" HorizontalAlignment="Center" VerticalAlignment="Center" Width="auto" Height="auto" Command="{Binding SelectAction}" Content="Выбрать" />
+    <Border>
+        <Border.Background>
+            <LinearGradientBrush StartPoint="0, 0" EndPoint="1, 0.7">
+                <GradientStop Color="{StaticResource secondaryBackColor1}" Offset="0"/>
+                <GradientStop Color="{StaticResource primaryBackColor2}" Offset="0.7"/>
+            </LinearGradientBrush>
+        </Border.Background>
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="auto" />
+                <ColumnDefinition Width="auto" />
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*" />
+            </Grid.RowDefinitions>
+            <Button Grid.Column="1" HorizontalAlignment="Center" VerticalAlignment="Center" Width="auto" Height="auto" Command="{Binding SelectAction}" Content="Выбрать" Style="{StaticResource RoundedButtonStyle}"/>
 
-    <ListBox Grid.Column="0" ItemsSource="{Binding Tarifs}"
-                 SelectedItem="{Binding SelectedTarif}">
-        <ListBox.ItemTemplate>
-            <DataTemplate>
-                <StackPanel Margin="5">
-                    <TextBlock FontSize="18" Text="{Binding Path=name}" />
-                    <TextBlock Text="{Binding StringFormat=Цена: {0:#####.00} руб., Path=Price}"/>
-                    <TextBlock Text="{Binding StringFormat=Количество СМС: {0}, Path=SMS_amount}" />
-                    <TextBlock Text="{Binding StringFormat=Количество минут: {0}, Path=MINUTES_amount}" />
-                    <TextBlock Text="{Binding StringFormat=Количество интернета: {0} МБ, Path=Internet_amount}" />
+            <ListBox Grid.Column="0" ItemsSource="{Binding Tarifs}"
+                 SelectedItem="{Binding SelectedTarif}"
+             Background="Transparent" Foreground="Transparent"
+             >
+                <ListBox.ItemTemplate>
+                    <DataTemplate>
+                        <StackPanel>
+                            <TextBlock FontSize="18" Text="{Binding Path=name}" Foreground="{StaticResource titleColor1}"/>
+                            <TextBlock Text="{Binding StringFormat=Цена: {0:#####.00} руб., Path=Price}" Foreground="{StaticResource titleColor2}"/>
+                            <TextBlock Text="{Binding StringFormat=Количество СМС: {0}, Path=SMS_amount}" Foreground="{StaticResource titleColor2}"/>
+                            <TextBlock Text="{Binding StringFormat=Количество минут: {0}, Path=MINUTES_amount}" Foreground="{StaticResource titleColor2}"/>
+                            <TextBlock Text="{Binding StringFormat=Количество интернета: {0} МБ, Path=Internet_amount}" Foreground="{StaticResource titleColor2}"/>
 
-                    <TextBlock Text="{Binding StringFormat=Цена звонков по городу: {0:#####.00} руб., Path=call_price_inCity}" />
-                    <TextBlock Text="{Binding StringFormat=Цена звонков вне города: {0:#####.00} руб., Path=call_price_outCity}" />
-                    <TextBlock Text="{Binding StringFormat=Цена международных звонков: {0:#####.00} руб., Path=call_price_outContry}" />
+                            <TextBlock Text="{Binding StringFormat=Цена звонков по городу: {0:#####.00} руб., Path=call_price_inCity}" Foreground="{StaticResource titleColor2}"/>
+                            <TextBlock Text="{Binding StringFormat=Цена звонков вне города: {0:#####.00} руб., Path=call_price_outCity}" Foreground="{StaticResource titleColor2}"/>
+                            <TextBlock Text="{Binding StringFormat=Цена международных звонков: {0:#####.00} руб., Path=call_price_outContry}" Foreground="{StaticResource titleColor2}"/>
 
-                    <TextBlock Text="{Binding StringFormat=Цена за смс: {0:#####.00} руб., Path=sms_price}" />
-                    <TextBlock Text="{Binding StringFormat=Цена за интернет: {0:#####.00} руб., Path=internet_price}" />
-                </StackPanel>
-            </DataTemplate>
-        </ListBox.ItemTemplate>
-    </ListBox>
-    </Grid>
+                            <TextBlock Text="{Binding StringFormat=Цена за смс: {0:#####.00} руб., Path=sms_price}" Foreground="{StaticResource titleColor2}"/>
+                            <TextBlock Text="{Binding StringFormat=Цена за интернет: {0:#####.00} руб., Path=internet_price}" Foreground="{StaticResource titleColor2}"/>
+                        </StackPanel>
+                    </DataTemplate>
+                </ListBox.ItemTemplate>
+            </ListBox>
+        </Grid>
+    </Border>
 </Window>

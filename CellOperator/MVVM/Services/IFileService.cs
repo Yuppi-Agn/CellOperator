@@ -16,8 +16,9 @@ namespace CellOperator.MVVM.Services
 {
     public interface IFileService
     {
-        void Save(List<Methods.Report_Calling> Callings, string Path);
-        void Save(List<Methods.Report_SMS> SMS, string Path);
+        void Save(List<AdministratorReportExpences> Expenses, string Path);
+        void Save(List<Report_Calling> Callings, string Path);
+        void Save(List<Report_SMS> SMS, string Path);
         void Save(List<ExpensesDTO> Expenses, string Path);
         //List<Phone> Open(string filename);
         //void Save(string filename, List<Phone> phonesList);
@@ -96,7 +97,7 @@ namespace CellOperator.MVVM.Services
         {
 
         }
-        public void Save(List<Methods.Report_Calling> Callings, string Path)
+        public void Save(List<Report_Calling> Callings, string Path)
         {
             if (Callings == null) throw new Exception("Callings=null");
             string String = "";
@@ -123,7 +124,7 @@ namespace CellOperator.MVVM.Services
             }
             stream.Dispose();
         }
-        public void Save(List<Methods.Report_SMS> SMS, string Path ) {
+        public void Save(List<Report_SMS> SMS, string Path ) {
             if (SMS == null) throw new Exception("SMS=null");
             string String = "";
             var stream = new StreamWriter(Path, false, Encoding.UTF8);
@@ -161,6 +162,31 @@ namespace CellOperator.MVVM.Services
             foreach (var item in Expenses)
             {
                 String = StrSym + item.Date.ToString() + StrSym;
+                String += Separator + StrSym + item.Type + StrSym;
+                String += Separator + StrSym + item.Expense + StrSym;
+
+                stream.WriteLine(String);
+            }
+            stream.Dispose();
+        }
+        public void Save(List<AdministratorReportExpences> Expenses, string Path)
+        {
+            if (Expenses == null) throw new Exception("Expenses=null");
+
+            string String = "";
+            var stream = new StreamWriter(Path, false, Encoding.UTF8);
+
+            String = StrSym + "Номер" + StrSym;
+            String += Separator + StrSym + "Дата" + StrSym;
+            String += Separator + StrSym + "Тип" + StrSym;
+            String += Separator + StrSym + "Сумма" + StrSym;
+
+            stream.WriteLine(String);
+
+            foreach (var item in Expenses)
+            {
+                String = StrSym + item.Number.ToString() + StrSym;
+                String += Separator + StrSym + item.Date.ToString() + StrSym;
                 String += Separator + StrSym + item.Type + StrSym;
                 String += Separator + StrSym + item.Expense + StrSym;
 

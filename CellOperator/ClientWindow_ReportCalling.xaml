@@ -6,7 +6,10 @@
         xmlns:local="clr-namespace:CellOperator"
         mc:Ignorable="d"
         Title="Детализация звонков" SizeToContent="WidthAndHeight" MaxHeight="400">
-
+    <Window.Resources>
+        <local:DateTimeToDateConverter x:Key="myDateConverter" />
+    </Window.Resources>
+    
     <Grid HorizontalAlignment="Left" VerticalAlignment="Top">
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="*"/>
@@ -27,11 +30,11 @@
             </StackPanel>
             
 
-            <DataGrid Grid.Row="2" Grid.Column="0" ItemsSource="{Binding Table}" CanUserAddRows="False" AutoGenerateColumns="False" HorizontalAlignment="Left" Height="auto" VerticalAlignment="Top" Width="auto">
+            <DataGrid IsReadOnly="True" Grid.Row="2" Grid.Column="0" ItemsSource="{Binding Table}" CanUserAddRows="False" AutoGenerateColumns="False" HorizontalAlignment="Left" Height="auto" VerticalAlignment="Top" Width="auto">
                 <DataGrid.Columns>
                     <DataGridTextColumn Binding="{Binding Path=Type}" Header="Тип"/>
                     <DataGridTextColumn Binding="{Binding Path=OtherNumber}" Header="Иной номер"/>
-                    <DataGridTextColumn Binding="{Binding Path=Date}" Header="Дата"/>
+                <DataGridTextColumn Binding="{Binding Path=Date,Converter={StaticResource myDateConverter}}" Header="Дата"/>
                     <DataGridTextColumn Binding="{Binding Path=Minutes}" Header="Время"/>
                     <DataGridTextColumn Binding="{Binding Path=ConnectionType}" Header="Тип звонка"/>
                 </DataGrid.Columns>

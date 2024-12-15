@@ -6,6 +6,9 @@
         xmlns:local="clr-namespace:CellOperator"
         mc:Ignorable="d"
         Title="Детализация трат" SizeToContent="WidthAndHeight" MaxHeight="450">
+    <Window.Resources>
+        <local:DateTimeToDateConverter x:Key="myDateConverter" />
+    </Window.Resources>
     <Grid HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="*"/>
@@ -26,11 +29,11 @@
             <DatePicker VerticalAlignment="Center" SelectedDate="{Binding ToDate}" DisplayDateStart="{Binding FirstDate}" DisplayDateEnd="{Binding LastDate}"/>
         </StackPanel>
 
-        <DataGrid Grid.Row="2" Grid.Column="0" ItemsSource="{Binding Table}" CanUserAddRows="False" AutoGenerateColumns="False" HorizontalAlignment="Left" Height="auto" VerticalAlignment="Top" Width="auto">
-        <DataGrid.Columns>            
-            <DataGridTextColumn Binding="{Binding Path=Date}" Header="Дата"/>
+        <DataGrid IsReadOnly="True" Grid.Row="2" Grid.Column="0" ItemsSource="{Binding Table}" CanUserAddRows="False" AutoGenerateColumns="False" HorizontalAlignment="Left" Height="auto" VerticalAlignment="Top" Width="auto">
+        <DataGrid.Columns>
+                <DataGridTextColumn Binding="{Binding Path=Date,Converter={StaticResource myDateConverter}}" Header="Дата"/>
             <DataGridTextColumn Binding="{Binding Path=Type}" Header="Тип"/>
-            <DataGridTextColumn Binding="{Binding Path=Expense}" Header="Сумма"/>
+                <DataGridTextColumn  Binding="{Binding StringFormat=' {0:#######0.00} руб.', Path=Expense}" Header="Сумма"/>
         </DataGrid.Columns>
     </DataGrid>
         </Grid>

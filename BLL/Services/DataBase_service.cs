@@ -67,6 +67,12 @@ namespace BLL.Services
         {
             return db.Tarif_History.ToList().Select(i => new Tarif_HistoryDTO(i)).ToList();
         }
+        public ClientDTO GetClient(int ID)
+        {
+            var item = db.Client.Find(ID);
+            if (item == null) return null;
+            else return new ClientDTO(item);
+        }
         public bool AddNumber(NumberDTO C)
         {
             Number It = db.Number.Find(C.ID);
@@ -484,7 +490,7 @@ namespace BLL.Services
 
             int ID = 0;
             if (db.Expenses.Count() > 0) ID = db.Expenses.OrderBy(p => p.ID).ToList().Last().ID + 1;
-
+            if (db.Expenses.Local.OrderBy(p => p.ID).ToList().Last().ID + 1 > ID) ID = db.Expenses.Local.OrderBy(p => p.ID).ToList().Last().ID + 1;
             Expenses expenses = new Expenses()
             {
                 ID = ID,
@@ -617,6 +623,31 @@ namespace BLL.Services
                 }
             }
         }
+        public void MonthSpent()
+        {
+            var numbers = db.Number.ToList();
+            for(int i=0; i< numbers.Count; i++)
+            {
+                //10 - Плата за услугу в месяц | платно
+                //11 - Плата за тариф в месяц | платно
+                var NumID = numbers[i].ID;
+                var Tarif = db.Tarif.Find(numbers[i].ID_Tarif);
+                if (Tarif != null) { 
+                    decimal TarifCost = Tarif.Price;
+                    AddExpenses(NumID, 11, TarifCost);
+                    numbers[i].Bill -= TarifCost;
+                }
+                var Services = db.C_Service_Connection.Where(p=> p.ID_number == NumID).ToList();
+                for(int j=0; j< Services.Count(); j++)
+                {
+                    var Service = db.C_Service.Find(Services[j].ID_Service);
+                    decimal ServiceCost = (decimal) Service.Price;
+                    AddExpenses(NumID, 10, ServiceCost);
+                    numbers[i].Bill -= ServiceCost;
+                }
+            }
+            Save();
+        }
         public void GenerateMembers(int count)
         {
             const int TarifNumber = 10;
@@ -722,7 +753,7 @@ namespace BLL.Services
                             ID = i / 2,
                             ClientID = i,
                             Adress = Adreeses[r.Next(0, Adreeses.Count - 1)],
-                            IdividualTaxpayerNumber = r.Next(0, 9) + r.Next(0, 9) + r.Next(0, 9) + r.Next(0, 9) + r.Next(0, 9) + r.Next(0, 9) + r.Next(0, 9) + r.Next(0, 9) + r.Next(0, 9) + r.Next(0, 9) + r.Next(0, 9) + r.Next(0, 9) + "",
+                            IdividualTaxpayerNumber = r.Next(0, 9).ToString() + r.Next(0, 9).ToString() + r.Next(0, 9).ToString() + r.Next(0, 9).ToString() + r.Next(0, 9).ToString() + r.Next(0, 9).ToString() + r.Next(0, 9).ToString() + r.Next(0, 9).ToString() + r.Next(0, 9).ToString() + r.Next(0, 9).ToString() + r.Next(0, 9).ToString() + r.Next(0, 9).ToString() + "",
                             OrganizationName = Somethings[r.Next(0, Somethings.Count - 1)]
                         });
                         break;

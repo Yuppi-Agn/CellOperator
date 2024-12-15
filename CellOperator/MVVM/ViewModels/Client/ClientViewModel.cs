@@ -55,6 +55,24 @@ namespace CellOperator.MVVM.ViewModels
                     }
             set { SNumbersToVisible = value; NotifyPropertyChanged("NumbersToVisible"); }
         }
+        private int _MinRemains;
+        public int MinRemains
+        {
+            get { return _MinRemains; }
+            set { _MinRemains = value; NotifyPropertyChanged("MinRemains"); }
+        }
+        private int _SMSRemains;
+        public int SMSRemains
+        {
+            get { return _SMSRemains; }
+            set { _SMSRemains = value; NotifyPropertyChanged("SMSRemains"); }
+        }
+        private int _InetRemains;
+        public int InetRemains
+        {
+            get { return _InetRemains; }
+            set { _InetRemains = value; NotifyPropertyChanged("InetRemains"); }
+        }
 
         private RelayCommand _SMSReport;
         public RelayCommand SMSReport { get { return _SMSReport; } }
@@ -169,6 +187,10 @@ namespace CellOperator.MVVM.ViewModels
             {
                 Money = Numbers[NumID].Bill;
                 Tarif = Numbers[NumID].Tarif;
+
+                InetRemains = Numbers[NumID].Internet_remains_amount;
+                MinRemains = Numbers[NumID].MINUTES_remains_amount;
+                SMSRemains = Numbers[NumID].SMS_remains_amount;
             }
         }
         private void UpdateNums()

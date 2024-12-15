@@ -11,7 +11,6 @@ using BLL.Services;
 using BLL.Models;
 using System.Collections.ObjectModel;
 
-using System.ComponentModel;
 using System.Windows.Controls;
 
 using CellOperator.MVVM.Services;
@@ -67,10 +66,10 @@ namespace CellOperator.MVVM.ViewModels
             }
         }
 
-        private List<Methods.Report_Calling> MyTable;
+        private List<Report_Calling> MyTable;
         private RelayCommand _SaveCSVAction;
         public RelayCommand SaveCSVAction { get { return _SaveCSVAction; } }
-        public ObservableCollection<Methods.Report_Calling> Table { get; set; }
+        public ObservableCollection<Report_Calling> Table { get; set; }
         public ClientWindow_ReportCallingModel(int NumId, ref Methods_service Methods, IDialogService DialogService, IFileService FileService)
         {    
             this.Methods = Methods;
@@ -78,7 +77,7 @@ namespace CellOperator.MVVM.ViewModels
             this.DialogService = DialogService;
             this.FileService = FileService;
             MyTable = Methods.Report_Calling(NumId);
-            this.Table = new ObservableCollection<Methods.Report_Calling>();
+            this.Table = new ObservableCollection<Report_Calling>();
             for (int i = 0; i < MyTable.Count; i++) this.Table.Add(MyTable[i]);
             _SaveCSVAction = new RelayCommand(SaveCSV, i => true);
             //var Tnew = Methods.Report_Calling_FirstDate();
@@ -162,10 +161,10 @@ namespace CellOperator.MVVM.ViewModels
             }
         }
 
-        private List<Methods.Report_SMS> MyTable;
+        private List<Report_SMS> MyTable;
         private RelayCommand _SaveCSVAction;
         public RelayCommand SaveCSVAction { get { return _SaveCSVAction; } }
-        public ObservableCollection<Methods.Report_SMS> Table { get; set; }
+        public ObservableCollection<Report_SMS> Table { get; set; }
         public ClientWindow_ReportSMSModel(int NumId, ref Methods_service Methods, IDialogService DialogService, IFileService FileService)
         {
             this.Methods = Methods;
@@ -174,7 +173,7 @@ namespace CellOperator.MVVM.ViewModels
             this.FileService = FileService;
 
             MyTable = Methods.Report_SMS(NumId);
-            this.Table = new ObservableCollection<Methods.Report_SMS>();
+            this.Table = new ObservableCollection<Report_SMS>();
             for (int i = 0; i < MyTable.Count; i++) this.Table.Add(MyTable[i]);
             _SaveCSVAction = new RelayCommand(SaveCSV, i => true);
 
@@ -400,13 +399,13 @@ namespace CellOperator.MVVM.ViewModels
         }
 
         private DataBase_service DB;
-        public ObservableCollection<Methods.ServiceOutput> Table { get; set; }
+        public ObservableCollection<ServiceOutput> Table { get; set; }
 
         private RelayCommand _ChangeAction;
         public RelayCommand ChangeAction { get { return _ChangeAction; } }
 
-        private Methods.ServiceOutput _Selected;
-        public Methods.ServiceOutput Selected
+        private ServiceOutput _Selected;
+        public ServiceOutput Selected
         {
             get { return _Selected; }
             set
@@ -418,7 +417,7 @@ namespace CellOperator.MVVM.ViewModels
         public ClientWindow_ServiceChangeModel(ref DataBase_service db, ClientDTO client, NumberDTO number)
         {
             _viewId = Guid.NewGuid();
-            this.Table = new ObservableCollection<Methods.ServiceOutput>();
+            this.Table = new ObservableCollection<ServiceOutput>();
             _ChangeAction = new RelayCommand(Change, i => true);
             DB = db;
             this.client = client;
@@ -509,9 +508,29 @@ namespace CellOperator.MVVM.ViewModels
         }
         public void Action(object parameter)
         {
-            DB.UserSendSMS(number.ID, "+7980" + _OtherNumber, SMSData);
-            MessageBox.Show("Произошла успешно!", "Отправка СМС...", MessageBoxButton.OK);
-            WindowManager.CloseWindow(ViewID);//Close();
+            bool numberonly = true;
+            for (int i = 0; i < _OtherNumber.Count(); i++)
+            {
+                if (i == 0)
+                {
+                    if (!(char.IsDigit(_OtherNumber[i]) || _OtherNumber[i] == '+')) numberonly = false;
+                }
+                else
+                {
+                    if (!char.IsDigit(_OtherNumber[i])) numberonly = false;
+                }
+            }
+
+            if (_OtherNumber.Count() <= 11 && _OtherNumber.Count() >= 2 && numberonly)
+            {
+                DB.UserSendSMS(number.ID, _OtherNumber, SMSData);
+                MessageBox.Show("Произошла успешно!", "Отправка СМС...", MessageBoxButton.OK);
+                WindowManager.CloseWindow(ViewID);//Close();
+            }
+            else
+            {
+                MessageBox.Show("Проверьте правильно ли вы набрали номер", "Ошибка", MessageBoxButton.OK);
+            }
         }
         #region INotifyPropertyChanged Members
         public event PropertyChangedEventHandler PropertyChanged;
@@ -575,9 +594,27 @@ namespace CellOperator.MVVM.ViewModels
         }
         public void Action(object parameter)
         {
-            DB.UserMakeCall(number.ID, "+7980" + _OtherNumber, int.Parse(_CallDuration));
+            bool numberonly = true;
+            for(int i=0; i< _OtherNumber.Count(); i++)
+            {
+                if (i == 0) {
+                    if (!(char.IsDigit(_OtherNumber[i]) || _OtherNumber[i] == '+')) numberonly = false;
+                        }
+                else
+                {
+                    if (!char.IsDigit(_OtherNumber[i])) numberonly = false;
+                }
+            }
+            
+            if(_OtherNumber.Count() <=11 && _OtherNumber.Count() >= 2 && numberonly) { 
+            DB.UserMakeCall(number.ID, _OtherNumber, int.Parse(_CallDuration));
             MessageBox.Show("Произошел успешно!", "Звонок...", MessageBoxButton.OK);
             WindowManager.CloseWindow(ViewID);//Close();
+            }
+            else
+            {
+                MessageBox.Show("Проверьте правильно ли вы набрали номер", "Ошибка", MessageBoxButton.OK);
+            }
         }
         #region INotifyPropertyChanged Members
         public event PropertyChangedEventHandler PropertyChanged;
