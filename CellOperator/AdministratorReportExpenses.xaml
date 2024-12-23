@@ -1,13 +1,17 @@
-﻿<Window x:Class="CellOperator.AdministratorReportExpenses"
+﻿<Window xmlns:oxy="http://oxyplot.org/wpf"  x:Class="CellOperator.AdministratorReportExpenses"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:CellOperator"
         mc:Ignorable="d"
-        Title="Детализация трат" SizeToContent="WidthAndHeight" MaxHeight="450">
+        Title="Детализация трат" SizeToContent="WidthAndHeight" MaxHeight="450"
+        xmlns:WindowEx.ShowIcon = "false"
+        >
+    
     <Window.Resources>
         <local:DateTimeToDateConverter x:Key="myDateConverter" />
+        <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
     </Window.Resources>
     <Grid HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
         <Grid.ColumnDefinitions>
@@ -19,17 +23,22 @@
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
         <ToolBar Grid.Row="0" Grid.Column="0" ScrollViewer.HorizontalScrollBarVisibility="Disabled" ScrollViewer.VerticalScrollBarVisibility="Disabled" ScrollViewer.CanContentScroll="False"  Height="auto" Width="auto" UseLayoutRounding="True" Grid.IsSharedSizeScope="True">
-            <Button Grid.Row="0" Grid.Column="0" Content="Сохранить в csv" HorizontalAlignment="Left"  Width="auto" Command="{Binding SaveCSVAction}"/>
+            <Button Visibility="{Binding IsIndividual, Mode=OneWay, Converter={StaticResource BooleanToVisibilityConverter}}" Grid.Row="0" Grid.Column="0" Content="Сохранить в csv" HorizontalAlignment="Left"  Width="auto" Command="{Binding SaveCSVAction}"/>
+            <Button Visibility="{Binding IsLegal, Mode=OneWay, Converter={StaticResource BooleanToVisibilityConverter}}" Grid.Row="0" Grid.Column="0" Content="Сохранить в svg" HorizontalAlignment="Left"  Width="auto" Command="{Binding SaveSVGAction}"/>
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Left" VerticalAlignment="Center">
+                <TextBlock Text="Показать список?"/>
+                <CheckBox IsChecked="{Binding IsIndividual}" HorizontalContentAlignment="Center" />
+            </StackPanel>
         </ToolBar>
 
-        <StackPanel Grid.Row="1" Grid.Column="0" Orientation="Horizontal" VerticalAlignment="Center" >
+        <StackPanel Visibility="{Binding IsIndividual, Mode=OneWay, Converter={StaticResource BooleanToVisibilityConverter}}"  Grid.Row="1" Grid.Column="0" Orientation="Horizontal" VerticalAlignment="Center" >
             <TextBlock Text=" C " VerticalAlignment="Center"/>
             <DatePicker VerticalAlignment="Center" SelectedDate="{Binding FromDate}" DisplayDateStart="{Binding FirstDate}" DisplayDateEnd="{Binding LastDate}"/>
             <TextBlock Text=" по " VerticalAlignment="Center"/>
             <DatePicker VerticalAlignment="Center" SelectedDate="{Binding ToDate}" DisplayDateStart="{Binding FirstDate}" DisplayDateEnd="{Binding LastDate}"/>
         </StackPanel>
 
-        <DataGrid IsReadOnly="True" Grid.Row="2" Grid.Column="0" ItemsSource="{Binding Table}" CanUserAddRows="False" AutoGenerateColumns="False" HorizontalAlignment="Left" Height="auto" VerticalAlignment="Top" Width="auto">
+        <DataGrid x:Name="Individual_entity" Visibility="{Binding IsIndividual, Mode=OneWay, Converter={StaticResource BooleanToVisibilityConverter}}" IsReadOnly="True" Grid.Row="2" Grid.Column="0" ItemsSource="{Binding Table}" CanUserAddRows="False" AutoGenerateColumns="False" HorizontalAlignment="Left" Height="auto" VerticalAlignment="Top" Width="auto">
             <DataGrid.Columns>
                 <DataGridTextColumn Binding="{Binding Path=Number}" Header="Номер"/>
                 <DataGridTextColumn Binding="{Binding Path=Date,Converter={StaticResource myDateConverter}}" Header="Дата"/>
@@ -37,5 +46,24 @@
                 <DataGridTextColumn  Binding="{Binding StringFormat=' {0:#######0.00} руб.', Path=Expense}" Header="Сумма"/>
             </DataGrid.Columns>
         </DataGrid>
+
+        <StackPanel x:Name="Legal_entity" Visibility="{Binding IsLegal, Mode=OneWay, Converter={StaticResource BooleanToVisibilityConverter}}" Grid.Row="2" Grid.Column="0" HorizontalAlignment="Left" Height="auto" VerticalAlignment="Top" Width="auto">
+            <ComboBox Name="YearsToVisible" HorizontalAlignment="Left" Height="auto" Width="auto" ItemsSource="{Binding Years}" SelectedIndex="{Binding SelectedYear}" IsTextSearchEnabled="False" ClipToBounds="False" >
+                <ComboBox.ItemTemplate>
+                    <DataTemplate>
+                        <StackPanel Orientation="Vertical">
+                            <TextBlock Text="{Binding}" Height="auto" Width="auto"/>
+                        </StackPanel>
+                    </DataTemplate>
+                </ComboBox.ItemTemplate>
+            </ComboBox>
+
+            <oxy:PlotView Model="{Binding GraphMain}" Height="200" Width="300" HorizontalAlignment="Left" VerticalAlignment="Top" ScrollViewer.HorizontalScrollBarVisibility="Auto" ScrollViewer.VerticalScrollBarVisibility="Auto"  />
+            <!--<oxy:PlotView Model="{Binding GraphServices}" />
+            <oxy:PlotView Model="{Binding GraphTarifs}" />
+            <oxy:PlotView Model="{Binding GraphSMS}" />
+            <oxy:PlotView Model="{Binding GraphCalls}" />
+            <oxy:PlotView Model="{Binding GraphInternet}" /> -->
+        </StackPanel>
     </Grid>
 </Window>

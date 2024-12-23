@@ -636,6 +636,9 @@ namespace BLL.Services
                     decimal TarifCost = Tarif.Price;
                     AddExpenses(NumID, 11, TarifCost);
                     numbers[i].Bill -= TarifCost;
+                    numbers[i].Internet_remains_amount = Tarif.Internet_amount;
+                    numbers[i].MINUTES_remains_amount = Tarif.MINUTES_amount;
+                    numbers[i].SMS_remains_amount = Tarif.SMS_amount;
                 }
                 var Services = db.C_Service_Connection.Where(p=> p.ID_number == NumID).ToList();
                 for(int j=0; j< Services.Count(); j++)

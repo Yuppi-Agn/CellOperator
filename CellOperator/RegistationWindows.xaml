@@ -88,8 +88,6 @@
             CommandParameter="{Binding ElementName=passwordBox}"
                         Style="{StaticResource RoundedButtonStyle}"
                         />
-                <!--<Button Content="Войти как пользователь" Margin="2" Click="Button__UserAuth"/>
-            <Button Content="Войти как администратор" Click="Button_AdministratorAuth"/>-->
             </StackPanel>
         </Grid>
     </Border>

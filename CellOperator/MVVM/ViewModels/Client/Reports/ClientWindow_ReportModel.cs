@@ -81,8 +81,8 @@ namespace CellOperator.MVVM.ViewModels
             for (int i = 0; i < MyTable.Count; i++) this.Table.Add(MyTable[i]);
             _SaveCSVAction = new RelayCommand(SaveCSV, i => true);
             //var Tnew = Methods.Report_Calling_FirstDate();
-            FirstDate = FromDate = Methods.Report_Calling_FirstDate();
-            LastDate= ToDate = Methods.Report_Calling_LastDate();
+            FirstDate = FromDate = Methods.Report_Calling_FirstDate(NumId);
+            LastDate= ToDate = Methods.Report_Calling_LastDate(NumId);
         }
         private void TableChanged()
         {
@@ -177,8 +177,8 @@ namespace CellOperator.MVVM.ViewModels
             for (int i = 0; i < MyTable.Count; i++) this.Table.Add(MyTable[i]);
             _SaveCSVAction = new RelayCommand(SaveCSV, i => true);
 
-            FirstDate = FromDate = Methods.Report_SMS_FirstDate();
-            LastDate = ToDate = Methods.Report_SMS_LastDate();
+            FirstDate = FromDate = Methods.Report_SMS_FirstDate(NumId);
+            LastDate = ToDate = Methods.Report_SMS_LastDate(NumId);
         }
         private void TableChanged()
         {
@@ -272,8 +272,8 @@ namespace CellOperator.MVVM.ViewModels
             this.Table = new ObservableCollection<ExpensesDTO>();
             for (int i = 0; i < MyTable.Count; i++) this.Table.Add(MyTable[i]);
             _SaveCSVAction = new RelayCommand(SaveCSV, i => true);
-            FirstDate = FromDate = Methods.Report_Expenses_FirstDate();
-            LastDate = ToDate = Methods.Report_Expenses_LastDate();
+            FirstDate = FromDate = Methods.Report_Expenses_FirstDate(NumId);
+            LastDate = ToDate = Methods.Report_Expenses_LastDate(NumId);
         }
         private void TableChanged()
         {
@@ -521,7 +521,7 @@ namespace CellOperator.MVVM.ViewModels
                 }
             }
 
-            if (_OtherNumber.Count() <= 11 && _OtherNumber.Count() >= 2 && numberonly)
+            if (_OtherNumber.Count() <= 12 && _OtherNumber.Count() >= 2 && numberonly)
             {
                 DB.UserSendSMS(number.ID, _OtherNumber, SMSData);
                 MessageBox.Show("Произошла успешно!", "Отправка СМС...", MessageBoxButton.OK);
@@ -606,7 +606,7 @@ namespace CellOperator.MVVM.ViewModels
                 }
             }
             
-            if(_OtherNumber.Count() <=11 && _OtherNumber.Count() >= 2 && numberonly) { 
+            if(_OtherNumber.Count() <=12 && _OtherNumber.Count() >= 2 && numberonly) { 
             DB.UserMakeCall(number.ID, _OtherNumber, int.Parse(_CallDuration));
             MessageBox.Show("Произошел успешно!", "Звонок...", MessageBoxButton.OK);
             WindowManager.CloseWindow(ViewID);//Close();

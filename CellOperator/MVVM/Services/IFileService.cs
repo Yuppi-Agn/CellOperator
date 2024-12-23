@@ -12,6 +12,10 @@ using System.Collections.ObjectModel;
 
 using System.IO;
 
+using OxyPlot;
+using OxyPlot.Series;
+using OxyPlot.OpenXml;
+
 namespace CellOperator.MVVM.Services
 {
     public interface IFileService
@@ -20,8 +24,13 @@ namespace CellOperator.MVVM.Services
         void Save(List<Report_Calling> Callings, string Path);
         void Save(List<Report_SMS> SMS, string Path);
         void Save(List<ExpensesDTO> Expenses, string Path);
+        
         //List<Phone> Open(string filename);
         //void Save(string filename, List<Phone> phonesList);
+    }
+    public interface IFILESVGService
+    {
+        void Save(PlotModel GraphMain, string Path);
     }
     public interface IDialogService
     {
@@ -193,6 +202,22 @@ namespace CellOperator.MVVM.Services
                 stream.WriteLine(String);
             }
             stream.Dispose();
+        }
+        
+    }
+    public class FileService_svg : IFILESVGService
+    {
+        public FileService_svg()
+        {
+
+        }
+        public void Save(PlotModel GraphMain, string Path)
+        {
+            using (var stream = File.Create(Path))
+            {
+                var exporter = new SvgExporter { Width = 600, Height = 400 };
+                exporter.Export(GraphMain, stream);
+            }
         }
     }
 

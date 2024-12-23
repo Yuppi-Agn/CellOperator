@@ -49,6 +49,21 @@ namespace BLL.Models
                     break;
             }
         }
+        public void SetTabs(){
+            switch (NumConnectionType)
+            {
+                default:
+                case 0:
+                    this.ConnectionType = "По городу";
+                    break;
+                case 1:
+                    this.ConnectionType = "Между городами";
+                    break;
+                case 2:
+                    this.ConnectionType = "Международный";
+                    break;
+            }
+        }
     }
     public class Report_SMS
     {
@@ -58,6 +73,22 @@ namespace BLL.Models
         public string ConnectionType { get; set; }
         public byte NumConnectionType { get; set; }
         public Report_SMS()
+        {
+            switch (NumConnectionType)
+            {
+                default:
+                case 0:
+                    this.ConnectionType = "По городу";
+                    break;
+                case 1:
+                    this.ConnectionType = "Между городами";
+                    break;
+                case 2:
+                    this.ConnectionType = "Международный";
+                    break;
+            }
+        }
+        public void SetTabs()
         {
             switch (NumConnectionType)
             {

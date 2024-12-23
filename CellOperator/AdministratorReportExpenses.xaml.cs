@@ -32,7 +32,13 @@ namespace CellOperator
             FileService_csv fileService = new FileService_csv();
             WindowsDilalogService dilalogService = new WindowsDilalogService("Введите название", ".csv", "Таблица формата csv");
 
-            DataContext = new AdministratorReportExpensesModel( ref Methods, dilalogService, fileService);
+            FileService_svg fileService_Svg = new FileService_svg();
+            WindowsDilalogService dilalogService_Svg = new WindowsDilalogService("Введите название", ".svg", "Svg");
+
+            DataContext = new AdministratorReportExpensesModel( ref Methods,
+                dilalogService, fileService,
+                dilalogService_Svg, fileService_Svg
+                );
 
         }
     }

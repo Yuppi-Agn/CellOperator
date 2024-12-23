@@ -65,6 +65,10 @@ namespace BLL.Services
                                   OtherNumber = calling.Number.Number1,
                                   NumConnectionType = (byte)calling.Connection_type,
                               }).ToList<Report_Calling>());
+            foreach (var item in reports)
+            {
+                item.SetTabs();
+            }
             return reports;
         }
         public List<Report_Calling> Report_Calling(int ID, DateTime FromDate, DateTime ToDate)
@@ -106,6 +110,10 @@ namespace BLL.Services
                     OtherNumber = calling.Number.Number1,
                     NumConnectionType = (byte)calling.Connection_type,
                 }).ToList<Report_Calling>());
+            foreach (var item in reports)
+            {
+                item.SetTabs();
+            }
             return reports;
         }
         public DateTime Report_Calling_FirstDate()
@@ -117,6 +125,26 @@ namespace BLL.Services
         public DateTime Report_Calling_LastDate()
         {
             var Item = db.Calling.OrderBy(p => p.C_Date).ToArray().Last();
+            if (Item == null) return DateTime.Now;
+            else return ((DateTime)Item.C_Date);
+        }
+        public DateTime Report_Calling_FirstDate(int NumID)
+        {
+            var ThisNum = db.Number.Find(NumID);
+            if (ThisNum == null) return DateTime.Now;
+
+            string ThisNumber = ThisNum.Number1;
+            var Item = db.Calling.Where(p => p.Number_slave == ThisNumber || p.ID_number_host == NumID).OrderBy(p => p.C_Date).ToArray().First();
+            if (Item == null) return DateTime.Now;
+            else return ((DateTime)Item.C_Date);
+        }
+        public DateTime Report_Calling_LastDate(int NumID)
+        {
+            var ThisNum = db.Number.Find(NumID);
+            if (ThisNum == null) return DateTime.Now;
+
+            string ThisNumber = ThisNum.Number1;
+            var Item = db.Calling.Where(p => p.Number_slave == ThisNumber || p.ID_number_host == NumID).OrderBy(p => p.C_Date).ToArray().Last();
             if (Item == null) return DateTime.Now;
             else return ((DateTime)Item.C_Date);
         }
@@ -137,6 +165,7 @@ namespace BLL.Services
                            Date = (DateTime)SMS.C_Date,
                            OtherNumber = SMS.Number_slave,
                            NumConnectionType = (byte)SMS.Connection_type,
+
                        }).ToList<Report_SMS>();
             reports.AddRange((
                 from SMS in db.SMS
@@ -151,6 +180,10 @@ namespace BLL.Services
                     OtherNumber = SMS.Number_slave,
                     NumConnectionType = (byte)SMS.Connection_type,
                 }).ToList<Report_SMS>());
+            foreach(var item in reports)
+            {
+                item.SetTabs();
+            }
             return reports;
         }
         public List<AdministratorReportExpences> Report_AllExpences()
@@ -205,6 +238,10 @@ namespace BLL.Services
                     OtherNumber = SMS.Number_slave,
                     NumConnectionType = (byte)SMS.Connection_type,
                 }).ToList<Report_SMS>());
+            foreach (var item in reports)
+            {
+                item.SetTabs();
+            }
             return reports;
         }
         public DateTime Report_SMS_FirstDate()
@@ -216,6 +253,26 @@ namespace BLL.Services
         public DateTime Report_SMS_LastDate()
         {
             var Item = db.SMS.OrderBy(p => p.C_Date).ToArray().Last();
+            if (Item == null) return DateTime.Now;
+            else return (DateTime)Item.C_Date;
+        }
+        public DateTime Report_SMS_FirstDate(int NumID)
+        {
+            var ThisNum = db.Number.Find(NumID);
+            if (ThisNum == null) return DateTime.Now;
+
+            string ThisNumber = ThisNum.Number1;
+            var Item = db.SMS.Where(p => p.Number_slave == ThisNumber || p.ID_number_host == NumID).OrderBy(p => p.C_Date).ToArray().First();
+            if (Item == null) return DateTime.Now;
+            else return (DateTime)Item.C_Date;
+        }
+        public DateTime Report_SMS_LastDate(int NumID)
+        {
+            var ThisNum = db.Number.Find(NumID);
+            if (ThisNum == null) return DateTime.Now;
+            
+            string ThisNumber = ThisNum.Number1;
+            var Item = db.SMS.Where(p=>p.Number_slave== ThisNumber || p.ID_number_host == NumID).OrderBy(p => p.C_Date).ToArray().Last();
             if (Item == null) return DateTime.Now;
             else return (DateTime)Item.C_Date;
         }
@@ -246,6 +303,18 @@ namespace BLL.Services
         public DateTime Report_Expenses_LastDate()
         {
             var Item = db.Expenses.OrderBy(p => p.C_Date).ToArray().Last();
+            if (Item == null) return DateTime.Now;
+            else return (DateTime)Item.C_Date;
+        }
+        public DateTime Report_Expenses_FirstDate(int NumID)
+        {
+            var Item = db.Expenses.Where(p => p.ID_number == NumID).OrderBy(p => p.C_Date).ToArray().First();
+            if (Item == null) return DateTime.Now;
+            else return (DateTime)Item.C_Date;
+        }
+        public DateTime Report_Expenses_LastDate(int NumID)
+        {
+            var Item = db.Expenses.Where(p => p.ID_number == NumID).OrderBy(p => p.C_Date).ToArray().Last();
             if (Item == null) return DateTime.Now;
             else return (DateTime)Item.C_Date;
         }
