@@ -37,7 +37,11 @@ namespace CellOperator.MVVM.ViewModels
                 NotifyPropertyChanged("SelectedPage");
             }
         }
-        DataBase_service Database;
+        ClientService ClientService;
+        ClientInteractionsService ClientInteractionsService;
+        TarifService TarifService;
+        ServicesService ServicesService;
+        NumberService NumberService;
         Methods_service methods;
 
         /*private RelayCommand _GenerateBaseCommand;
@@ -63,8 +67,13 @@ namespace CellOperator.MVVM.ViewModels
         }
         private void loadData()
         {
-            if (Database == null) Database = new DataBase_service();
+            //if (Database == null) Database = new DataBase_service();
             if (methods == null) methods = new Methods_service();
+            if (ClientService == null) ClientService = new ClientService();
+            if (ClientInteractionsService == null) ClientInteractionsService = new ClientInteractionsService();
+            if (TarifService == null) TarifService = new TarifService();
+            if (ServicesService == null) ServicesService = new ServicesService();
+            if (NumberService == null) NumberService = new NumberService();
 
             Client_Individuals = new ObservableCollection<Client_IndividualDTO>();
             Client_LegalEntitys = new ObservableCollection<Client_LegalEntityDTO>();
@@ -85,16 +94,16 @@ namespace CellOperator.MVVM.ViewModels
         }
         private void LoadMembers()
         {
-            var S1 = Database.GetAllIndividualClients();
-            var S2 = Database.GetAllLegalEntityClients();
-            var S3 = Database.GetAllNumbers();
-            var S4 = Database.GetAllTarifs();
-            var S5 = Database.GetAllSMS();
-            var S6 = Database.GetAllCallings();
+            var S1 = ClientService.GetAllIndividualClients();
+            var S2 = ClientService.GetAllLegalEntityClients();
+            var S3 = NumberService.GetAllNumbers();
+            var S4 = TarifService.GetAllTarifs();
+            var S5 = ClientInteractionsService.GetAllSMS();
+            var S6 = ClientInteractionsService.GetAllCallings();
 
-            var S7 = Database.GetAllServices();
-            var S8 = Database.GetAllService_Connection();
-            var S9 = Database.GetAllTarif_history();
+            var S7 = ServicesService.GetAllServices();
+            var S8 = ServicesService.GetAllService_Connection();
+            var S9 = TarifService.GetAllTarif_history();
 
             Client_Individuals.Clear();
             Client_LegalEntitys.Clear();
@@ -122,24 +131,24 @@ namespace CellOperator.MVVM.ViewModels
         }
         public void GenerateBase(object parameter)
         {
-            Database.GenerateMembers(700);
+            //Database.GenerateMembers(700);
             LoadMembers();
         }
         public void ChangePassword(object parameter)
         {
             ClientDTO Client;
-            if(SelectedPage==0) Client=Database.GetClient((int)Client_Individuals[SelectedClient].ClientID);
-            else Client = Database.GetClient((int)Client_LegalEntitys[SelectedClient].ClientID);
+            if(SelectedPage==0) Client= ClientService.GetClient((int)Client_Individuals[SelectedClient].ClientID);
+            else Client = ClientService.GetClient((int)Client_LegalEntitys[SelectedClient].ClientID);
             if (Client != null)
             {
-                var taskWindow = new ClientChangePassword(ref Database, Client);
+                var taskWindow = new ClientChangePassword(Client);
                 taskWindow.ShowDialog();
                 LoadMembers();
             }
         }
         public void MountlySpent(object parameter)
         {
-            Database.MonthSpent();
+            ClientInteractionsService.MonthSpent();
             LoadMembers();
         }
         public void GenerateExpences(object parameter)

@@ -23,10 +23,10 @@ namespace CellOperator
     /// </summary>
     public partial class ClientWindow_MakeCall : Window
     {
-        public ClientWindow_MakeCall(ref DataBase_service db, ClientDTO client, NumberDTO number)
+        public ClientWindow_MakeCall(ClientDTO client, NumberDTO number)
         {
             InitializeComponent();
-            DataContext = new ClientWindow_MakeCallModel(ref db, client, number);
+            DataContext = new ClientWindow_MakeCallModel(client, number);
         }
     }
 }

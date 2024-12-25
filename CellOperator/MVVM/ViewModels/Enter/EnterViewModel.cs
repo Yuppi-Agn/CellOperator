@@ -51,6 +51,8 @@ namespace CellOperator.MVVM.ViewModels
 
             Username = "";
             Password = "";
+
+            ClientService clientService = new ClientService();
         }
         private void Login(object parameter)
         {
@@ -69,7 +71,7 @@ namespace CellOperator.MVVM.ViewModels
                         break;
                     case 2:
                         {
-                            var Database = new DataBase_service();
+                            var Database = new ClientService();
                             ClientWindow taskWindow = new ClientWindow(Database.FindClient(Username, clearTextPassword));
                             taskWindow.Show();
                         }

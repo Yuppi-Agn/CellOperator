@@ -17,7 +17,8 @@ using CellOperator.MVVM.Services;
 
 using OxyPlot;
 using OxyPlot.Series;
-using OxyPlot.OpenXml;
+using OxyPlot.Axes;
+using OxyPlot.Legends;
 
 namespace CellOperator.MVVM.ViewModels.Administator
 {
@@ -177,61 +178,71 @@ namespace CellOperator.MVVM.ViewModels.Administator
              */
             PlotModel Thisgrap = new PlotModel();
             var SortedTable = MyTable.OrderBy(p => p.Date);
-            if (Thisgrap == null) Thisgrap = new PlotModel();
             Thisgrap.Title = "Прибыль";
             Thisgrap.SubtitleFont = Thisgrap.TitleFont;
             Thisgrap.IsLegendVisible = true;
+            double legendOffset = 0;
+            // Добавление оси X
+            var xAxis = new LinearAxis
+            {
+                Position = AxisPosition.Bottom,
+                Title = "Месяц",
+                Minimum = FirstDate.Month - 1, 
+                Maximum = LastDate.Month + 1,   
+                MajorStep = 1,                  
+                MinorStep = 1                   
+            };
+
+            Thisgrap.Axes.Add(xAxis);
+
+            // Добавление оси Y
+            var yAxis = new LinearAxis
+            {
+                Position = AxisPosition.Left,
+                Title = "Сумма расходов"
+            };
+
+            Thisgrap.Axes.Add(yAxis);
 
             for (int TypeID = 4; TypeID <= 11; TypeID++)
-            {
-                
+            {                
                 var series = new LineSeries();
                 series.Color = OxyColor.FromRgb(0, 0, 0);
+                series.Title = "Default Title";
+                series.LegendKey = series.Title;
+
+
                 switch (TypeID)
                 {
                     default:
-                    case 1:
-                        //series.Title = "Звонки в тарифе";
-                        TypeID++;
-                        break;
-                    case 2:
-                        //series.Title = "СМС в тарифе";
-                        TypeID++;
-                        break;
-                    case 3:
-                        //series.Title = "Трафик в тарифе";
-                        TypeID++;
-                        break;
+                        continue;
                     case 4:
                         series.Title = "Звонки вне тарифа";
-                        //series.Color = OxyColor.FromRgb(255,255,255);
+                        series.Color = OxyColor.FromRgb(0,0,255);
                         break;
                     case 5:
                         series.Title = "СМС вне тарифа";
-                        //series.Color = OxyColor.FromRgb(255, 255, 255);
+                        series.Color = OxyColor.FromRgb(0, 122, 122);
                         break;
                     case 6:
                         series.Title = "Трафик вне тарифа";
-                        //series.Color = OxyColor.FromRgb(255, 255, 255);
-                        break;
-                    case 7:
-                        TypeID++;
+                        series.Color = OxyColor.FromRgb(0, 0, 80);
                         break;
                     case 8:
                         series.Title = "Подключение/смена тарифа";
-                        //series.Color = OxyColor.FromRgb(255, 255, 255);
+                        series.Color = OxyColor.FromRgb(255, 0, 0);
                         break;
                     case 9:
                         series.Title = "Подключение услуги";
-                        //series.Color = OxyColor.FromRgb(255, 255, 255);
+                        series.Color = OxyColor.FromRgb(200, 0, 55);
                         break;
                     case 10:
                         series.Title = "Плата за услугу в месяц";
-                        //series.Color = OxyColor.FromRgb(255, 255, 255);
+                        series.Color = OxyColor.FromRgb(0, 255, 0);
                         break;
                     case 11:
                         series.Title = "Плата за тариф в месяц";
-                        //series.Color = OxyColor.FromRgb(255, 255, 255);
+                        series.Color = OxyColor.FromRgb(75, 180, 0);
                         break;
                 }
 
@@ -248,15 +259,26 @@ namespace CellOperator.MVVM.ViewModels.Administator
                 }
 
                 Thisgrap.Series.Add(series);
-                //XmlWriterBase xmlWriter = new XmlWriterBase;
-                //XmlWriterBase(GraphMain)
-                /*if (DialogService.SaveFileDialog())
+                /*LegendBase legend = new Legend();
+                legend.LegendPlacement = LegendPlacement.Outside;
+                legend.LegendPosition = LegendPosition.TopCenter;
+                legend.LegendTitle = series.Title;
+                legend.LegendTitleColor = series.Color;
+                legend.LegendItemOrder = LegendItemOrder.Normal;*/
+                var legend = new Legend
                 {
-                    var Path = DialogService.FilePath;
-                    FileService.Save(GraphMain, Path);
-                }*/
+                    LegendPlacement = LegendPlacement.Outside,
+                    LegendPosition = LegendPosition.BottomLeft,
+                    LegendTitle = series.Title,
+                    LegendTitleColor = series.Color,
+                    LegendItemOrder = LegendItemOrder.Normal,
+                    LegendMargin = (int)legendOffset, // Здесь вы можете управлять высотой легенды                    
+                };
+                legendOffset += 15;
+                Thisgrap.Legends.Add(legend);
             }
-            GraphMain = Thisgrap;
+
+            GraphMain = Thisgrap;            
         }
         private void TableChanged()
         {

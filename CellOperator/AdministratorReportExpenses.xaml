@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:CellOperator"
         mc:Ignorable="d"
-        Title="Детализация трат" SizeToContent="WidthAndHeight" MaxHeight="450"
+        Title="Детализация трат" SizeToContent="WidthAndHeight" MaxHeight="550"
         xmlns:WindowEx.ShowIcon = "false"
         >
     
@@ -58,7 +58,7 @@
                 </ComboBox.ItemTemplate>
             </ComboBox>
 
-            <oxy:PlotView Model="{Binding GraphMain}" Height="200" Width="300" HorizontalAlignment="Left" VerticalAlignment="Top" ScrollViewer.HorizontalScrollBarVisibility="Auto" ScrollViewer.VerticalScrollBarVisibility="Auto"  />
+            <oxy:PlotView Model="{Binding GraphMain}" MinHeight="400" MinWidth="300" HorizontalAlignment="Left" VerticalAlignment="Top" ScrollViewer.HorizontalScrollBarVisibility="Auto" ScrollViewer.VerticalScrollBarVisibility="Auto"  />
             <!--<oxy:PlotView Model="{Binding GraphServices}" />
             <oxy:PlotView Model="{Binding GraphTarifs}" />
             <oxy:PlotView Model="{Binding GraphSMS}" />

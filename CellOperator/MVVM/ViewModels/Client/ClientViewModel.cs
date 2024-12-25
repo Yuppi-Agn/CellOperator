@@ -13,7 +13,10 @@ namespace CellOperator.MVVM.ViewModels
 {
     public class ClientViewModel : INotifyPropertyChanged
     {
-        DataBase_service Database;
+        ClientService Database;
+        NumberService NumService;
+        ClientInteractionsService ClientInteractions;
+
         Methods_service methods;
         ClientDTO Client;
         List<NumberDTO> Numbers;
@@ -99,8 +102,10 @@ namespace CellOperator.MVVM.ViewModels
 
         public ClientViewModel(ClientDTO client) {
             Client = client;
-            Database = new DataBase_service();
+            Database = new ClientService();
             methods = new Methods_service();
+            NumService = new NumberService();
+            ClientInteractions = new ClientInteractionsService();
 
             UpdateNums();
             SNameBox = Database.FindName(Client);
@@ -160,7 +165,7 @@ namespace CellOperator.MVVM.ViewModels
         public void Show_TarifChange(object parameter)
         {
             if (Numbers.Count - 1 < SelectedNumber) return;
-            ClientTarifChange taskWindow = new ClientTarifChange(ref Database, Client, Numbers[SelectedNumber]);
+            ClientTarifChange taskWindow = new ClientTarifChange(Client, Numbers[SelectedNumber]);
             taskWindow.ShowDialog();
             UpdateNums();
             NumberChanged(SSelectedNumber);
@@ -168,14 +173,14 @@ namespace CellOperator.MVVM.ViewModels
         public void Show_ServiceChange(object parameter)
         {
             if (Numbers.Count - 1 < SelectedNumber) return;
-            ClientServiceChange taskWindow = new ClientServiceChange(ref Database, Client, Numbers[SelectedNumber]);
+            ClientServiceChange taskWindow = new ClientServiceChange(Client, Numbers[SelectedNumber]);
             taskWindow.ShowDialog();
             UpdateNums();
             NumberChanged(SSelectedNumber);
         }
         public void Show_NumberBuy(object parameter)
         {
-            ClientWindow_BuyNumber taskWindow = new ClientWindow_BuyNumber(ref Database, Client);
+            ClientWindow_BuyNumber taskWindow = new ClientWindow_BuyNumber(Client);
             taskWindow.ShowDialog();
             UpdateNums();
             NumberChanged(SSelectedNumber);
@@ -195,7 +200,7 @@ namespace CellOperator.MVVM.ViewModels
         }
         private void UpdateNums()
         {
-            Numbers = Database.FindNumbers(Client);
+            Numbers = NumService.FindNumbers(Client);
             List<string> ThisNumbersToVisible = new List<string>();
             for (int i = 0; i < Numbers.Count(); i++) ThisNumbersToVisible.Add(Numbers[i].Number);
 
@@ -204,14 +209,14 @@ namespace CellOperator.MVVM.ViewModels
         private void AddMoney(object parameter)
         {
             if (Numbers.Count - 1 < SelectedNumber) return;
-            Database.AddMoney(Numbers[SelectedNumber].ID, (decimal) 100);
+            NumService.AddMoney(Numbers[SelectedNumber].ID, (decimal) 100);
             UpdateNums();
             NumberChanged(SelectedNumber);
         }
         public void SendSMS(object parameter)
         {
             if (Numbers.Count - 1 < SelectedNumber) return;
-            var taskWindow = new ClientWindow_SendSMS(ref Database, Client, Numbers[SelectedNumber]);
+            var taskWindow = new ClientWindow_SendSMS(Client, Numbers[SelectedNumber]);
             taskWindow.ShowDialog();
             UpdateNums();
             NumberChanged(SSelectedNumber);
@@ -219,7 +224,7 @@ namespace CellOperator.MVVM.ViewModels
         public void MakeCall(object parameter)
         {
             if (Numbers.Count - 1 < SelectedNumber) return;
-            var taskWindow = new ClientWindow_MakeCall(ref Database, Client, Numbers[SelectedNumber]);
+            var taskWindow = new ClientWindow_MakeCall(Client, Numbers[SelectedNumber]);
             taskWindow.ShowDialog();
             UpdateNums();
             NumberChanged(SSelectedNumber);
@@ -227,14 +232,14 @@ namespace CellOperator.MVVM.ViewModels
         public void SpentInternet(object parameter)
         {
             if (Numbers.Count - 1 < SelectedNumber) return;
-            var taskWindow = new ClientWindow_SpentInternet(ref Database, Client, Numbers[SelectedNumber]);
+            var taskWindow = new ClientWindow_SpentInternet(Client, Numbers[SelectedNumber]);
             taskWindow.ShowDialog();
             UpdateNums();
             NumberChanged(SSelectedNumber);
         }
         public void ChangePassword(object parameter)
         {
-            var taskWindow = new ClientChangePassword(ref Database, Client);
+            var taskWindow = new ClientChangePassword(Client);
             taskWindow.ShowDialog();
         }
     }

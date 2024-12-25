@@ -314,7 +314,7 @@ namespace CellOperator.MVVM.ViewModels
             get { return _viewId; }
         }
 
-        private DataBase_service DB;
+        private TarifService DB;
         public ObservableCollection<TarifDTO> Tarifs { get; set; }
 
         private RelayCommand _ChangeAction;
@@ -332,12 +332,12 @@ namespace CellOperator.MVVM.ViewModels
                 NotifyPropertyChanged("SelectedTarif");
             }
         }
-        public ClientWindow_TarifChangeModel(ref DataBase_service db, ClientDTO client, NumberDTO number)
+        public ClientWindow_TarifChangeModel(ClientDTO client, NumberDTO number)
         {
             _viewId = Guid.NewGuid();
             this.Tarifs = new ObservableCollection<TarifDTO>();
             _ChangeAction = new RelayCommand(Change, i => true);
-            DB = db;
+            DB = new TarifService();
 
             var Table = DB.GetAllTarifs(client);
             for (int i = 0; i < Table.Count; i++)
@@ -348,12 +348,12 @@ namespace CellOperator.MVVM.ViewModels
             this.client = client;
             this.number = number;
         }
-        public ClientWindow_TarifChangeModel(ref DataBase_service db, ClientDTO client)
+        public ClientWindow_TarifChangeModel(ClientDTO client)
         {
             _viewId = Guid.NewGuid();
             this.Tarifs = new ObservableCollection<TarifDTO>();
             _SelectAction = new RelayCommand(Select, i => true);
-            DB = db;
+            DB = new TarifService();
 
             var Table = DB.GetAllTarifs(client);
             for (int i = 0; i < Table.Count; i++)
@@ -373,8 +373,9 @@ namespace CellOperator.MVVM.ViewModels
         }
         public void Select(object parameter)
         {
+            NumberService numService = new NumberService();
             if (SelectedTarif == null) return;
-            DB.BuyNumber(client, _SelectedTarif.ID);
+            numService.BuyNumber(client, _SelectedTarif.ID);
             MessageBox.Show("Произошла успешно!", "Покупка номера...", MessageBoxButton.OK);
             WindowManager.CloseWindow(ViewID);//Close();
         }
@@ -398,7 +399,7 @@ namespace CellOperator.MVVM.ViewModels
             get { return _viewId; }
         }
 
-        private DataBase_service DB;
+        private ServicesService DB;
         public ObservableCollection<ServiceOutput> Table { get; set; }
 
         private RelayCommand _ChangeAction;
@@ -414,12 +415,12 @@ namespace CellOperator.MVVM.ViewModels
                 NotifyPropertyChanged("Selected");
             }
         }
-        public ClientWindow_ServiceChangeModel(ref DataBase_service db, ClientDTO client, NumberDTO number)
+        public ClientWindow_ServiceChangeModel(ClientDTO client, NumberDTO number)
         {
             _viewId = Guid.NewGuid();
             this.Table = new ObservableCollection<ServiceOutput>();
             _ChangeAction = new RelayCommand(Change, i => true);
-            DB = db;
+            DB = new ServicesService();
             this.client = client;
             this.number = number;
 
@@ -466,7 +467,7 @@ namespace CellOperator.MVVM.ViewModels
             get { return _viewId; }
         }
 
-        private DataBase_service DB;
+        private ClientInteractionsService DB;
 
         private RelayCommand _BaseCommand;
         public RelayCommand BaseCommand { get { return _BaseCommand; } }
@@ -496,12 +497,12 @@ namespace CellOperator.MVVM.ViewModels
         {
             get { return _YourNumber; }
         }
-        public ClientWindow_SendSMSModel(ref DataBase_service db, ClientDTO client, NumberDTO number)
+        public ClientWindow_SendSMSModel(ClientDTO client, NumberDTO number)
         {
             _YourNumber = "Ваш номер: " + number.Number;
             _viewId = Guid.NewGuid();
             _BaseCommand = new RelayCommand(Action, i => true);
-            DB = db;
+            DB = new ClientInteractionsService();
 
             this.client = client;
             this.number = number;
@@ -552,7 +553,7 @@ namespace CellOperator.MVVM.ViewModels
             get { return _viewId; }
         }
 
-        private DataBase_service DB;
+        private ClientInteractionsService DB;
 
         private RelayCommand _BaseCommand;
         public RelayCommand BaseCommand { get { return _BaseCommand; } }
@@ -582,12 +583,12 @@ namespace CellOperator.MVVM.ViewModels
         {
             get { return _YourNumber; }
         }
-        public ClientWindow_MakeCallModel(ref DataBase_service db, ClientDTO client, NumberDTO number)
+        public ClientWindow_MakeCallModel(ClientDTO client, NumberDTO number)
         {
             _YourNumber = "Ваш номер: " + number.Number;
             _viewId = Guid.NewGuid();
             _BaseCommand = new RelayCommand(Action, i => true);
-            DB = db;
+            DB = new ClientInteractionsService();
 
             this.client = client;
             this.number = number;
@@ -636,7 +637,7 @@ namespace CellOperator.MVVM.ViewModels
             get { return _viewId; }
         }
 
-        private DataBase_service DB;
+        private ClientInteractionsService DB;
 
         private RelayCommand _BaseCommand;
         public RelayCommand BaseCommand { get { return _BaseCommand; } }
@@ -656,12 +657,12 @@ namespace CellOperator.MVVM.ViewModels
         {
             get { return _YourNumber; }
         }
-        public ClientWindow_SpentInternetModel(ref DataBase_service db, ClientDTO client, NumberDTO number)
+        public ClientWindow_SpentInternetModel( ClientDTO client, NumberDTO number)
         {
             _YourNumber = "Ваш номер: " + number.Number;
             _viewId = Guid.NewGuid();
             _BaseCommand = new RelayCommand(Action, i => true);
-            DB = db;
+            DB = new ClientInteractionsService();
 
             this.client = client;
             this.number = number;
@@ -696,17 +697,17 @@ namespace CellOperator.MVVM.ViewModels
             get { return _Password; }
             set { _Password = value; }
         }
-        private DataBase_service DB;
+        private ClientService DB;
 
         private RelayCommand _BaseAction;
         public RelayCommand BaseAction { get { return _BaseAction; } }
 
-        public ClientWindow_PasswordChangeModel(ref DataBase_service db, ClientDTO client)
+        public ClientWindow_PasswordChangeModel(ClientDTO client)
         {
             this.client = client;
             _viewId = Guid.NewGuid();
             _BaseAction = new RelayCommand(Change, i => true);
-            DB = db;
+            DB = new ClientService();
         }
         public void Change(object parameter)
         {

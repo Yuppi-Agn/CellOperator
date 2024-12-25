@@ -23,10 +23,10 @@ namespace CellOperator
     /// </summary>
     public partial class ClientServiceChange : Window
     {
-        public ClientServiceChange(ref DataBase_service db, ClientDTO client, NumberDTO number)
+        public ClientServiceChange(ClientDTO client, NumberDTO number)
         {
             InitializeComponent();
-            DataContext = new ClientWindow_ServiceChangeModel(ref db, client, number);
+            DataContext = new ClientWindow_ServiceChangeModel(client, number);
         }
     }
 }

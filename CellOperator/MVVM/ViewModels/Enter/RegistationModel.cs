@@ -14,7 +14,7 @@ namespace CellOperator.MVVM.ViewModels
 {
     class RegistationModel : INotifyPropertyChanged
     {
-        DataBase_service DB;
+        ClientService DB;
         private readonly RelayCommand _RegistationAction;
         private string SUsername, SPassword,
             _FirstName, _LastName, _Patronymic, _Passport,
@@ -109,7 +109,7 @@ namespace CellOperator.MVVM.ViewModels
             _viewId = Guid.NewGuid();
             _RegistationAction = new RelayCommand(Registration, i => true);
 
-            DB = new DataBase_service();
+            DB = new ClientService();
         }
 
         private void Registration(object parameter)

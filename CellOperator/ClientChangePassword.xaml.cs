@@ -23,10 +23,10 @@ namespace CellOperator
     /// </summary>
     public partial class ClientChangePassword : Window
     {
-        public ClientChangePassword(ref DataBase_service db, ClientDTO client)
+        public ClientChangePassword(ClientDTO client)
         {
             InitializeComponent();
-            DataContext = new ClientWindow_PasswordChangeModel(ref db, client);
+            DataContext = new ClientWindow_PasswordChangeModel(client);
         }
     }
 }

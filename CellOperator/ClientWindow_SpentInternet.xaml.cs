@@ -23,10 +23,10 @@ namespace CellOperator
     /// </summary>
     public partial class ClientWindow_SpentInternet : Window
     {
-        public ClientWindow_SpentInternet(ref DataBase_service db, ClientDTO client, NumberDTO number)
+        public ClientWindow_SpentInternet( ClientDTO client, NumberDTO number)
         {
             InitializeComponent();
-            DataContext = new ClientWindow_SpentInternetModel(ref db, client, number);
+            DataContext = new ClientWindow_SpentInternetModel( client, number);
         }
     }
 }

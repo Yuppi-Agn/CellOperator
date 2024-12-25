@@ -12,11 +12,11 @@ namespace CellOperator.MVVM.Services
 {
     class AuthService
     {
-        DataBase_service Database;
+        ClientService Database;
 
         public AuthService()
         {
-            Database = new DataBase_service();
+            Database = new ClientService();
         }
         public int AuthCheck(string Username, string Password)
         {

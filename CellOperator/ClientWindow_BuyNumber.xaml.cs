@@ -23,10 +23,10 @@ namespace CellOperator
     /// </summary>
     public partial class ClientWindow_BuyNumber : Window
     {
-        public ClientWindow_BuyNumber(ref DataBase_service db, ClientDTO client)
+        public ClientWindow_BuyNumber(ClientDTO client)
         {
             InitializeComponent();
-            DataContext = new ClientWindow_TarifChangeModel(ref db, client);
+            DataContext = new ClientWindow_TarifChangeModel(client);
         }
     }
 }

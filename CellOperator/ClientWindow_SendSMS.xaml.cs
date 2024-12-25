@@ -23,10 +23,10 @@ namespace CellOperator
     /// </summary>
     public partial class ClientWindow_SendSMS : Window
     {
-        public ClientWindow_SendSMS(ref DataBase_service db, ClientDTO client, NumberDTO number)
+        public ClientWindow_SendSMS(ClientDTO client, NumberDTO number)
         {
             InitializeComponent();
-            DataContext = new ClientWindow_SendSMSModel(ref db, client, number);
+            DataContext = new ClientWindow_SendSMSModel(client, number);
         }
     }
 }
